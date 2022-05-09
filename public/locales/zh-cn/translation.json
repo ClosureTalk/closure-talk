@@ -1,0 +1,18 @@
+{
+  "Save image": "保存图片",
+  "Save code": "保存代码",
+  "Load code": "载入代码",
+  "Clear chat": "清空聊天",
+  "Clear chat confirm title": "清空全部聊天？",
+  "Clear chat confirm text": "没有保存的聊天内容将无法找回！",
+  "Yes": "是",
+  "Cancel": "取消",
+  "Show info": "关于",
+  "Show help": "帮助",
+  "Help text": "在左边搜索角色\n点击头像将其加入右下角区域\n点击右下角区域的头像切换当前角色\n切换角色快捷键：Ctrl+数字\n按Enter发送消息，Shift+Enter换行\n点击聊天气泡在其后插入\n右键点击聊天气泡编辑或删除",
+  "Alpha text": "早期预览版。前往 GitHub 追踪开发进度和计划。",
+  "Save": "保存",
+  "Delete": "删除",
+  "Content": "内容",
+  "Always show avatar": "显示头像"
+}

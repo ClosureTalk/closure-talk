@@ -1,0 +1,17 @@
+.char-list-item::after {
+  content: "";
+  border-bottom: #BBB 1px dashed;
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 0;
+}
+
+.top-bar .MuiOutlinedInput-root svg {
+  color: inherit;
+}
+
+.top-bar .MuiOutlinedInput-root fieldset,
+.top-bar .MuiOutlinedInput-root:hover fieldset {
+  border-color: inherit !important;
+}

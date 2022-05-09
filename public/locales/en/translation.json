@@ -1,0 +1,18 @@
+{
+  "Save image": "Save image",
+  "Save code": "Save code",
+  "Load code": "Load code",
+  "Clear chat": "Clear chat",
+  "Clear chat confirm title": "Clear all chat?",
+  "Clear chat confirm text": "Unsaved chat will be gone forever.",
+  "Yes": "Yes",
+  "Cancel": "Cancel",
+  "Show info": "Information",
+  "Show help": "Show help",
+  "Help text": "Search for characters on the left.\nClick on an avatar to add it to the bottom-right character area.\nClick on a character area avatar to talk with that character.\nPress Ctrl+Number to quickly switch talking character.\nEnter to send, Shift+Enter to break line.\nClick on chat bubble to insert after it.\nRight-click on bubble to edit or delete.",
+  "Alpha text": "Early preview. Check GitHub for development progress and plans.",
+  "Save": "Save",
+  "Delete": "Delete",
+  "Content": "Content",
+  "Always show avatar": "Always show avatar"
+}
