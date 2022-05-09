@@ -10,15 +10,53 @@ import { deserialize_chat, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
 import { read_file } from "../utils/FileUtils";
+import { get_key_string } from "../utils/KeyboardUtils";
 import ChatInputView from "./ChatInputView";
 
 export default function ChatView() {
   const ctx = useAppContext();
   const {t} = useTranslation();
-  const [chat, setChat] = useState<ChatItem[]>([]);
+  const [chat, setChatRaw] = useState<ChatItem[]>([]);
   const [confirmingClearChat, setConfirmingClearChat] = useState(false);
   const [editing, setEditing] = useState<ChatItem|null>(null);
   const [insertIdx, setInsertIdx] = useState(-1);
+  const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat([], ctx)]);
+  const [chatHistoryIdx, setChatHistoryIdx] = useState(1);
+
+  const setChat = (list: ChatItem[]) => {
+    const latest = serialize_chat(list, ctx);
+
+    // when a new state is commited, it becomes the latest history entry
+    const newHistory = chatHistory.slice(0, chatHistoryIdx);
+    newHistory.push(latest);
+
+    setChatHistory(newHistory);
+    setChatHistoryIdx(newHistory.length);
+    setChatRaw(list);
+  }
+
+  // undo and redo
+  useEffect(() => {
+    const handler = (ev: KeyboardEvent) => {
+      if (ev.target !== document.body || ev.repeat) {
+        return;
+      }
+      const key = get_key_string(ev);
+      if (["Control+z", "Meta+z"].includes(key) && chatHistoryIdx > 1) {
+        setChatRaw(deserialize_chat(chatHistory[chatHistoryIdx-2], ctx)[0]);
+        setChatHistoryIdx(chatHistoryIdx-1);
+      }
+      else if (["Control+y", "Meta+y"].includes(key) && chatHistoryIdx < chatHistory.length) {
+        setChatRaw(deserialize_chat(chatHistory[chatHistoryIdx], ctx)[0]);
+        setChatHistoryIdx(chatHistoryIdx+1);
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  });
 
   // save JSON
   useEffect(() => {
