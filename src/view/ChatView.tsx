@@ -2,11 +2,11 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
-import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
 import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { render_chat } from "../renderer/RendererFactory";
+import { deserialize_chat, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
 import { read_file } from "../utils/FileUtils";
@@ -20,21 +20,10 @@ export default function ChatView() {
   const [editing, setEditing] = useState<ChatItem|null>(null);
   const [insertIdx, setInsertIdx] = useState(-1);
 
+  // save JSON
   useEffect(() => {
     const handler = () => {
-      download_text(JSON.stringify({
-        chat: chat.map(ch => ({
-          char_id: ch.char?.character.id,
-          img: ch.char?.img,
-          content: ch.content,
-          type: ch.type,
-          avatar: ch.avatar,
-        })),
-        chars: ctx.activeChars.map(ch => ({
-          char_id: ch.character.id,
-          img: ch.img,
-        })),
-      }, undefined, 2), `closure-talk-${get_now_filename()}.json`);
+      download_text(serialize_chat(chat, ctx), `closure-talk-${get_now_filename()}.json`);
     };
 
     window.addEventListener(SaveCodeEventName, handler);
@@ -43,6 +32,7 @@ export default function ChatView() {
     };
   });
 
+  // load JSON
   useEffect(() => {
     const file = document.getElementById("upload-code-file") as HTMLInputElement;
     const uploadHandler = async () => {
@@ -52,23 +42,7 @@ export default function ChatView() {
 
       try {
         const text = await read_file(file.files![0]);
-        const obj = JSON.parse(text);
-
-        const newChat = (obj.chat as any[]).map(ch => {
-          const char = ctx.data.characters.get(ch.char_id) || null;
-          const valid = char !== null && char.images.includes(ch.img);
-          return new ChatItem(
-            valid ? new ChatChar(char, ch.img) : null,
-            ch.content,
-            ch.type,
-            ch.avatar,
-          );
-        });
-        const newChars = (obj.chars as any[]).map(ch => {
-          const char = ctx.data.characters.get(ch.char_id) || null;
-          const valid = char !== null && char.images.includes(ch.img);
-          return valid ? new ChatChar(char, ch.img) : null;
-        }).filter(ch => ch !== null) as ChatChar[];
+        const [newChat, newChars] = deserialize_chat(text, ctx);
 
         setChat(newChat);
         ctx.setActiveChars(newChars);
@@ -91,8 +65,9 @@ export default function ChatView() {
       window.removeEventListener(LoadCodeEventName, handler);
       file.removeEventListener("change", uploadHandler);
     };
-  })
+  });
 
+  // clear chat confirmation
   useEffect(() => {
     const handler = () => setConfirmingClearChat(true);
 
@@ -102,6 +77,7 @@ export default function ChatView() {
     };
   });
 
+  // scroll to inserted chat
   useEffect(() => {
     const container = document.getElementById("chat-container")!;
     if (insertIdx < 0) {
@@ -113,6 +89,7 @@ export default function ChatView() {
     }
   }, [chat]);
 
+  // left click handler
   const clickCallback = (item: ChatItem) => {
     const idx = chat.indexOf(item);
     if (idx === 0) {
@@ -127,6 +104,7 @@ export default function ChatView() {
     document.getElementById("chat-input")!.focus();
   };
 
+  // right click handler
   const contextMenuCallback = (ev: MouseEvent, item: ChatItem) => {
     setEditing(item);
     ev.preventDefault();

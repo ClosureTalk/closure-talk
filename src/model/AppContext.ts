@@ -4,7 +4,7 @@ import AppData from "./AppData";
 import ChatChar from "./ChatChar";
 import { Renderers } from "./Constants";
 
-interface IAppContext {
+export interface IAppContext {
   lang: string;
   setLang: Function;
   renderer: RendererType;
