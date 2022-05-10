@@ -13,8 +13,8 @@ export default function YuzutalkRenderer(props: RendererProps) {
 
   const getName = (item: ChatItem) => {
     return item.nameOverride.length > 0 ?
-          item.nameOverride :
-          item.char?.character.get_short_name(ctx.lang);
+      item.nameOverride :
+      item.char?.character.get_short_name(ctx.lang);
   };
 
   const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
@@ -47,26 +47,51 @@ export default function YuzutalkRenderer(props: RendererProps) {
     </div>
   );
 
-  const renderSpecialItem = (item: ChatItem) => {
-    const name = getName(item) || item.content;
+  const renderSpecialItem = (item: ChatItem, content: JSX.Element) => {
     return (
       <div
         className="yuzu-item yuzu-special-item"
         onClick={() => props.click(item)}
         onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
-        <div className="yuzu-kizuna-item">
-          <div className="yuzu-kizuna-header">
-            <span className="text">{t("yuzu-kizuna-title")}</span>
-          </div>
-          <div className="yuzu-kizuna-heart">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" height="100%"><path d="M58.5 8.2a18.7 18.7 0 00-26.5 0 18.7 18.7 0 00-26.5 0 18.7 18.7 0 000 26.5L32 61.3l26.5-26.6a18.7 18.7 0 000-26.5z" fill="#FFD1DB"></path></svg>
-          </div>
-          <div className="yuzu-kizuna-footer">
-            <span className="text">{t("yuzu-kizuna-text").replace("{}", name)}</span>
-          </div>
+        {content}
+      </div>
+    );
+  };
+
+  const renderKizunaItem = (item: ChatItem) => {
+    const name = getName(item)!;
+    return renderSpecialItem(item, (
+      <div className="yuzu-kizuna-item">
+        <div className="yuzu-kizuna-header">
+          <span className="text">{t("yuzu-kizuna-title")}</span>
+        </div>
+        <div className="yuzu-kizuna-heart">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" height="100%"><path d="M58.5 8.2a18.7 18.7 0 00-26.5 0 18.7 18.7 0 00-26.5 0 18.7 18.7 0 000 26.5L32 61.3l26.5-26.6a18.7 18.7 0 000-26.5z" fill="#FFD1DB"></path></svg>
+        </div>
+        <div className="yuzu-kizuna-footer">
+          <span className="text">{t("yuzu-kizuna-text").replace("{}", name)}</span>
         </div>
       </div>
-    )
+    ));
+  };
+
+  const renderReplyItem = (item: ChatItem) => {
+    const choices = item.content.split("\n");
+
+    return renderSpecialItem(item, (
+      <div className="yuzu-reply-item">
+        <div className="yuzu-reply-header">
+          <span className="text">{t("yuzu-reply-title")}</span>
+        </div>
+        <div className="yuzu-reply-choices">
+          {choices.map((s, idx) => (
+            <div key={idx} className="yuzu-reply-choice">
+              <span className="text">{s}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ));
   };
 
   const renderItem = (idx: number) => {
@@ -74,7 +99,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
     const boxClasses = [];
 
     if (item.type === ChatItemType.Special) {
-      return renderSpecialItem(item);
+      return item.char !== null ? renderKizunaItem(item) : renderReplyItem(item);
     }
 
     let content: string | JSX.Element = "Not implemented";
@@ -86,7 +111,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
       content = <img src={item.content} />;
       boxClasses.push("yuzu-image-box");
       if (item.is_stamp()) {
-        boxClasses.push("yuzu-stamp")
+        boxClasses.push("yuzu-stamp");
       }
     }
 

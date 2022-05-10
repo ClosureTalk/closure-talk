@@ -175,7 +175,8 @@
   font-weight: bold;
 }
 
-.yuzu-kizuna-footer .text::after {
+.yuzu-kizuna-footer .text::after,
+.yuzu-reply-choices .text::after {
   display: block;
   content: "";
   position: absolute;
@@ -187,4 +188,52 @@
   border-radius: 5px;
   filter: blur(2px);
   z-index: -1;
+}
+
+.yuzu-reply-item {
+  grid-column: 2;
+  position: relative;
+  border: 1px solid rgb(216, 216, 216);
+  border-radius: 10px;
+  background-color: rgb(243, 247, 248);
+  padding: 16px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.yuzu-reply-header {
+  border-bottom: 1px solid rgb(216, 216, 216);
+  padding-bottom: 8px;
+}
+
+.yuzu-reply-header .text {
+  color: rgb(76, 91, 112);
+  font-size: 18px;
+  font-weight: bold;
+  border-left: 2px solid rgb(52, 147, 249);
+  padding: 0 8px;
+}
+
+.yuzu-reply-choices {
+  margin-top: 8px;
+}
+
+.yuzu-reply-choice:not(:last-of-type) {
+  margin-bottom: 8px;
+}
+
+.yuzu-reply-choice {
+  position: relative;
+  padding: 8px;
+  min-height: 24px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  color: rgb(76, 91, 112);
+  border: 1px solid rgb(231, 235, 236);
+  background-color: white;
+  text-align: center;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
 }
