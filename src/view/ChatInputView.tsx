@@ -101,7 +101,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
         <IconButton
           onClick={ev => setSelectImageAnchor(ev.target as HTMLElement)}
         >
-          <Avatar src={currentChar?.character.get_url(currentChar.img)} />
+          <Avatar src={currentChar?.character.get_url(currentChar.img)} alt={`Avatar of ${currentChar?.character.get_short_name("en") || "player"}`} />
         </IconButton>
         <Popover
           open={selectImageAnchor !== null}
@@ -150,7 +150,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
       }}>
         <PlayerChip
           variant="outlined"
-          avatar={<Avatar />}
+          avatar={<Avatar alt="Avatar of player"/>}
           onClick={() => setCurrentChar(null)}
         />
         {ctx.activeChars.map(ch => (
@@ -158,7 +158,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
             key={ch.get_id()}
             variant="outlined"
             avatar={
-              <Avatar src={ch.character.get_url(ch.img)} />
+              <Avatar src={ch.character.get_url(ch.img)} alt={`Avatar of ${ch.character.get_short_name("en")}`} />
             }
             onClick={() => {
               setCurrentChar(ch);

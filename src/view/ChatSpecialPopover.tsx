@@ -30,6 +30,7 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
           stampLists[stampListIdx].map(st => (
             <img
               key={st.key}
+              alt={`Stamp ${st.key}`}
               className="stamp-btn"
               src={st.url}
               onClick={() => {

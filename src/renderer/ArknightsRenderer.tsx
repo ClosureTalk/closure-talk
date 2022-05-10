@@ -40,13 +40,17 @@ export default function ArknightsRenderer(props: RendererProps) {
       );
     }
     else if (item.type === ChatItemType.Image) {
-      content = <img src={item.content} className={item.is_stamp() ? "akn-stamp" : ""} />;
+      content = <img
+        alt={item.is_stamp() ? "Stamp" : "Uploaded image"}
+        src={item.content}
+        className={item.is_stamp() ? "akn-stamp" : ""}
+      />;
     }
 
     return (
       <div className="akn-item">
         <div className="akn-avatar">
-          <img src={avatarUrl}></img>
+          <img alt={`Avatar of ${item.char?.character.get_short_name("en") || "player"}`} src={avatarUrl}></img>
         </div>
         <div className="akn-content" onClick={() => props.click(item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
           {content}

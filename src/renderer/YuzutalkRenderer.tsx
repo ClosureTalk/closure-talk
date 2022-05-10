@@ -23,7 +23,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
         <div className="yuzu-left">
           {!showAvatar ? null :
             <div className="yuzu-avatar-box">
-              <img src={item.char!.character.get_url(item.char!.img)}></img>
+              <img alt={`Avatar of ${item.char!.character.get_short_name("en")}`} src={item.char!.character.get_url(item.char!.img)}></img>
             </div>
           }
         </div>
@@ -108,7 +108,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
       boxClasses.push("yuzu-message-box");
     }
     else if (item.type === ChatItemType.Image) {
-      content = <img src={item.content} />;
+      content = <img alt={item.is_stamp() ? "Stamp" : "Uploaded image"} src={item.content} />;
       boxClasses.push("yuzu-image-box");
       if (item.is_stamp()) {
         boxClasses.push("yuzu-stamp");

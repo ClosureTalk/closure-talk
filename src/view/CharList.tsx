@@ -45,6 +45,7 @@ export default function CharList(props: CharListProps) {
       }}>
         <Avatar
           src={ch.get_url(img)}
+          alt={`Avatar of ${ch.get_short_name("en")}`}
           sx={{ width: "64px", height: "64px" }}
         />
       </IconButton>
