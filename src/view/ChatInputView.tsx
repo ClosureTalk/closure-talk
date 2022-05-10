@@ -112,7 +112,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
             horizontal: "left",
           }}
         >
-          <ChatSpecialPopover addImage={addImageChat} />
+          <ChatSpecialPopover addImage={addImageChat} closePopover={() => setSelectImageAnchor(null)} />
         </Popover>
         <Input id="chat-input" fullWidth placeholder="Chat" multiline onKeyDown={(ev) => {
           if (get_key_string(ev.nativeEvent) === "Enter") {

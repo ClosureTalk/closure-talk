@@ -6,6 +6,7 @@ import { prompt_file, read_file_as_url } from "../utils/FileUtils";
 
 class ChatSpecialPopoverProps {
   addImage = (url: string) => { };
+  closePopover = () => { };
 }
 
 export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
@@ -28,7 +29,10 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
           <img
             className="stamp-btn"
             src={st.url}
-            onClick={() => props.addImage(st.url)}></img>
+            onClick={() => {
+              props.addImage(st.url);
+              props.closePopover();
+            }}></img>
         ))
         }
       </Box>
@@ -45,6 +49,7 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
           try {
             const url = await read_file_as_url(file);
             props.addImage(url);
+            props.closePopover();
           }
           catch (ex) {
             console.error(ex);
