@@ -20,7 +20,6 @@ _This project is currently an early preview alpha. Development progress and plan
     - `Ctrl+2` switches to first character, etc.
 1. Type. Press `Enter` to send, press `Shift+Enter` to line break.
 1. On top of page, there are buttons for saving a screenshot, saving the chat to a text file, and loading a chat saved previously.
-    - Automatic screenshot is not working well. Using your own screenshot tool is recommended.
 
 ## More on Editing
 
