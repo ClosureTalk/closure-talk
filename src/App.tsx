@@ -6,6 +6,7 @@ import AppData from "./model/AppData";
 import ChatChar from "./model/ChatChar";
 import { Renderers } from "./model/Constants";
 import { RendererType } from "./renderer/RendererType";
+import { load_local_storage_chat } from "./utils/ChatUtils";
 import CharList from "./view/CharList";
 import ChatView from "./view/ChatView";
 import LoadingScreen from "./view/LoadingScreen";
@@ -20,7 +21,9 @@ function App() {
   useEffect(() => {
     if (data === null) {
       (async () => {
-        setData(await AppData.load_data());
+        const loaded = await AppData.load_data();
+        setData(loaded);
+        setActiveChars(load_local_storage_chat(loaded.characters)[1]);
       })();
     }
   }, []);

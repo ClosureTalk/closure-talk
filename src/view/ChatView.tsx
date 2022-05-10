@@ -6,7 +6,7 @@ import ChatItem from "../model/ChatItem";
 import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { render_chat } from "../renderer/RendererFactory";
-import { deserialize_chat, serialize_chat } from "../utils/ChatUtils";
+import { deserialize_chat, load_local_storage_chat, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
 import { read_file } from "../utils/FileUtils";
@@ -16,15 +16,22 @@ import ChatInputView from "./ChatInputView";
 export default function ChatView() {
   const ctx = useAppContext();
   const {t} = useTranslation();
-  const [chat, setChatRaw] = useState<ChatItem[]>([]);
+  const lastChat = load_local_storage_chat(ctx.data.characters)[0];
+
+  const [chat, setChatRaw] = useState<ChatItem[]>(lastChat);
   const [confirmingClearChat, setConfirmingClearChat] = useState(false);
   const [editing, setEditing] = useState<ChatItem|null>(null);
   const [insertIdx, setInsertIdx] = useState(-1);
-  const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat([], ctx)]);
+  const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat(lastChat, ctx.activeChars)]);
   const [chatHistoryIdx, setChatHistoryIdx] = useState(1);
 
+  const setChatSaved = (list: ChatItem[], serailized: string) => {
+    localStorage.setItem("last-chat", serailized);
+    setChatRaw(list);
+  };
+
   const setChat = (list: ChatItem[]) => {
-    const latest = serialize_chat(list, ctx);
+    const latest = serialize_chat(list, ctx.activeChars);
 
     // when a new state is commited, it becomes the latest history entry
     const newHistory = chatHistory.slice(0, chatHistoryIdx);
@@ -32,7 +39,7 @@ export default function ChatView() {
 
     setChatHistory(newHistory);
     setChatHistoryIdx(newHistory.length);
-    setChatRaw(list);
+    setChatSaved(list, latest);
   }
 
   // undo and redo
@@ -42,13 +49,21 @@ export default function ChatView() {
         return;
       }
       const key = get_key_string(ev);
+
+      let idx = -1;
       if (["Control+z", "Meta+z"].includes(key) && chatHistoryIdx > 1) {
-        setChatRaw(deserialize_chat(chatHistory[chatHistoryIdx-2], ctx)[0]);
+        idx = chatHistoryIdx-2;
         setChatHistoryIdx(chatHistoryIdx-1);
       }
       else if (["Control+y", "Meta+y"].includes(key) && chatHistoryIdx < chatHistory.length) {
-        setChatRaw(deserialize_chat(chatHistory[chatHistoryIdx], ctx)[0]);
+        idx = chatHistoryIdx;
         setChatHistoryIdx(chatHistoryIdx+1);
+      }
+
+      if (idx >= 0) {
+        const newChatText = chatHistory[idx];
+        const newChat = deserialize_chat(newChatText, ctx.data.characters)[0];
+        setChatSaved(newChat, newChatText);
       }
     };
 
@@ -61,7 +76,7 @@ export default function ChatView() {
   // save JSON
   useEffect(() => {
     const handler = () => {
-      download_text(serialize_chat(chat, ctx), `closure-talk-${get_now_filename()}.json`);
+      download_text(serialize_chat(chat, ctx.activeChars), `closure-talk-${get_now_filename()}.json`);
     };
 
     window.addEventListener(SaveCodeEventName, handler);
@@ -80,7 +95,7 @@ export default function ChatView() {
 
       try {
         const text = await read_file(file.files![0]);
-        const [newChat, newChars] = deserialize_chat(text, ctx);
+        const [newChat, newChars] = deserialize_chat(text, ctx.data.characters);
 
         setChat(newChat);
         ctx.setActiveChars(newChars);
