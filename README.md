@@ -19,12 +19,16 @@ _This project is currently an early preview alpha. Development progress and plan
     - `Ctrl+1` switches to the "player" (_dokutah_ or _sensei_)
     - `Ctrl+2` switches to first character, etc.
 1. Type. Press `Enter` to send, press `Shift+Enter` to line break.
-1. On top of page, there are buttons for saving a screenshot, saving the chat to a text file, and loading a chat saved previously.
+1. Top right of page, buttons for:
+    - saving a screenshot
+    - saving the chat to a text file
+    - loading a chat saved previously
 
 ## More on Editing
 
 1. Click on a bubble to start inserting chats after it.
 1. Right-click on a bubble to edit the content, force avatar display, or delete the bubble.
+1. Click on blank area. Then `Ctrl/Cmd+Z` and `Ctrl/Cmd+Y` to undo and redo chat changes.
 
 ## Credits
 
