@@ -29,6 +29,18 @@
   padding: 8px;
 }
 
+.yuzu-image-box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 8px;
+  border: 1px solid rgb(231, 235, 236);
+  max-width: 75%;
+}
+
+.yuzu-image-box.yuzu-stamp {
+  width: 40%;
+}
+
 .yuzu-message {
   position: relative;
   white-space: pre-wrap;
@@ -66,8 +78,11 @@
   padding: 16px 16px 0;
 }
 
-.yuzu-message-box.yuzu-player-message-box {
+.yuzu-player-box {
   grid-column: 2;
+}
+
+.yuzu-message-box.yuzu-player-box {
   background-color: rgb(74, 138, 202);
 }
 
@@ -84,7 +99,7 @@
   border-color: transparent rgb(76, 91, 112) transparent transparent;
 }
 
-.yuzu-message-box.yuzu-player-message-box::before {
+.yuzu-message-box.yuzu-player-box::before {
   display: block;
   content: "";
   position: absolute;

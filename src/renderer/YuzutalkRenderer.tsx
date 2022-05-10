@@ -9,7 +9,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
   const ctx = useAppContext();
   const chat = props.chat;
 
-  const renderCharacterItem = (item: ChatItem, showAvatar: boolean, content: JSX.Element) => {
+  const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
     return (
       <div className="yuzu-item">
         <div className="yuzu-left">
@@ -23,7 +23,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
           {!showAvatar ? null :
             <div className="yuzu-name">{item.char!.character.get_short_name(ctx.lang)}</div>
           }
-          <div className={"yuzu-message-box " + (showAvatar ? "yuzu-avatar-message-box" : "")}>
+          <div className={boxClasses.join(" ")}>
             {content}
           </div>
         </div>
@@ -31,9 +31,9 @@ export default function YuzutalkRenderer(props: RendererProps) {
     );
   };
 
-  const renderPlayerItem = (content: JSX.Element) => (
+  const renderPlayerItem = (content: JSX.Element, boxClasses: string[]) => (
     <div className="yuzu-item yuzu-player-item">
-      <div className="yuzu-message-box yuzu-player-message-box">
+      <div className={boxClasses.join(" ")}>
         {content}
       </div>
     </div>
@@ -41,13 +41,19 @@ export default function YuzutalkRenderer(props: RendererProps) {
 
   const renderItem = (idx: number) => {
     const item = chat[idx];
+    const boxClasses = [];
 
     let content: string | JSX.Element = "Not implemented";
     if (item.type === ChatItemType.Text) {
       content = item.content;
+      boxClasses.push("yuzu-message-box");
     }
     else if (item.type === ChatItemType.Image) {
       content = <img src={item.content} />;
+      boxClasses.push("yuzu-image-box");
+      if (item.isStamp()) {
+        boxClasses.push("yuzu-stamp")
+      }
     }
 
     content = (
@@ -63,11 +69,15 @@ export default function YuzutalkRenderer(props: RendererProps) {
       const showAvatar = idx === 0 ||
         item.avatar === ChatItemAvatarType.Show ||
         chat[idx - 1].char?.get_id() !== item.char!.get_id();
+      if (item.type === ChatItemType.Text && showAvatar) {
+        boxClasses.push("yuzu-avatar-message-box");
+      }
 
-      return renderCharacterItem(item, showAvatar, content);
+      return renderCharacterItem(item, showAvatar, boxClasses, content);
     }
     else {
-      return renderPlayerItem(content);
+      boxClasses.push("yuzu-player-box");
+      return renderPlayerItem(content, boxClasses);
     }
   };
 

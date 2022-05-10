@@ -19,4 +19,8 @@ export default class ChatItem {
     this.type = type;
     this.avatar = avatar;
   }
+
+  isStamp(): boolean {
+    return this.type === ChatItemType.Image && !this.content.startsWith("data:image");
+  }
 }

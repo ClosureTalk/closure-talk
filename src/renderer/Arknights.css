@@ -33,6 +33,10 @@
   max-width: 100%;
 }
 
+.akn-content img.akn-stamp {
+  max-width: 40%;
+}
+
 .akn-content-text {
   white-space: pre-wrap;
   overflow-wrap: break-word;

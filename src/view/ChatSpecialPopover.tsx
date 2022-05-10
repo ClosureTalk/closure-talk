@@ -20,9 +20,17 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
     }}>
       <Box sx={{
         height: "200px",
-        backgroundColor: "lightcoral"
+        overflow: "scroll",
+        columnGap: "2px",
       }}>
-        TODO Avatars
+        {stampLists.length === 0 ? null :
+        stampLists[stampListIdx].map(st => (
+          <img
+            className="stamp-btn"
+            src={st.url}
+            onClick={() => props.addImage(st.url)}></img>
+        ))
+        }
       </Box>
       <Stack direction="row" sx={{
         paddingTop: "4px",
