@@ -29,7 +29,7 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
         columnGap: "4px",
       }}>
         <IconButton onClick={async () => {
-          const file = await prompt_file("images/*");
+          const file = await prompt_file("image/*");
           if (file === null) {
             return;
           }
