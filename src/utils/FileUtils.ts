@@ -1,10 +1,14 @@
-export async function read_file_as_text(file: File): Promise<string> {
+function read_file(reader_action: (reader: FileReader) => void): Promise<string|ArrayBuffer> {
   return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.onload = event => resolve(event.target!.result as string);
-    fileReader.onerror = error => reject(error);
-    fileReader.readAsText(file);
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result!);
+    reader.onerror = error => reject(error);
+    reader_action(reader);
   });
+}
+
+export async function read_file_as_text(file: File): Promise<string> {
+  return await read_file(reader => reader.readAsText(file)) as string;
 }
 
 export function prompt_file(accept: string): Promise<File|null> {
