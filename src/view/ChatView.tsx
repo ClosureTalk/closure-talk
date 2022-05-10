@@ -190,8 +190,10 @@ export default function ChatView() {
         open={editing !== null}
         onClose={() => {
           const item = editing!;
-          item.avatar = (document.getElementById("edit-avatar") as HTMLInputElement).checked ? ChatItemAvatarType.Show : ChatItemAvatarType.Auto;
-          item.content = (document.getElementById("edit-content") as HTMLInputElement).value;
+          const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
+          item.avatar = getElement("edit-avatar").checked ? ChatItemAvatarType.Show : ChatItemAvatarType.Auto;
+          item.content = getElement("edit-content").value;
+          item.nameOverride = getElement("name-override").value.trim();
           setChat([...chat]);
           setEditing(null);
         }}
@@ -208,6 +210,17 @@ export default function ChatView() {
             multiline
             variant="standard"
             defaultValue={editing?.content}
+            onFocus={ev => ev.target.select()}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name-override"
+            label={t("Name override")}
+            fullWidth
+            multiline
+            variant="standard"
+            defaultValue={editing?.nameOverride}
             onFocus={ev => ev.target.select()}
           />
           <FormGroup>

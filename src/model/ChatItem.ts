@@ -7,17 +7,20 @@ export default class ChatItem {
   content: string;
   type: ChatItemType;
   avatar: ChatItemAvatarType;
+  nameOverride: string;
 
   constructor(
     char: ChatChar | null,
     content: string,
     type: ChatItemType,
     avatar = ChatItemAvatarType.Auto,
+    nameOverride = "",
   ) {
     this.char = char;
     this.content = content;
     this.type = type;
     this.avatar = avatar;
+    this.nameOverride = nameOverride;
   }
 
   is_stamp(): boolean {

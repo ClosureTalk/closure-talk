@@ -10,6 +10,10 @@ export default function YuzutalkRenderer(props: RendererProps) {
   const chat = props.chat;
 
   const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
+    const name = item.nameOverride.length > 0 ?
+                  item.nameOverride :
+                  item.char!.character.get_short_name(ctx.lang);
+
     return (
       <div className="yuzu-item">
         <div className="yuzu-left">
@@ -21,7 +25,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
         </div>
         <div className="yuzu-right">
           {!showAvatar ? null :
-            <div className="yuzu-name">{item.char!.character.get_short_name(ctx.lang)}</div>
+            <div className="yuzu-name">{name}</div>
           }
           <div className={boxClasses.join(" ")}>
             {content}

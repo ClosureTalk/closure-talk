@@ -10,6 +10,7 @@ export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[]): strin
       content: ch.content,
       type: ch.type,
       avatar: ch.avatar,
+      name_override: ch.nameOverride,
     })),
     chars: activeChars.map(ch => ({
       char_id: ch.character.id,
@@ -29,6 +30,7 @@ export function deserialize_chat(text: string, characters: Map<string, Character
       ch.content,
       ch.type,
       ch.avatar,
+      ch.name_override || "",
     );
   });
   const chars = (obj.chars as any[]).map(ch => {
