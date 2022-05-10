@@ -9,7 +9,7 @@ export function render_chat(type: RendererType, chat: ChatItem[], clickCallback:
       return (
         <ArknightsRenderer chat={chat} click={clickCallback} contextMenuCallback={contextMenuCallback} insertIdx={insertIdx} />
       );
-    case RendererType.Momotalk:
+    case RendererType.Yuzutalk:
       return (
         <YuzutalkRenderer chat={chat} click={clickCallback} contextMenuCallback={contextMenuCallback} insertIdx={insertIdx} />
       );

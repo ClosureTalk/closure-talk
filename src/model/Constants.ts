@@ -9,7 +9,7 @@ export const DataSources: IDataSource[] = [
 
 export const Renderers = [
   RendererType.Arknights,
-  RendererType.Momotalk,
+  RendererType.Yuzutalk,
 ];
 
 export const Languages = [
