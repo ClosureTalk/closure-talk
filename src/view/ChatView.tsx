@@ -9,7 +9,7 @@ import { render_chat } from "../renderer/RendererFactory";
 import { deserialize_chat, load_local_storage_chat, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
-import { read_file } from "../utils/FileUtils";
+import { prompt_file, read_file_as_text } from "../utils/FileUtils";
 import { get_key_string } from "../utils/KeyboardUtils";
 import ChatInputView from "./ChatInputView";
 
@@ -87,14 +87,14 @@ export default function ChatView() {
 
   // load JSON
   useEffect(() => {
-    const file = document.getElementById("upload-code-file") as HTMLInputElement;
-    const uploadHandler = async () => {
-      if ((file.files?.length || 0) === 0) {
+    const handler = async () => {
+      const file = await prompt_file(".json");
+      if (file === null) {
         return;
       }
 
       try {
-        const text = await read_file(file.files![0]);
+        const text = await read_file_as_text(file);
         const [newChat, newChars] = deserialize_chat(text, ctx.data.characters);
 
         setChat(newChat);
@@ -103,20 +103,11 @@ export default function ChatView() {
       catch (ex) {
         console.error(ex);
       }
-
-      file.value = "";
-    };
-
-    file.addEventListener("change", uploadHandler);
-
-    const handler = () => {
-      file.click();
     };
 
     window.addEventListener(LoadCodeEventName, handler);
     return () => {
       window.removeEventListener(LoadCodeEventName, handler);
-      file.removeEventListener("change", uploadHandler);
     };
   });
 
@@ -231,9 +222,6 @@ export default function ChatView() {
             }}>{t("Delete")}</Button>
         </DialogActions>
       </Dialog>
-      <input type="file" id="upload-code-file" accept="application/json" style={{
-        display: "none"
-      }}></input>
     </Box>
   )
 }
