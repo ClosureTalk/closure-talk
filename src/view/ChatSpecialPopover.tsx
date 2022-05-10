@@ -3,9 +3,11 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useAppContext } from "../model/AppContext";
 import { useState } from "react";
 import { prompt_file, read_file_as_url } from "../utils/FileUtils";
+import StarsIcon from '@mui/icons-material/Stars';
 
 class ChatSpecialPopoverProps {
   addImage = (url: string) => { };
+  addSpecial = () => { };
   closePopover = () => { };
 }
 
@@ -40,6 +42,9 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
         paddingTop: "4px",
         columnGap: "4px",
       }}>
+        <IconButton onClick={() => props.addSpecial()}>
+          <StarsIcon />
+        </IconButton>
         <IconButton onClick={async () => {
           const file = await prompt_file("image/*");
           if (file === null) {

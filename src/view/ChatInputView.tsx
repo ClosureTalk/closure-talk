@@ -88,6 +88,10 @@ export default function ChatInputView(props: ChatInputViewProps) {
     addChat(new ChatItem(currentChar, url, ChatItemType.Image));
   }
 
+  const addSpecialChat = () => {
+    addChat(new ChatItem(currentChar, "", ChatItemType.Special));
+  };
+
   return (
     <Box sx={{
       height: `${boxHeight}px`,
@@ -112,7 +116,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
             horizontal: "left",
           }}
         >
-          <ChatSpecialPopover addImage={addImageChat} closePopover={() => setSelectImageAnchor(null)} />
+          <ChatSpecialPopover addImage={addImageChat} addSpecial={addSpecialChat} closePopover={() => setSelectImageAnchor(null)} />
         </Popover>
         <Input id="chat-input" fullWidth placeholder="Chat" multiline onKeyDown={(ev) => {
           if (get_key_string(ev.nativeEvent) === "Enter") {

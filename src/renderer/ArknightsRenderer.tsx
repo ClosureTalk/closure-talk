@@ -1,6 +1,24 @@
+import { MouseEventHandler } from "react";
 import { ChatItemType } from "../model/ChatItemType";
 import "./Arknights.css";
 import RendererProps from "./RendererProps";
+
+
+function make_akn_header(content: string, click: ()=>void, contextMenu:MouseEventHandler) {
+  return (
+    <div className="akn-header">
+    <div className="akn-header-left">DIALOGUE</div>
+    <div className="akn-header-title" onClick={click} onContextMenu={contextMenu}>
+      {content}
+      <div className="akn-header-title-deco akn-header-title-deco-1"></div>
+      <div className="akn-header-title-deco akn-header-title-deco-2"></div>
+      <div className="akn-header-title-deco akn-header-title-deco-3"></div>
+      <div className="akn-header-title-deco akn-header-title-deco-4"></div>
+    </div>
+    <div className="akn-header-right"></div>
+  </div>
+  )
+}
 
 
 export default function ArknightsRenderer(props: RendererProps) {
@@ -8,6 +26,11 @@ export default function ArknightsRenderer(props: RendererProps) {
 
   const renderItem = (idx: number) => {
     const item = chat[idx];
+    if (item.type === ChatItemType.Special) {
+      const title = item.content.trim().length === 0 ? "Part.01" : item.content;
+      return make_akn_header(title, () => props.click(item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
+    }
+
     const avatarUrl = item.char?.character.get_url(item.char!.img) || "resources/renderer/ak/doctor.webp";
 
     let content: string | JSX.Element = "Not implemented";
@@ -44,17 +67,6 @@ export default function ArknightsRenderer(props: RendererProps) {
         paddingTop: "8px",
         paddingBottom: "16px",
       }}>
-        <div className="akn-header">
-          <div className="akn-header-left">DIALOGUE</div>
-          <div className="akn-header-title">
-            Part.01
-            <div className="akn-header-title-deco akn-header-title-deco-1"></div>
-            <div className="akn-header-title-deco akn-header-title-deco-2"></div>
-            <div className="akn-header-title-deco akn-header-title-deco-3"></div>
-            <div className="akn-header-title-deco akn-header-title-deco-4"></div>
-          </div>
-          <div className="akn-header-right"></div>
-        </div>
         {chat.map((_, idx) => (
           <div key={idx} className="chat-item">
             {idx !== props.insertIdx ? null :

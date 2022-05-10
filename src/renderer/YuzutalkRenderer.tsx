@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
 import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
@@ -7,13 +8,16 @@ import "./Yuzutalk.css";
 
 export default function YuzutalkRenderer(props: RendererProps) {
   const ctx = useAppContext();
+  const { t } = useTranslation();
   const chat = props.chat;
 
-  const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
-    const name = item.nameOverride.length > 0 ?
-                  item.nameOverride :
-                  item.char!.character.get_short_name(ctx.lang);
+  const getName = (item: ChatItem) => {
+    return item.nameOverride.length > 0 ?
+          item.nameOverride :
+          item.char?.character.get_short_name(ctx.lang);
+  };
 
+  const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
     return (
       <div className="yuzu-item">
         <div className="yuzu-left">
@@ -25,7 +29,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
         </div>
         <div className="yuzu-right">
           {!showAvatar ? null :
-            <div className="yuzu-name">{name}</div>
+            <div className="yuzu-name">{getName(item)}</div>
           }
           <div className={boxClasses.join(" ")}>
             {content}
@@ -43,9 +47,35 @@ export default function YuzutalkRenderer(props: RendererProps) {
     </div>
   );
 
+  const renderSpecialItem = (item: ChatItem) => {
+    const name = getName(item) || item.content;
+    return (
+      <div
+        className="yuzu-item yuzu-special-item"
+        onClick={() => props.click(item)}
+        onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
+        <div className="yuzu-kizuna-item">
+          <div className="yuzu-kizuna-header">
+            <span className="text">{t("yuzu-kizuna-title")}</span>
+          </div>
+          <div className="yuzu-kizuna-heart">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" height="100%"><path d="M58.5 8.2a18.7 18.7 0 00-26.5 0 18.7 18.7 0 00-26.5 0 18.7 18.7 0 000 26.5L32 61.3l26.5-26.6a18.7 18.7 0 000-26.5z" fill="#FFD1DB"></path></svg>
+          </div>
+          <div className="yuzu-kizuna-footer">
+            <span className="text">{t("yuzu-kizuna-text").replace("{}", name)}</span>
+          </div>
+        </div>
+      </div>
+    )
+  };
+
   const renderItem = (idx: number) => {
     const item = chat[idx];
     const boxClasses = [];
+
+    if (item.type === ChatItemType.Special) {
+      return renderSpecialItem(item);
+    }
 
     let content: string | JSX.Element = "Not implemented";
     if (item.type === ChatItemType.Text) {
@@ -72,6 +102,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
     if (item.char !== null) {
       const showAvatar = idx === 0 ||
         item.avatar === ChatItemAvatarType.Show ||
+        chat[idx - 1].type === ChatItemType.Special ||
         chat[idx - 1].char?.get_id() !== item.char!.get_id();
       if (item.type === ChatItemType.Text && showAvatar) {
         boxClasses.push("yuzu-avatar-message-box");

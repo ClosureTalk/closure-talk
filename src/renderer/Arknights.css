@@ -64,11 +64,10 @@
 
 .akn-header-title {
   color: #d4d4d4;
-  text-align: center;
+  padding: 0 8px;
   font-size: 16px;
   font-family: Optima, sans-serif;
   font-variant-numeric: slashed-zero;
-  width: 60px;
   position: relative;
   margin-left: -1px;
 }

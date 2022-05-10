@@ -117,3 +117,74 @@
   height: 2px;
   border-top: #a2a2a2 dashed 1px;
 }
+
+.yuzu-item.yuzu-special-item {
+  padding: 16px 24px 0 16px;
+}
+
+.yuzu-kizuna-item {
+  grid-column: 2;
+  position: relative;
+  border: 1px solid rgb(216, 216, 216);
+  border-radius: 10px;
+  background-color: transparent;
+  padding: 16px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.yuzu-kizuna-header {
+  border-bottom: 1px solid rgb(216, 216, 216);
+  padding-bottom: 8px;
+}
+
+.yuzu-kizuna-header .text {
+  color: rgb(76, 91, 112);
+  font-size: 18px;
+  font-weight: bold;
+  border-left: 2px solid rgb(255, 146, 164);
+  padding: 0 8px;
+}
+
+.yuzu-kizuna-heart {
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  background-color: rgb(255, 237, 241);
+  z-index: -1;
+  text-align: right;
+}
+
+.yuzu-kizuna-footer {
+  margin-top: 8px;
+}
+
+.yuzu-kizuna-footer .text {
+  position: relative;
+  width: 100%;
+  padding: 8px 0;
+  border-radius: 5px;
+  border: 1px solid rgb(255, 146, 164);
+  background-color: rgb(255, 146, 164);
+  color: white;
+  font-size: 16px;
+  display: block;
+  text-align: center;
+  font-weight: bold;
+}
+
+.yuzu-kizuna-footer .text::after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 4px);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  filter: blur(2px);
+  z-index: -1;
+}
