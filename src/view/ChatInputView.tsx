@@ -1,8 +1,8 @@
-import { Avatar, Button, Chip, IconButton, Input, Popover, Stack, TextField, Typography } from "@mui/material";
-import { Box, styled } from "@mui/system";
 import SendIcon from '@mui/icons-material/Send';
-import { useAppContext } from "../model/AppContext";
+import { Avatar, Chip, IconButton, Input, Popover, Stack } from "@mui/material";
+import { Box, styled } from "@mui/system";
 import { useEffect, useState } from "react";
+import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
 import { ChatItemType } from "../model/ChatItemType";
@@ -30,9 +30,9 @@ const PlayerChip = styled(LargeChip)(() => ({
 
 class ChatInputViewProps {
   chat: ChatItem[] = [];
-  setChat = (updated: ChatItem[]) => {};
+  setChat = (updated: ChatItem[]) => { };
   insertIdx = -1;
-  setInsertIdx = (idx: number) => {};
+  setInsertIdx = (idx: number) => { };
 }
 
 function focusOnInput() {
@@ -43,7 +43,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const ctx = useAppContext();
   const [currentChar, setCurrentChar] = useState<ChatChar | null>(null);
   const [previousActiveCharLength, setPreviousActiveCharLength] = useState(0);
-  const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement|null>(null);
+  const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement | null>(null);
   const boxHeight = 240;
 
   // set new active char if new char is added
@@ -53,18 +53,18 @@ export default function ChatInputView(props: ChatInputViewProps) {
     }
 
     if (ctx.activeChars.length > previousActiveCharLength) {
-      setCurrentChar(ctx.activeChars[ctx.activeChars.length-1]);
+      setCurrentChar(ctx.activeChars[ctx.activeChars.length - 1]);
       focusOnInput();
     }
     setPreviousActiveCharLength(ctx.activeChars.length);
-  }, [ctx.activeChars]);
+  }, [ctx.activeChars, previousActiveCharLength]);
 
   const addChat = (item: ChatItem) => {
     const newChat = [...props.chat];
     const idx = props.insertIdx;
     if (idx >= 0) {
       newChat.splice(idx, 0, item);
-      props.setInsertIdx(idx+1);
+      props.setInsertIdx(idx + 1);
     }
     else {
       newChat.push(item);
@@ -82,11 +82,11 @@ export default function ChatInputView(props: ChatInputViewProps) {
 
     input.value = "";
     addChat(new ChatItem(currentChar, content, ChatItemType.Text));
-  }
+  };
 
   const addImageChat = (url: string) => {
     addChat(new ChatItem(currentChar, url, ChatItemType.Image));
-  }
+  };
 
   const addSpecialChat = () => {
     addChat(new ChatItem(currentChar, "", ChatItemType.Special));
@@ -129,8 +129,8 @@ export default function ChatInputView(props: ChatInputViewProps) {
             if (num === 1) {
               setCurrentChar(null);
             }
-            if (num >= 2 && num <= ctx.activeChars.length+1) {
-              setCurrentChar(ctx.activeChars[num-2]);
+            if (num >= 2 && num <= ctx.activeChars.length + 1) {
+              setCurrentChar(ctx.activeChars[num - 2]);
             }
           }
         }} />
@@ -143,7 +143,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
         flexDirection: "row",
         flexWrap: "wrap",
         padding: "8px",
-        height: `${boxHeight-44}px`,
+        height: `${boxHeight - 44}px`,
         overflowY: "scroll",
         alignContent: "flex-start",
         gap: "4px",
@@ -169,5 +169,5 @@ export default function ChatInputView(props: ChatInputViewProps) {
         ))}
       </Box>
     </Box>
-  )
+  );
 }

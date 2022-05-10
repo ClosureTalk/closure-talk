@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
 import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
-import { ChatItemType } from "../model/ChatItemType";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { render_chat } from "../renderer/RendererFactory";
 import { deserialize_chat, load_local_storage_chat, serialize_chat } from "../utils/ChatUtils";
@@ -16,12 +15,12 @@ import ChatInputView from "./ChatInputView";
 
 export default function ChatView() {
   const ctx = useAppContext();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const lastChat = load_local_storage_chat(ctx.data.characters)[0];
 
   const [chat, setChatRaw] = useState<ChatItem[]>(lastChat);
   const [confirmingClearChat, setConfirmingClearChat] = useState(false);
-  const [editing, setEditing] = useState<ChatItem|null>(null);
+  const [editing, setEditing] = useState<ChatItem | null>(null);
   const [insertIdx, setInsertIdx] = useState(-1);
   const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat(lastChat, ctx.activeChars)]);
   const [chatHistoryIdx, setChatHistoryIdx] = useState(1);
@@ -41,7 +40,7 @@ export default function ChatView() {
     setChatHistory(newHistory);
     setChatHistoryIdx(newHistory.length);
     setChatSaved(list, latest);
-  }
+  };
 
   // undo and redo
   useEffect(() => {
@@ -53,12 +52,12 @@ export default function ChatView() {
 
       let idx = -1;
       if (["Control+z", "Meta+z"].includes(key) && chatHistoryIdx > 1) {
-        idx = chatHistoryIdx-2;
-        setChatHistoryIdx(chatHistoryIdx-1);
+        idx = chatHistoryIdx - 2;
+        setChatHistoryIdx(chatHistoryIdx - 1);
       }
       else if (["Control+y", "Meta+y"].includes(key) && chatHistoryIdx < chatHistory.length) {
         idx = chatHistoryIdx;
-        setChatHistoryIdx(chatHistoryIdx+1);
+        setChatHistoryIdx(chatHistoryIdx + 1);
       }
 
       if (idx >= 0) {
@@ -129,10 +128,10 @@ export default function ChatView() {
       container.scrollTo(0, container.scrollHeight);
     }
     else {
-      const targetIdx = Math.max(0, insertIdx-3);
+      const targetIdx = Math.max(0, insertIdx - 3);
       document.querySelectorAll(".chat-item")[targetIdx].scrollIntoView({ behavior: "smooth" });
     }
-  }, [chat]);
+  }, [chat, insertIdx]);
 
   // left click handler
   const clickCallback = (item: ChatItem) => {
@@ -144,7 +143,7 @@ export default function ChatView() {
       setInsertIdx(-1);
     }
     else {
-      setInsertIdx(insertIdx === idx+1 ? -1 : idx+1);
+      setInsertIdx(insertIdx === idx + 1 ? -1 : idx + 1);
     }
     document.getElementById("chat-input")!.focus();
   };
@@ -162,30 +161,30 @@ export default function ChatView() {
       height: "100%",
     }}>
       <Box
-      id="chat-container"
-      sx={{
-        flexGrow: 1,
-        overflowY: "scroll",
-      }}>
+        id="chat-container"
+        sx={{
+          flexGrow: 1,
+          overflowY: "scroll",
+        }}>
         {render_chat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
       </Box>
       <ChatInputView chat={chat} setChat={setChat} insertIdx={insertIdx} setInsertIdx={setInsertIdx} />
       <Dialog
         open={confirmingClearChat}
         onClose={() => setConfirmingClearChat(false)}
-        >
-          <DialogTitle>{t("Clear chat confirm title")}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>{t("Clear chat confirm text")}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setConfirmingClearChat(false)}>{t("Cancel")}</Button>
-            <Button color="warning" onClick={() => {
-              setChat([]);
-              setInsertIdx(-1);
-              setConfirmingClearChat(false);
-            }}>{t("Yes")}</Button>
-          </DialogActions>
+      >
+        <DialogTitle>{t("Clear chat confirm title")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{t("Clear chat confirm text")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmingClearChat(false)}>{t("Cancel")}</Button>
+          <Button color="warning" onClick={() => {
+            setChat([]);
+            setInsertIdx(-1);
+            setConfirmingClearChat(false);
+          }}>{t("Yes")}</Button>
+        </DialogActions>
       </Dialog>
       <Dialog
         open={editing !== null}
@@ -233,12 +232,12 @@ export default function ChatView() {
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={() => {
-              setChat(chat.filter(ch => ch !== editing));
-              setEditing(null);
-              setInsertIdx(-1);
-            }}>{t("Delete")}</Button>
+            setChat(chat.filter(ch => ch !== editing));
+            setEditing(null);
+            setInsertIdx(-1);
+          }}>{t("Delete")}</Button>
         </DialogActions>
       </Dialog>
     </Box>
-  )
+  );
 }

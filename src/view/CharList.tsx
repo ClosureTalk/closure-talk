@@ -25,7 +25,6 @@ function applySearch(chars: Character[], search: string, sources: string[]): Cha
 }
 
 export default function CharList(props: CharListProps) {
-  const chars = props.data.characters;
   const ctx = useAppContext();
   const [search, setSearch] = useState("");
   const [sources, setSources] = useState(DataSources.map(s => s.key));
@@ -33,7 +32,7 @@ export default function CharList(props: CharListProps) {
 
   useEffect(() => {
     setDisplayedChars(applySearch(props.data.ordered_characters, search, sources));
-  }, [chars, search, sources]);
+  }, [props.data.ordered_characters, search, sources]);
 
   const makeAvatar = (ch: Character, img: string) => {
     return (
