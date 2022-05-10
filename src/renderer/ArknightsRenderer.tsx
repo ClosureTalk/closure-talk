@@ -1,3 +1,4 @@
+import { ChatItemType } from "../model/ChatItemType";
 import "./Arknights.css";
 import RendererProps from "./RendererProps";
 
@@ -9,15 +10,23 @@ export default function ArknightsRenderer(props: RendererProps) {
     const item = chat[idx];
     const avatarUrl = item.char?.character.get_url(item.char!.img) || "resources/renderer/ak/doctor.webp";
 
+    let content: string | JSX.Element = "Not implemented";
+    if (item.type === ChatItemType.Text) {
+      content = (
+        <div className="akn-content-text">{item.content}</div>
+      );
+    }
+    else if (item.type === ChatItemType.Image) {
+      content = <img src={item.content} />;
+    }
+
     return (
       <div className="akn-item">
         <div className="akn-avatar">
         <img src={avatarUrl}></img>
         </div>
         <div className="akn-content" onClick={() => props.click(item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
-          <div className="akn-content-text">
-          {item.content}
-          </div>
+          {content}
         </div>
       </div>
     )

@@ -1,4 +1,4 @@
-import { Avatar, Button, Chip, IconButton, Input, Stack, TextField } from "@mui/material";
+import { Avatar, Button, Chip, IconButton, Input, Popover, Stack, TextField, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import SendIcon from '@mui/icons-material/Send';
 import { useAppContext } from "../model/AppContext";
@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
 import { ChatItemType } from "../model/ChatItemType";
-import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
+import { get_key_string } from "../utils/KeyboardUtils";
+import ChatSpecialPopover from "./ChatSpecialPopover";
 
 const LargeChip = styled(Chip)(() => ({
   width: "92px",
@@ -42,6 +43,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const ctx = useAppContext();
   const [currentChar, setCurrentChar] = useState<ChatChar | null>(null);
   const [previousActiveCharLength, setPreviousActiveCharLength] = useState(0);
+  const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement|null>(null);
   const boxHeight = 240;
 
   // set new active char if new char is added
@@ -57,16 +59,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
     setPreviousActiveCharLength(ctx.activeChars.length);
   }, [ctx.activeChars]);
 
-  const addChat = (input: HTMLInputElement) => {
-    const content = input.value;
-    if (content.length === 0) {
-      return;
-    }
-
-    input.value = "";
-
-    const type = currentChar === null ? ChatItemType.Player : ChatItemType.Character;
-    const item = new ChatItem(currentChar, content, type, ChatItemAvatarType.Auto);
+  const addChat = (item: ChatItem) => {
     const newChat = [...props.chat];
     const idx = props.insertIdx;
     if (idx >= 0) {
@@ -80,17 +73,52 @@ export default function ChatInputView(props: ChatInputViewProps) {
     props.setChat(newChat);
   };
 
+  const addNormalChat = () => {
+    const input = document.getElementById("chat-input") as HTMLInputElement;
+    const content = input.value;
+    if (content.length === 0) {
+      return;
+    }
+
+    input.value = "";
+    addChat(new ChatItem(currentChar, content, ChatItemType.Text));
+  }
+
+  const addImageChat = (url: string) => {
+    addChat(new ChatItem(currentChar, url, ChatItemType.Image));
+  }
+
   return (
     <Box sx={{
       height: `${boxHeight}px`,
       width: "100%",
     }}>
       <Stack direction="row" spacing={1} paddingLeft="4px" paddingTop="4px">
-        <Avatar src={currentChar?.character.get_url(currentChar.img)} />
+        <IconButton
+          onClick={ev => setSelectImageAnchor(ev.target as HTMLElement)}
+        >
+          <Avatar src={currentChar?.character.get_url(currentChar.img)} />
+        </IconButton>
+        <Popover
+          open={selectImageAnchor !== null}
+          onClose={() => setSelectImageAnchor(null)}
+          anchorEl={selectImageAnchor}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+        >
+          <ChatSpecialPopover addImage={addImageChat} />
+        </Popover>
         <Input id="chat-input" fullWidth placeholder="Chat" multiline onKeyDown={(ev) => {
-          if (ev.key === "Enter" && !ev.shiftKey) {
+          if (get_key_string(ev.nativeEvent) === "Enter") {
             ev.preventDefault();
-            addChat(ev.target as HTMLInputElement);
+            addNormalChat();
+            return;
           }
           if (ev.ctrlKey) {
             const num = Number(ev.key);
@@ -102,7 +130,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
             }
           }
         }} />
-        <IconButton>
+        <IconButton onClick={() => addNormalChat()}>
           <SendIcon />
         </IconButton>
       </Stack>

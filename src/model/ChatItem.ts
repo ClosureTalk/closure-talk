@@ -12,7 +12,7 @@ export default class ChatItem {
     char: ChatChar | null,
     content: string,
     type: ChatItemType,
-    avatar: ChatItemAvatarType,
+    avatar = ChatItemAvatarType.Auto,
   ) {
     this.char = char;
     this.content = content;

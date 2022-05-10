@@ -1,60 +1,75 @@
 import { useAppContext } from "../model/AppContext";
+import ChatItem from "../model/ChatItem";
 import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
 import { ChatItemType } from "../model/ChatItemType";
 import RendererProps from "./RendererProps";
-import "./Yuzutalk.css"
+import "./Yuzutalk.css";
 
 export default function YuzutalkRenderer(props: RendererProps) {
   const ctx = useAppContext();
   const chat = props.chat;
 
+  const renderCharacterItem = (item: ChatItem, showAvatar: boolean, content: JSX.Element) => {
+    return (
+      <div className="yuzu-item">
+        <div className="yuzu-left">
+          {!showAvatar ? null :
+            <div className="yuzu-avatar-box">
+              <img src={item.char!.character.get_url(item.char!.img)}></img>
+            </div>
+          }
+        </div>
+        <div className="yuzu-right">
+          {!showAvatar ? null :
+            <div className="yuzu-name">{item.char!.character.get_short_name(ctx.lang)}</div>
+          }
+          <div className={"yuzu-message-box " + (showAvatar ? "yuzu-avatar-message-box" : "")}>
+            {content}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderPlayerItem = (content: JSX.Element) => (
+    <div className="yuzu-item yuzu-player-item">
+      <div className="yuzu-message-box yuzu-player-message-box">
+        {content}
+      </div>
+    </div>
+  );
+
   const renderItem = (idx: number) => {
     const item = chat[idx];
 
-    if (item.type === ChatItemType.Character) {
+    let content: string | JSX.Element = "Not implemented";
+    if (item.type === ChatItemType.Text) {
+      content = item.content;
+    }
+    else if (item.type === ChatItemType.Image) {
+      content = <img src={item.content} />;
+    }
+
+    content = (
+      <div
+        className="yuzu-message"
+        onClick={() => props.click(item)}
+        onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
+        {content}
+      </div>
+    );
+
+    if (item.char !== null) {
       const showAvatar = idx === 0 ||
-      item.avatar === ChatItemAvatarType.Show ||
-      chat[idx-1].char?.get_id() !== item.char!.get_id();
+        item.avatar === ChatItemAvatarType.Show ||
+        chat[idx - 1].char?.get_id() !== item.char!.get_id();
 
-      return (
-        <div className="yuzu-item">
-          <div className="yuzu-left">
-            {!showAvatar? null :
-              <div className="yuzu-avatar-box">
-                <img src={item.char!.character.get_url(item.char!.img)}></img>
-              </div>
-            }
-          </div>
-          <div className="yuzu-right">
-            {!showAvatar ? null :
-              <div className="yuzu-name">{item.char!.character.get_short_name(ctx.lang)}</div>
-            }
-            <div className={"yuzu-message-box " + (showAvatar ? "yuzu-avatar-message-box" : "")}>
-              <div className="yuzu-message" onClick={() => props.click(item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
-                {item.content}
-              </div>
-            </div>
-          </div>
-        </div>
-      )
+      return renderCharacterItem(item, showAvatar, content);
     }
-
-    if (item.type === ChatItemType.Player) {
-      return (
-        <div className="yuzu-item yuzu-player-item">
-          <div className="yuzu-message-box yuzu-player-message-box">
-            <div className="yuzu-message" onClick={() => props.click(item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
-              {item.content}
-            </div>
-          </div>
-        </div>
-      )
+    else {
+      return renderPlayerItem(content);
     }
-
-    return (
-      <div>Wait</div>
-    )
-  }
+  };
 
   const chatBgColor = "rgb(255, 247, 225)";
 
@@ -78,5 +93,5 @@ export default function YuzutalkRenderer(props: RendererProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

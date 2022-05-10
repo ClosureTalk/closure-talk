@@ -29,6 +29,10 @@
   width: 100%;
 }
 
+.akn-content img {
+  max-width: 100%;
+}
+
 .akn-content-text {
   white-space: pre-wrap;
   overflow-wrap: break-word;

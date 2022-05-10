@@ -11,6 +11,10 @@ export async function read_file_as_text(file: File): Promise<string> {
   return await read_file(reader => reader.readAsText(file)) as string;
 }
 
+export async function read_file_as_url(file: File): Promise<string> {
+  return await read_file(reader => reader.readAsDataURL(file)) as string;
+}
+
 export function prompt_file(accept: string): Promise<File|null> {
   return new Promise((resolve, reject) => {
     const input = document.createElement("input") as HTMLInputElement;

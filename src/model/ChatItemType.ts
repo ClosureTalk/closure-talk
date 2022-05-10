@@ -1,5 +1,5 @@
 export enum ChatItemType {
-  Player = "PLAYER",
-  Character = "CHAR",
+  Text = "TEXT",
   Special = "SPECIAL",
+  Image = "IMAGE",
 }

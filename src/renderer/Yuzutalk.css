@@ -37,6 +37,10 @@
   font-weight: 400;
 }
 
+.yuzu-message img {
+  max-width: 100%;
+}
+
 .yuzu-name {
   font-size: 20px;
   font-weight: bold;
