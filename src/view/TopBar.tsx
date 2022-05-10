@@ -34,8 +34,7 @@ export default function TopBar() {
           <Typography variant="h5">Closure Talk</Typography>
           <Typography variant="body1" sx={{
             fontStyle: "italic"
-          }}>alpha</Typography>
-          <Typography variant="body1">{t("Alpha text")}</Typography>
+          }}>beta</Typography>
         </Stack>
         <Box sx={{
           display: "flex",
