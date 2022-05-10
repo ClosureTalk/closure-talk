@@ -1,9 +1,9 @@
-import { Box, IconButton, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import { useAppContext } from "../model/AppContext";
-import { useState } from "react";
-import { prompt_file, read_file_as_url } from "../utils/FileUtils";
 import StarsIcon from '@mui/icons-material/Stars';
+import { Box, IconButton, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { useState } from "react";
+import { useAppContext } from "../model/AppContext";
+import { prompt_file, read_file_as_url } from "../utils/FileUtils";
 
 class ChatSpecialPopoverProps {
   addImage = (url: string) => { };
@@ -27,16 +27,16 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
         columnGap: "2px",
       }}>
         {stampLists.length === 0 ? null :
-        stampLists[stampListIdx].map(st => (
-          <img
-            key={st.key}
-            className="stamp-btn"
-            src={st.url}
-            onClick={() => {
-              props.addImage(st.url);
-              props.closePopover();
-            }}></img>
-        ))
+          stampLists[stampListIdx].map(st => (
+            <img
+              key={st.key}
+              className="stamp-btn"
+              src={st.url}
+              onClick={() => {
+                props.addImage(st.url);
+                props.closePopover();
+              }}></img>
+          ))
         }
       </Box>
       <Stack direction="row" sx={{
@@ -72,8 +72,8 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
             {stampLists.map((list, idx) => (
               <ToggleButton
                 value={idx}
-                sx={{paddingTop: "0", paddingBottom: "0"}}>
-                  {list[0].ds.key}
+                sx={{ paddingTop: "0", paddingBottom: "0" }}>
+                {list[0].ds.key}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>

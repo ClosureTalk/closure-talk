@@ -1,21 +1,21 @@
+import CodeIcon from '@mui/icons-material/Code';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import InfoIcon from '@mui/icons-material/Info';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { AppBar, Box, Dialog, DialogContent, DialogContentText, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { StyledIconButton } from "../component/StyledIconButton";
 import { StyledInputLabel, StyledSelect } from "../component/StyledSelect";
 import { useAppContext } from "../model/AppContext";
 import { Languages, Renderers } from "../model/Constants";
+import { ClearChatEvent, LoadCodeEvent, SaveCodeEvent } from "../model/Events";
 import { capture_and_save } from "../utils/CaptureUtils";
 import { get_now_filename } from "../utils/DateUtils";
-import CodeIcon from '@mui/icons-material/Code';
-import { StyledIconButton } from "../component/StyledIconButton";
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { ClearChatEvent, LoadCodeEvent, SaveCodeEvent } from "../model/Events";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import InfoIcon from '@mui/icons-material/Info';
 import InfoView from "./InfoView";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 export default function TopBar() {
   const ctx = useAppContext();
@@ -31,11 +31,11 @@ export default function TopBar() {
           marginLeft: "8px",
           columnGap: "8px",
         }}>
-        <Typography variant="h5">Closure Talk</Typography>
-        <Typography variant="body1" sx={{
-          fontStyle: "italic"
-        }}>alpha</Typography>
-        <Typography variant="body1">{t("Alpha text")}</Typography>
+          <Typography variant="h5">Closure Talk</Typography>
+          <Typography variant="body1" sx={{
+            fontStyle: "italic"
+          }}>alpha</Typography>
+          <Typography variant="body1">{t("Alpha text")}</Typography>
         </Stack>
         <Box sx={{
           display: "flex",
@@ -103,32 +103,32 @@ export default function TopBar() {
           </StyledIconButton>
           <StyledIconButton
             title={t("Save image")}
-            onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`) }}>
+            onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
             <PhotoCameraIcon />
           </StyledIconButton>
           <StyledIconButton
             title={t("Save code")}
-            onClick={() => {window.dispatchEvent(SaveCodeEvent)}}
-            >
+            onClick={() => { window.dispatchEvent(SaveCodeEvent); }}
+          >
             <CodeIcon />
           </StyledIconButton>
           <StyledIconButton
             title={t("Load code")}
-            onClick={() => {window.dispatchEvent(LoadCodeEvent)}}
-            >
+            onClick={() => { window.dispatchEvent(LoadCodeEvent); }}
+          >
             <FileUploadIcon />
           </StyledIconButton>
           <StyledIconButton
             title={t("Clear chat")}
-            onClick={() => {window.dispatchEvent(ClearChatEvent)}}
-            >
+            onClick={() => { window.dispatchEvent(ClearChatEvent); }}
+          >
             <DeleteForeverIcon />
           </StyledIconButton>
         </Box>
       </Toolbar>
       <Dialog
         open={showHelp}
-        onClose={() => {setShowHelp(false)}}
+        onClose={() => { setShowHelp(false); }}
       >
         <DialogContent>
           <DialogContentText sx={{
@@ -138,11 +138,11 @@ export default function TopBar() {
       </Dialog>
       <Dialog
         open={showInfo}
-        onClose={() => {setShowInfo(false)}}
-        >
-          <DialogContent>
-            <InfoView />
-          </DialogContent>
+        onClose={() => { setShowInfo(false); }}
+      >
+        <DialogContent>
+          <InfoView />
+        </DialogContent>
       </Dialog>
     </AppBar>
   );

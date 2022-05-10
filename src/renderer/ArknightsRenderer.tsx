@@ -4,20 +4,20 @@ import "./Arknights.css";
 import RendererProps from "./RendererProps";
 
 
-function make_akn_header(content: string, click: ()=>void, contextMenu:MouseEventHandler) {
+function make_akn_header(content: string, click: () => void, contextMenu: MouseEventHandler) {
   return (
     <div className="akn-header">
-    <div className="akn-header-left">DIALOGUE</div>
-    <div className="akn-header-title" onClick={click} onContextMenu={contextMenu}>
-      {content}
-      <div className="akn-header-title-deco akn-header-title-deco-1"></div>
-      <div className="akn-header-title-deco akn-header-title-deco-2"></div>
-      <div className="akn-header-title-deco akn-header-title-deco-3"></div>
-      <div className="akn-header-title-deco akn-header-title-deco-4"></div>
+      <div className="akn-header-left">DIALOGUE</div>
+      <div className="akn-header-title" onClick={click} onContextMenu={contextMenu}>
+        {content}
+        <div className="akn-header-title-deco akn-header-title-deco-1"></div>
+        <div className="akn-header-title-deco akn-header-title-deco-2"></div>
+        <div className="akn-header-title-deco akn-header-title-deco-3"></div>
+        <div className="akn-header-title-deco akn-header-title-deco-4"></div>
+      </div>
+      <div className="akn-header-right"></div>
     </div>
-    <div className="akn-header-right"></div>
-  </div>
-  )
+  );
 }
 
 
@@ -46,14 +46,14 @@ export default function ArknightsRenderer(props: RendererProps) {
     return (
       <div className="akn-item">
         <div className="akn-avatar">
-        <img src={avatarUrl}></img>
+          <img src={avatarUrl}></img>
         </div>
         <div className="akn-content" onClick={() => props.click(item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
           {content}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const chatBgColor = "#231b14";
 
@@ -77,5 +77,5 @@ export default function ArknightsRenderer(props: RendererProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

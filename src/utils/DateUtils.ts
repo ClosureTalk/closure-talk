@@ -1,5 +1,5 @@
 export function get_now() {
-  return new Date(Date.now())
+  return new Date(Date.now());
 }
 
 export function get_now_string() {

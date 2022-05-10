@@ -9,7 +9,7 @@ export function trigger_download(url: string, filename: string) {
 
 export function download_text(text: string, filename: string) {
   const blob = new Blob([text], {
-    type:"text/plain;charset=UTF-8"
+    type: "text/plain;charset=UTF-8"
   });
   trigger_download(URL.createObjectURL(blob), filename);
 }
