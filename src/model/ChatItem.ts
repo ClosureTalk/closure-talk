@@ -20,7 +20,7 @@ export default class ChatItem {
     this.avatar = avatar;
   }
 
-  isStamp(): boolean {
+  is_stamp(): boolean {
     return this.type === ChatItemType.Image && !this.content.startsWith("data:image");
   }
 }

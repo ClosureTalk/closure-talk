@@ -51,7 +51,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
     else if (item.type === ChatItemType.Image) {
       content = <img src={item.content} />;
       boxClasses.push("yuzu-image-box");
-      if (item.isStamp()) {
+      if (item.is_stamp()) {
         boxClasses.push("yuzu-stamp")
       }
     }

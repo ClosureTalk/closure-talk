@@ -17,7 +17,7 @@ export default function ArknightsRenderer(props: RendererProps) {
       );
     }
     else if (item.type === ChatItemType.Image) {
-      content = <img src={item.content} className={item.isStamp() ? "akn-stamp" : ""} />;
+      content = <img src={item.content} className={item.is_stamp() ? "akn-stamp" : ""} />;
     }
 
     return (
