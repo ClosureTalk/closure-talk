@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
 import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
+import { ChatItemType } from "../model/ChatItemType";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { render_chat } from "../renderer/RendererFactory";
 import { deserialize_chat, load_local_storage_chat, serialize_chat } from "../utils/ChatUtils";
@@ -192,7 +193,9 @@ export default function ChatView() {
           const item = editing!;
           const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
           item.avatar = getElement("edit-avatar").checked ? ChatItemAvatarType.Show : ChatItemAvatarType.Auto;
-          item.content = getElement("edit-content").value;
+          if (item.is_editable()) {
+            item.content = getElement("edit-content").value;
+          }
           item.nameOverride = getElement("name-override").value.trim();
           setChat([...chat]);
           setEditing(null);
@@ -209,8 +212,9 @@ export default function ChatView() {
             fullWidth
             multiline
             variant="standard"
-            defaultValue={editing?.content}
+            defaultValue={editing?.is_editable() ? editing?.content : ""}
             onFocus={ev => ev.target.select()}
+            disabled={!(editing?.is_editable())}
           />
           <TextField
             autoFocus

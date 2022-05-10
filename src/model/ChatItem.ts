@@ -26,4 +26,8 @@ export default class ChatItem {
   is_stamp(): boolean {
     return this.type === ChatItemType.Image && !this.content.startsWith("data:image");
   }
+
+  is_editable(): boolean {
+    return this.type !== ChatItemType.Image;
+  }
 }
