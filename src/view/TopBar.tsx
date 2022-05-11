@@ -24,7 +24,7 @@ export default function TopBar() {
   const [showInfo, setShowInfo] = useState(false);
 
   return (
-    <AppBar position="fixed" className="top-bar">
+    <AppBar position="fixed" className="top-bar" elevation={0}>
       <Toolbar disableGutters>
         <Stack direction="row" sx={{
           alignItems: "center",
