@@ -68,7 +68,7 @@ export default function ArknightsRenderer(props: RendererProps) {
     }}>
       <div id="chat-area" style={{
         backgroundColor: chatBgColor,
-        paddingTop: "8px",
+        paddingTop: "16px",
         paddingBottom: "16px",
       }}>
         {chat.map((_, idx) => (
