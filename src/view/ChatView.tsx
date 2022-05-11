@@ -216,12 +216,10 @@ export default function ChatView() {
             disabled={!(editing?.is_editable())}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="name-override"
             label={t("Name override")}
             fullWidth
-            multiline
             variant="standard"
             defaultValue={editing?.nameOverride}
             onFocus={ev => ev.target.select()}
