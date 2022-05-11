@@ -2,7 +2,7 @@
 
 A stylized chat generator. [Try it!](https://closuretalk.github.io).
 
-_This project is currently an early preview alpha. Development progress and plan are on Wiki pages of the repo._
+_This project is currently beta. Development progress and plan are on Wiki pages of the repo._
 
 [中文说明](README.CN.md)
 
@@ -19,6 +19,7 @@ _This project is currently an early preview alpha. Development progress and plan
     - `Ctrl+1` switches to the "player" (_dokutah_ or _sensei_)
     - `Ctrl+2` switches to first character, etc.
 1. Type. Press `Enter` to send, press `Shift+Enter` to line break.
+1. Click on the avatar next to the chat input to send stickers and images, or special chat items
 1. Top right of page, buttons for:
     - saving a screenshot
     - saving the chat to a text file
