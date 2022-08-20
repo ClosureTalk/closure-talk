@@ -23,11 +23,14 @@ function make_akn_header(content: string, click: () => void, contextMenu: MouseE
 
 export default function ArknightsRenderer(props: RendererProps) {
   const chat = props.chat;
+  let headerCounter = 0;
 
   const renderItem = (idx: number) => {
     const item = chat[idx];
     if (item.type === ChatItemType.Special) {
-      const title = item.content.trim().length === 0 ? "Part.01" : item.content;
+      // make part counter increasing sequentially
+      headerCounter++;
+      const title = item.content.trim().length === 0 ? `Part.${headerCounter.toString().padStart(2, "0")}` : item.content;
       return make_akn_header(title, () => props.click(item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
     }
 
