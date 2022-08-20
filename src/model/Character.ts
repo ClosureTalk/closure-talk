@@ -17,7 +17,7 @@ export default class Character {
     this.all_search = ([
       Array.from(this.names.values()).join("|"),
       Array.from(this.short_names.values()).join("|"),
-      this.searches.join("|"),
+      this.searches.filter(s => !s.startsWith(":#")).join("|"),
     ].join("|")).toLowerCase();
   }
 

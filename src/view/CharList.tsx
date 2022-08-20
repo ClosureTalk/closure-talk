@@ -1,17 +1,18 @@
-import { Box, Button, IconButton, ListItem, ListItemText, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, IconButton, ListItem, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import VFill from "../component/VFill";
 import { useAppContext } from "../model/AppContext";
 import Character from "../model/Character";
 import ChatChar from "../model/ChatChar";
-import { DataSources } from "../model/Constants";
+import DataSourceState from "../model/DataSourceState";
 
-function applySearch(chars: Character[], search: string, sources: string[]): Character[] {
+function applySearch(chars: Character[], search: string, sources: DataSourceState[]): Character[] {
   const keys = search.split(",").map(s => s.trim().toLowerCase());
   const result = chars.filter(
-    ch => sources.some(s => s === ch.ds.key)
+    ch => sources.find(s => s.enabled && s.source.key === ch.ds.key && s.source.filter(ch, s.filters))
   ).filter(
     ch => keys.every(key => ch.all_search.includes(key))
   );
@@ -21,16 +22,17 @@ function applySearch(chars: Character[], search: string, sources: string[]): Cha
 
 export default function CharList() {
   const ctx = useAppContext();
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
-  const [sources, setSources] = useState(DataSources.map(s => s.key));
   const [displayedChars, setDisplayedChars] = useState<Character[]>([]);
+  const [editingSourceKey, setEditingSourceKey] = useState("");
 
   useEffect(() => {
     const characters = Array.from(ctx.characters.values());
-    const filtered = applySearch(characters, search, sources);
+    const filtered = applySearch(characters, search, ctx.sources);
     const sorted = filtered.sort((a, b) => a.id.localeCompare(b.id));
     setDisplayedChars(sorted);
-  }, [ctx.characters, search, sources]);
+  }, [ctx.characters, search, ctx.sources]);
 
   const makeAvatar = (ch: Character, img: string) => {
     return (
@@ -64,6 +66,15 @@ export default function CharList() {
     );
   };
 
+  const editing = ctx.sources.find(s => s.source.key === editingSourceKey);
+  const updateEditing = (action: (copy: DataSourceState) => void) => {
+    const copy = new DataSourceState(editing!.source, editing!.filters);
+    Object.assign(copy, editing);
+    action(copy);
+    ctx.setSources(ctx.sources.map(v => v.source.key === copy.source.key ? copy : v));
+    copy.save_state();
+  };
+
   return (
     <Box sx={{
       display: "flex",
@@ -74,25 +85,65 @@ export default function CharList() {
         padding: "8px",
       }}>
         <Stack direction="row" spacing={1}>
-          {DataSources.map(ds => (
+          {ctx.sources.map(ds => (
             <Button
-              key={ds.key}
+              key={ds.source.key}
               variant="outlined"
-              color={sources.includes(ds.key) ? "success" : "error"}
+              color={editingSourceKey === ds.source.key ? "secondary" : (ds.enabled ? "success" : "error")}
               onClick={_ => {
-                const idx = sources.indexOf(ds.key);
-                const updated = [...sources];
-                if (idx >= 0) {
-                  updated.splice(idx, 1);
+                if (editingSourceKey === ds.source.key) {
+                  setEditingSourceKey("");
                 }
                 else {
-                  updated.push(ds.key);
+                  setEditingSourceKey(ds.source.key);
                 }
-                setSources(updated);
               }}
-            >{ds.name}</Button>
+            >{ds.source.name}</Button>
           ))}
         </Stack>
+        {
+          !editing ? null :
+            <Stack direction="column" spacing={1} style={{
+              borderStyle: "solid",
+              borderColor: "gray",
+              borderRadius: "4px",
+              borderWidth: "1px",
+              padding: "8px",
+            }}>
+              <FormGroup>
+                <FormControlLabel control={
+                  <Checkbox
+                    checked={editing.enabled}
+                    onChange={() => {
+                      updateEditing(copy => copy.enabled = !copy.enabled);
+                    }}
+                  />
+                } label={t("Enabled")} />
+              </FormGroup>
+              {editing.filters.map((gp, gp_idx) => (
+                <Stack direction="column" key={gp.group_key}>
+                  <Typography variant="h6">{editing.source.get_string(gp.group_name, ctx.lang)}</Typography>
+                  <Stack direction="row" spacing={1} style={{
+                    flexWrap: "wrap",
+                    maxWidth: "100%",
+                  }}>
+                    {Array.from(Array(gp.filter_names.length).keys()).map(idx => (
+                      <FormGroup key={idx}>
+                        <FormControlLabel control={
+                          <Checkbox
+                            checked={gp.active[idx]}
+                            onChange={() => {
+                              updateEditing(copy => copy.filters[gp_idx].active[idx] = !gp.active[idx]);
+                            }}
+                          />
+                        } label={editing.source.get_string(gp.filter_names[idx], ctx.lang)} />
+                      </FormGroup>
+                    ))}
+                  </Stack>
+                </Stack>
+              ))}
+            </Stack>
+        }
         <TextField variant="outlined" label="Search" onChange={ev => setSearch(ev.target.value)}></TextField>
       </Stack>
       <VFill renderer={(height) => {
