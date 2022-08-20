@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { AppContext } from "./model/AppContext";
 import AppData from "./model/AppData";
+import Character from "./model/Character";
 import ChatChar from "./model/ChatChar";
 import { Renderers } from "./model/Constants";
+import StampInfo from "./model/StampInfo";
 import { RendererType } from "./renderer/RendererType";
 import { load_local_storage_chat } from "./utils/ChatUtils";
 import CharList from "./view/CharList";
@@ -13,22 +15,28 @@ import LoadingScreen from "./view/LoadingScreen";
 import TopBar from "./view/TopBar";
 
 function App() {
-  const [data, setData] = useState<AppData | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const [renderer, setRenderer] = useState((localStorage.getItem("renderer") || Renderers[0]) as RendererType);
   const [lang, setLang] = useState(localStorage.getItem("lang") || "zh-cn");
   const [activeChars, setActiveChars] = useState<ChatChar[]>([]);
+  const [characters, setCharacters] = useState(new Map<string, Character>());
+  const [stamps, setStamps] = useState<StampInfo[][]>([]);
 
   useEffect(() => {
-    if (data === null) {
-      (async () => {
-        const loaded = await AppData.load_data();
-        setData(loaded);
-        setActiveChars(load_local_storage_chat(loaded.characters)[1]);
-      })();
+    if (loaded) {
+      return;
     }
-  }, [data]);
 
-  if (data === null) {
+  (async () => {
+      const data = await AppData.load_data();
+      setCharacters(data.characters);
+      setStamps(data.stamps);
+      setLoaded(true);
+      setActiveChars(load_local_storage_chat(data.characters)[1]);
+    })();
+  }, [loaded]);
+
+  if (!loaded) {
     return (
       <LoadingScreen />
     );
@@ -42,7 +50,9 @@ function App() {
       setRenderer: setRenderer,
       activeChars: activeChars,
       setActiveChars: setActiveChars,
-      data: data,
+      characters: characters,
+      setCharacters: setCharacters,
+      stamps: stamps,
     }}>
       <Box>
         <TopBar />
@@ -59,7 +69,7 @@ function App() {
             height: "100%",
             backgroundColor: "#dddddd",
           }}>
-            <CharList data={data} />
+            <CharList />
           </Box>
           <Box sx={{
             width: "500px",

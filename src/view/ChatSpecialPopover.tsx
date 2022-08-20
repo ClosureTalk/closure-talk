@@ -13,7 +13,7 @@ class ChatSpecialPopoverProps {
 
 export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
   const ctx = useAppContext();
-  const stampLists = ctx.data.stamps.filter(l => l.length > 0);
+  const stampLists = ctx.stamps.filter(l => l.length > 0);
   const [stampListIdx, setStampListIdx] = useState(0);
 
   return (

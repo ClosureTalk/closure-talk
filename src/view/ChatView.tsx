@@ -16,7 +16,7 @@ import ChatInputView from "./ChatInputView";
 export default function ChatView() {
   const ctx = useAppContext();
   const { t } = useTranslation();
-  const lastChat = load_local_storage_chat(ctx.data.characters)[0];
+  const lastChat = load_local_storage_chat(ctx.characters)[0];
 
   const [chat, setChatRaw] = useState<ChatItem[]>(lastChat);
   const [confirmingClearChat, setConfirmingClearChat] = useState(false);
@@ -62,7 +62,7 @@ export default function ChatView() {
 
       if (idx >= 0) {
         const newChatText = chatHistory[idx];
-        const newChat = deserialize_chat(newChatText, ctx.data.characters)[0];
+        const newChat = deserialize_chat(newChatText, ctx.characters)[0];
         setChatSaved(newChat, newChatText);
       }
     };
@@ -95,7 +95,7 @@ export default function ChatView() {
 
       try {
         const text = await read_file_as_text(file);
-        const [newChat, newChars] = deserialize_chat(text, ctx.data.characters);
+        const [newChat, newChars] = deserialize_chat(text, ctx.characters);
 
         setChat(newChat);
         ctx.setActiveChars(newChars);

@@ -4,14 +4,9 @@ import React, { useEffect, useState } from "react";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import VFill from "../component/VFill";
 import { useAppContext } from "../model/AppContext";
-import AppData from "../model/AppData";
 import Character from "../model/Character";
 import ChatChar from "../model/ChatChar";
 import { DataSources } from "../model/Constants";
-
-class CharListProps {
-  data = new AppData();
-}
 
 function applySearch(chars: Character[], search: string, sources: string[]): Character[] {
   const keys = search.split(",").map(s => s.trim().toLowerCase());
@@ -24,15 +19,18 @@ function applySearch(chars: Character[], search: string, sources: string[]): Cha
   return result;
 }
 
-export default function CharList(props: CharListProps) {
+export default function CharList() {
   const ctx = useAppContext();
   const [search, setSearch] = useState("");
   const [sources, setSources] = useState(DataSources.map(s => s.key));
   const [displayedChars, setDisplayedChars] = useState<Character[]>([]);
 
   useEffect(() => {
-    setDisplayedChars(applySearch(props.data.ordered_characters, search, sources));
-  }, [props.data.ordered_characters, search, sources]);
+    const characters = Array.from(ctx.characters.values());
+    const filtered = applySearch(characters, search, sources);
+    const sorted = filtered.sort((a, b) => a.id.localeCompare(b.id));
+    setDisplayedChars(sorted);
+  }, [ctx.characters, search, sources]);
 
   const makeAvatar = (ch: Character, img: string) => {
     return (

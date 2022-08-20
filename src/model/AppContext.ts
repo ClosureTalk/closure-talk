@@ -1,8 +1,9 @@
 import { createContext, useContext } from 'react';
 import { RendererType } from "../renderer/RendererType";
-import AppData from "./AppData";
+import Character from "./Character";
 import ChatChar from "./ChatChar";
 import { Renderers } from "./Constants";
+import StampInfo from "./StampInfo";
 
 export interface IAppContext {
   lang: string;
@@ -11,7 +12,9 @@ export interface IAppContext {
   setRenderer: Function;
   activeChars: ChatChar[];
   setActiveChars: Function;
-  data: AppData;
+  characters: Map<string, Character>;
+  setCharacters: Function;
+  stamps: StampInfo[][];
 }
 
 const AppContext = createContext<IAppContext>({
@@ -21,7 +24,9 @@ const AppContext = createContext<IAppContext>({
   setRenderer: () => { },
   activeChars: [],
   setActiveChars: () => { },
-  data: new AppData(),
+  characters: new Map<string, Character>(),
+  setCharacters: () => { },
+  stamps: [],
 });
 
 const useAppContext = () => useContext(AppContext);
