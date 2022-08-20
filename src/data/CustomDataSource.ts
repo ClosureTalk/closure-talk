@@ -1,5 +1,6 @@
 import Character from "../model/Character";
 import CustomCharacter from "../model/CustomCharacter";
+import FilterGroup from "../model/FilterGroup";
 import StampInfo from "../model/StampInfo";
 import BasicDataSource from "./BasicDataSource";
 
@@ -43,5 +44,9 @@ export default class CustomDataSource extends BasicDataSource {
       };
     });
     localStorage.setItem("custom-characters", JSON.stringify(chars));
+  }
+
+  async get_filters(): Promise<FilterGroup[]> {
+    return [];
   }
 }

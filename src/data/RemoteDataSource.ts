@@ -1,4 +1,5 @@
 import Character from "../model/Character";
+import FilterGroup from "../model/FilterGroup";
 import StampInfo from "../model/StampInfo";
 import BasicDataSource from "./BasicDataSource";
 
@@ -23,6 +24,11 @@ export default class RemoteDataSource extends BasicDataSource {
       `resources/${this.key}/stamps/${encodeURIComponent(s)}.webp`,
       this
     ));
+  }
+
+  async get_filters(): Promise<FilterGroup[]> {
+    const list = await (await fetch(`resources/${this.key}/filters.json`)).json() as any[];
+    return list.map(obj => FilterGroup.load_object(obj));
   }
 
   get_avatar_url(img: string): string {

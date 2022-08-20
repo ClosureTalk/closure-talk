@@ -1,11 +1,12 @@
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { AppContext } from "./model/AppContext";
 import AppData from "./model/AppData";
 import Character from "./model/Character";
 import ChatChar from "./model/ChatChar";
 import { Renderers } from "./model/Constants";
+import DataSourceState from "./model/DataSourceState";
 import StampInfo from "./model/StampInfo";
 import { RendererType } from "./renderer/RendererType";
 import { load_local_storage_chat } from "./utils/ChatUtils";
@@ -21,18 +22,20 @@ function App() {
   const [activeChars, setActiveChars] = useState<ChatChar[]>([]);
   const [characters, setCharacters] = useState(new Map<string, Character>());
   const [stamps, setStamps] = useState<StampInfo[][]>([]);
+  const [sources, setSources] = useState<DataSourceState[]>([]);
 
   useEffect(() => {
     if (loaded) {
       return;
     }
 
-  (async () => {
+    (async () => {
       const data = await AppData.load_data();
       setCharacters(data.characters);
       setStamps(data.stamps);
       setLoaded(true);
       setActiveChars(load_local_storage_chat(data.characters)[1]);
+      setSources(data.sources);
     })();
   }, [loaded]);
 
@@ -53,6 +56,8 @@ function App() {
       characters: characters,
       setCharacters: setCharacters,
       stamps: stamps,
+      sources: sources,
+      setSources: setSources,
     }}>
       <Box>
         <TopBar />
@@ -72,7 +77,8 @@ function App() {
             <CharList />
           </Box>
           <Box sx={{
-            width: "500px",
+            flexShrink: "0",
+            flexBasis: "500px",
             height: "100%",
           }}>
             <ChatView />

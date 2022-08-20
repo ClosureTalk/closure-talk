@@ -3,6 +3,7 @@ import { RendererType } from "../renderer/RendererType";
 import Character from "./Character";
 import ChatChar from "./ChatChar";
 import { Renderers } from "./Constants";
+import DataSourceState from "./DataSourceState";
 import StampInfo from "./StampInfo";
 
 export interface IAppContext {
@@ -15,6 +16,8 @@ export interface IAppContext {
   characters: Map<string, Character>;
   setCharacters: Function;
   stamps: StampInfo[][];
+  sources: DataSourceState[];
+  setSources: Function;
 }
 
 const AppContext = createContext<IAppContext>({
@@ -27,6 +30,8 @@ const AppContext = createContext<IAppContext>({
   characters: new Map<string, Character>(),
   setCharacters: () => { },
   stamps: [],
+  sources: [],
+  setSources: () => { },
 });
 
 const useAppContext = () => useContext(AppContext);
