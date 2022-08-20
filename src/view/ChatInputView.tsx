@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import { Avatar, Chip, IconButton, Input, Popover, Stack } from "@mui/material";
 import { Box, styled } from "@mui/system";
@@ -8,6 +9,7 @@ import ChatItem from "../model/ChatItem";
 import { ChatItemType } from "../model/ChatItemType";
 import { get_key_string } from "../utils/KeyboardUtils";
 import ChatSpecialPopover from "./ChatSpecialPopover";
+import CustomCharDialog from "./CustomCharDialog";
 
 const LargeChip = styled(Chip)(() => ({
   width: "92px",
@@ -44,6 +46,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const [currentChar, setCurrentChar] = useState<ChatChar | null>(null);
   const [previousActiveCharLength, setPreviousActiveCharLength] = useState(0);
   const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement | null>(null);
+  const [customCharOpen, setCustomCharOpen] = useState(false);
   const boxHeight = 240;
 
   // set new active char if new char is added
@@ -150,7 +153,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
       }}>
         <PlayerChip
           variant="outlined"
-          avatar={<Avatar alt="Avatar of player"/>}
+          avatar={<Avatar alt="Avatar of player" />}
           onClick={() => setCurrentChar(null)}
         />
         {ctx.activeChars.map(ch => (
@@ -167,7 +170,15 @@ export default function ChatInputView(props: ChatInputViewProps) {
             onDelete={() => ctx.setActiveChars(ctx.activeChars.filter(c => c.get_id() !== ch.get_id()))}
           />
         ))}
+        <PlayerChip
+          variant="outlined"
+          avatar={
+            <Avatar sx={{ bgcolor: "white" }}><AddIcon /></Avatar>
+          }
+          onClick={() => { setCustomCharOpen(true); }}
+        />
       </Box>
+      <CustomCharDialog open={customCharOpen} setClose={() => { setCustomCharOpen(false); }} />
     </Box>
   );
 }

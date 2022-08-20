@@ -33,6 +33,10 @@ export default class Character {
     return this.ds.get_string(this.short_names, lang);
   }
 
+  is_custom(): boolean {
+    return this.id.startsWith("custom-");
+  }
+
   static load_object(object: any, id_prefix: string, ds: IDataSource): Character {
     const ch = new Character(ds);
     Object.assign(ch, object);

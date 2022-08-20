@@ -1,16 +1,10 @@
 import Character from "../model/Character";
 import StampInfo from "../model/StampInfo";
-import IDataSource from "./IDataSource";
+import BasicDataSource from "./BasicDataSource";
 
-export default class RemoteDataSource implements IDataSource {
-  name: string;
-  key: string;
-  lang_fallback: string;
-
+export default class RemoteDataSource extends BasicDataSource {
   constructor(name: string, key: string, lang_fallback: string) {
-    this.name = name;
-    this.key = key;
-    this.lang_fallback = lang_fallback;
+    super(name, key, lang_fallback);
   }
 
   id_prefix(): string {
@@ -33,15 +27,5 @@ export default class RemoteDataSource implements IDataSource {
 
   get_avatar_url(img: string): string {
     return `resources/${this.key}/characters/${encodeURIComponent(img)}.webp`;
-  }
-
-  get_string(map: Map<string, string>, lang: string): string {
-    for (let key of [lang, this.lang_fallback]) {
-      const s = map.get(key);
-      if (s && s.length > 0) {
-        return s;
-      }
-    }
-    return "";
   }
 }
