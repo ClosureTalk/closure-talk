@@ -35,6 +35,7 @@ Character metadata sources:
 
 - _Arknights_ from [Kengxxiao/ArknightsGameData](https://github.com/Kengxxiao/ArknightsGameData)
 - _Blue Archive_ from [YuzuTalk/translation](https://github.com/YuzuTalk/translation)
+- Some _Blue Archive_ Chinese translation from [B站碧蓝档案WIKI](https://wiki.biligame.com/bluearchive)
 
 ## Copyrights
 
