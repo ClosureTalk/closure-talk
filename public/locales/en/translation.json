@@ -16,5 +16,7 @@
   "Always show avatar": "Always show avatar",
   "yuzu-kizuna-title": "Relationship Event",
   "yuzu-kizuna-text": "To {}'s Relationship Story",
-  "yuzu-reply-title": "Reply"
+  "yuzu-reply-title": "Reply",
+  "Remove custom char confirm title": "Remove custom character?",
+  "Remove custom char confirm text": "Dialogs of the character will appear as text from player after refreshing."
 }

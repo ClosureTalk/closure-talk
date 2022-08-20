@@ -19,5 +19,7 @@
   "yuzu-reply-title": "回复",
   "Make custom char": "创建自定义角色",
   "Name": "名字",
-  "Create": "创建"
+  "Create": "创建",
+  "Remove custom char confirm title": "删除自定义角色？",
+  "Remove custom char confirm text": "该角色的对话会在刷新后变成玩家说的话"
 }

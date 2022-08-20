@@ -7,9 +7,11 @@ import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
 import { ChatItemType } from "../model/ChatItemType";
+import CustomCharacter from "../model/CustomCharacter";
 import { get_key_string } from "../utils/KeyboardUtils";
 import ChatSpecialPopover from "./ChatSpecialPopover";
 import CustomCharDialog from "./CustomCharDialog";
+import RemoveCustomCharDialog from "./RemoveCustomCharDialog";
 
 const LargeChip = styled(Chip)(() => ({
   width: "92px",
@@ -47,6 +49,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const [previousActiveCharLength, setPreviousActiveCharLength] = useState(0);
   const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement | null>(null);
   const [customCharOpen, setCustomCharOpen] = useState(false);
+  const [removingCustomChar, setRemovingCustomChar] = useState<CustomCharacter | null>(null);
   const boxHeight = 240;
 
   // set new active char if new char is added
@@ -94,6 +97,15 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const addSpecialChat = () => {
     addChat(new ChatItem(currentChar, "", ChatItemType.Special));
   };
+
+  const deleteActiveChar = (ch: ChatChar) => {
+    console.log(ch);
+    if (ch.character.is_custom()) {
+      setRemovingCustomChar(ch.character as CustomCharacter);
+    }
+
+    ctx.setActiveChars(ctx.activeChars.filter(c => c.get_id() !== ch.get_id()));
+  }
 
   return (
     <Box sx={{
@@ -167,7 +179,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
               setCurrentChar(ch);
               focusOnInput();
             }}
-            onDelete={() => ctx.setActiveChars(ctx.activeChars.filter(c => c.get_id() !== ch.get_id()))}
+            onDelete={() => { deleteActiveChar(ch); }}
           />
         ))}
         <PlayerChip
@@ -179,6 +191,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
         />
       </Box>
       <CustomCharDialog open={customCharOpen} setClose={() => { setCustomCharOpen(false); }} />
+      <RemoveCustomCharDialog char={removingCustomChar} setClose={() => { setRemovingCustomChar(null); }} />
     </Box>
   );
 }
