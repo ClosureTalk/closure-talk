@@ -3,6 +3,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { Avatar, Chip, IconButton, Input, Popover, Stack } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
@@ -45,6 +46,7 @@ function focusOnInput() {
 
 export default function ChatInputView(props: ChatInputViewProps) {
   const ctx = useAppContext();
+  const { t } = useTranslation();
   const [currentChar, setCurrentChar] = useState<ChatChar | null>(null);
   const [previousActiveCharLength, setPreviousActiveCharLength] = useState(0);
   const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement | null>(null);
@@ -133,7 +135,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
         >
           <ChatSpecialPopover addImage={addImageChat} addSpecial={addSpecialChat} closePopover={() => setSelectImageAnchor(null)} />
         </Popover>
-        <Input id="chat-input" fullWidth placeholder="Chat" multiline onKeyDown={(ev) => {
+        <Input id="chat-input" fullWidth placeholder={t("chat-input-placeholder")} multiline onKeyDown={(ev) => {
           if (get_key_string(ev.nativeEvent) === "Enter") {
             ev.preventDefault();
             addNormalChat();

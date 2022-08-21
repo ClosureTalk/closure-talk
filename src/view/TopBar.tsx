@@ -89,36 +89,36 @@ export default function TopBar() {
             <GitHubIcon />
           </StyledIconButton>
           <StyledIconButton
-            title={t("Show info")}
+            title={t("topbar-show-info")}
             onClick={() => setShowInfo(true)}
           >
             <InfoIcon />
           </StyledIconButton>
           <StyledIconButton
-            title={t("Show help")}
+            title={t("topbar-show-help")}
             onClick={() => setShowHelp(true)}
           >
             <HelpOutlineIcon />
           </StyledIconButton>
           <StyledIconButton
-            title={t("Save image")}
+            title={t("topbar-save-image")}
             onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
             <PhotoCameraIcon />
           </StyledIconButton>
           <StyledIconButton
-            title={t("Save code")}
+            title={t("topbar-save-code")}
             onClick={() => { window.dispatchEvent(SaveCodeEvent); }}
           >
             <CodeIcon />
           </StyledIconButton>
           <StyledIconButton
-            title={t("Load code")}
+            title={t("topbar-load-code")}
             onClick={() => { window.dispatchEvent(LoadCodeEvent); }}
           >
             <FileUploadIcon />
           </StyledIconButton>
           <StyledIconButton
-            title={t("Clear chat")}
+            title={t("topbar-clear-chat")}
             onClick={() => { window.dispatchEvent(ClearChatEvent); }}
           >
             <DeleteForeverIcon />
@@ -132,7 +132,7 @@ export default function TopBar() {
         <DialogContent>
           <DialogContentText sx={{
             whiteSpace: "pre-line"
-          }}>{t("Help text")}</DialogContentText>
+          }}>{t("help-text-content")}</DialogContentText>
         </DialogContent>
       </Dialog>
       <Dialog

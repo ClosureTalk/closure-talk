@@ -118,7 +118,7 @@ export default function CharList() {
                       updateEditing(copy => copy.enabled = !copy.enabled);
                     }}
                   />
-                } label={t("Enabled")} />
+                } label={t("source-enabled")} />
               </FormGroup>
               {editing.filters.map((gp, gp_idx) => (
                 <Stack direction="column" key={gp.group_key}>
@@ -144,7 +144,7 @@ export default function CharList() {
               ))}
             </Stack>
         }
-        <TextField variant="outlined" label="Search" onChange={ev => setSearch(ev.target.value)}></TextField>
+        <TextField variant="outlined" label={t("search-label")} onChange={ev => setSearch(ev.target.value)}></TextField>
       </Stack>
       <VFill renderer={(height) => {
         return (

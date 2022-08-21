@@ -173,17 +173,17 @@ export default function ChatView() {
         open={confirmingClearChat}
         onClose={() => setConfirmingClearChat(false)}
       >
-        <DialogTitle>{t("Clear chat confirm title")}</DialogTitle>
+        <DialogTitle>{t("clear-chat-confirm-title")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{t("Clear chat confirm text")}</DialogContentText>
+          <DialogContentText>{t("clear-chat-confirm-text")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmingClearChat(false)}>{t("Cancel")}</Button>
+          <Button onClick={() => setConfirmingClearChat(false)}>{t("clear-chat-confirm-cancel")}</Button>
           <Button color="warning" onClick={() => {
             setChat([]);
             setInsertIdx(-1);
             setConfirmingClearChat(false);
-          }}>{t("Yes")}</Button>
+          }}>{t("clear-chat-confirm-yes")}</Button>
         </DialogActions>
       </Dialog>
       <Dialog
@@ -207,7 +207,7 @@ export default function ChatView() {
             autoFocus
             margin="dense"
             id="edit-content"
-            label={t("Content")}
+            label={t("chat-edit-content")}
             fullWidth
             multiline
             variant="standard"
@@ -218,14 +218,14 @@ export default function ChatView() {
           <TextField
             margin="dense"
             id="name-override"
-            label={t("Name override")}
+            label={t("chat-edit-name-override")}
             fullWidth
             variant="standard"
             defaultValue={editing?.nameOverride}
             onFocus={ev => ev.target.select()}
           />
           <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked={editing?.avatar === ChatItemAvatarType.Show} id="edit-avatar" />} label={t("Always show avatar")} />
+            <FormControlLabel control={<Switch defaultChecked={editing?.avatar === ChatItemAvatarType.Show} id="edit-avatar" />} label={t("chat-edit-always-show-avatar")} />
           </FormGroup>
         </DialogContent>
         <DialogActions>
@@ -233,7 +233,7 @@ export default function ChatView() {
             setChat(chat.filter(ch => ch !== editing));
             setEditing(null);
             setInsertIdx(-1);
-          }}>{t("Delete")}</Button>
+          }}>{t("chat-edit-delete")}</Button>
         </DialogActions>
       </Dialog>
     </Box>
