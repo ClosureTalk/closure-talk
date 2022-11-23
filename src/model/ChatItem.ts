@@ -1,33 +1,16 @@
 import ChatChar from "./ChatChar";
-import { ChatItemAvatarType } from "./ChatItemAvatarType";
-import { ChatItemType } from "./ChatItemType";
+import { ArknightsChatItemProps } from "./props/ArknightsProps";
+import { YuzutalkChatItemProps } from "./props/YuzutalkProps";
 
 export default class ChatItem {
-  char: ChatChar | null;
-  content: string;
-  type: ChatItemType;
-  avatar: ChatItemAvatarType;
-  nameOverride: string;
+  char: ChatChar | null = null;
+  content = "";
+  yuzutalk = new YuzutalkChatItemProps();
+  arknights = new ArknightsChatItemProps();
 
-  constructor(
-    char: ChatChar | null,
-    content: string,
-    type: ChatItemType,
-    avatar = ChatItemAvatarType.Auto,
-    nameOverride = "",
-  ) {
-    this.char = char;
-    this.content = content;
-    this.type = type;
-    this.avatar = avatar;
-    this.nameOverride = nameOverride;
-  }
-
-  is_stamp(): boolean {
-    return this.type === ChatItemType.Image && !this.content.startsWith("data:image");
-  }
-
-  is_editable(): boolean {
-    return this.type !== ChatItemType.Image;
+  constructor(obj: Partial<ChatItem> | null | undefined = {}) {
+    if (obj) {
+      Object.assign(this, obj);
+    }
   }
 }

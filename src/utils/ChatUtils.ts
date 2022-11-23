@@ -1,6 +1,8 @@
 import Character from "../model/Character";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
+import { ArknightsChatItemProps } from "../model/props/ArknightsProps";
+import { YuzutalkChatItemProps } from "../model/props/YuzutalkProps";
 
 export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[]): string {
   return JSON.stringify({
@@ -8,9 +10,8 @@ export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[]): strin
       char_id: ch.char?.character.id,
       img: ch.char?.img,
       content: ch.content,
-      type: ch.type,
-      avatar: ch.avatar,
-      name_override: ch.nameOverride,
+      yuzutalk: ch.yuzutalk,
+      arknights: ch.arknights,
     })),
     chars: activeChars.map(ch => ({
       char_id: ch.character.id,
@@ -25,14 +26,17 @@ export function deserialize_chat(text: string, characters: Map<string, Character
   const chat = (obj.chat as any[]).map(ch => {
     const char = characters.get(ch.char_id) || null;
     const valid = char !== null && char.images.includes(ch.img);
-    return new ChatItem(
-      valid ? new ChatChar(char, ch.img) : null,
-      ch.content,
-      ch.type,
-      ch.avatar,
-      ch.name_override || "",
-    );
+
+    ch.yuzutalk = ch.yuzutalk ?? new YuzutalkChatItemProps();
+
+    return new ChatItem({
+      char: valid ? new ChatChar(char, ch.img) : null,
+      content: ch.content,
+      yuzutalk: new YuzutalkChatItemProps(ch.yuzutalk),
+      arknights: new ArknightsChatItemProps(ch.arknights),
+    });
   });
+
   const chars = (obj.chars as any[]).map(ch => {
     const char = characters.get(ch.char_id) || null;
     const valid = char !== null && char.images.includes(ch.img);

@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
-import { ChatItemType } from "../model/ChatItemType";
 import CustomCharacter from "../model/CustomCharacter";
+import { createChatItem } from "../renderer/RendererFactory";
 import { get_key_string } from "../utils/KeyboardUtils";
 import ChatSpecialPopover from "./ChatSpecialPopover";
 import CustomCharDialog from "./CustomCharDialog";
@@ -89,15 +89,11 @@ export default function ChatInputView(props: ChatInputViewProps) {
     }
 
     input.value = "";
-    addChat(new ChatItem(currentChar, content, ChatItemType.Text));
+    addChat(createChatItem(currentChar, content, false));
   };
 
   const addImageChat = (url: string) => {
-    addChat(new ChatItem(currentChar, url, ChatItemType.Image));
-  };
-
-  const addSpecialChat = () => {
-    addChat(new ChatItem(currentChar, "", ChatItemType.Special));
+    addChat(createChatItem(currentChar, url, true));
   };
 
   const deleteActiveChar = (ch: ChatChar) => {
@@ -107,7 +103,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
     }
 
     ctx.setActiveChars(ctx.activeChars.filter(c => c.get_id() !== ch.get_id()));
-  }
+  };
 
   return (
     <Box sx={{
@@ -133,7 +129,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
             horizontal: "left",
           }}
         >
-          <ChatSpecialPopover addImage={addImageChat} addSpecial={addSpecialChat} closePopover={() => setSelectImageAnchor(null)} />
+          <ChatSpecialPopover addImage={addImageChat} closePopover={() => setSelectImageAnchor(null)} />
         </Popover>
         <Input id="chat-input" fullWidth placeholder={t("chat-input-placeholder")} multiline onKeyDown={(ev) => {
           if (get_key_string(ev.nativeEvent) === "Enter") {

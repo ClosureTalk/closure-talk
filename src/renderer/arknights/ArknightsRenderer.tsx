@@ -1,7 +1,8 @@
 import { MouseEventHandler } from "react";
-import { ChatItemType } from "../model/ChatItemType";
+import ChatItem from "../../model/ChatItem";
+import { ArknightsChatItemType } from "../../model/props/ArknightsProps";
+import RendererProps from "../RendererProps";
 import "./Arknights.css";
-import RendererProps from "./RendererProps";
 
 
 function make_akn_header(content: string, click: () => void, contextMenu: MouseEventHandler) {
@@ -20,6 +21,9 @@ function make_akn_header(content: string, click: () => void, contextMenu: MouseE
   );
 }
 
+function is_stamp(item: ChatItem): boolean {
+  return item.arknights.type === ArknightsChatItemType.Image && !item.content.startsWith("data:image");
+}
 
 export default function ArknightsRenderer(props: RendererProps) {
   const chat = props.chat;
@@ -27,7 +31,10 @@ export default function ArknightsRenderer(props: RendererProps) {
 
   const renderItem = (idx: number) => {
     const item = chat[idx];
-    if (item.type === ChatItemType.Special) {
+    const itemProps = item.arknights;
+    const type = itemProps.type;
+
+    if (type === ArknightsChatItemType.SectionTitle) {
       // make part counter increasing sequentially
       headerCounter++;
       const title = item.content.trim().length === 0 ? `Part.${headerCounter.toString().padStart(2, "0")}` : item.content;
@@ -37,16 +44,16 @@ export default function ArknightsRenderer(props: RendererProps) {
     const avatarUrl = item.char?.character.get_url(item.char!.img) || "resources/renderer/ak/doctor.webp";
 
     let content: string | JSX.Element = "Not implemented";
-    if (item.type === ChatItemType.Text) {
+    if (type === ArknightsChatItemType.Text) {
       content = (
         <div className="akn-content-text">{item.content}</div>
       );
     }
-    else if (item.type === ChatItemType.Image) {
+    else if (type === ArknightsChatItemType.Image) {
       content = <img
-        alt={item.is_stamp() ? "Stamp" : "Uploaded image"}
+        alt={"Image"}
         src={item.content}
-        className={item.is_stamp() ? "akn-stamp" : ""}
+        className={is_stamp(item) ? "akn-stamp" : ""}
       />;
     }
 

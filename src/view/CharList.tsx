@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, IconButton, ListItem, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import VFill from "../component/VFill";
