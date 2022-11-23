@@ -12,6 +12,14 @@
   "custom-char-name": "",
   "custom-char-title": "",
   "help-text-content": "",
+  "item-type": "",
+  "item-type-choices": "",
+  "item-type-image": "",
+  "item-type-narration": "",
+  "item-type-relationship-story": "",
+  "item-type-section-title": "",
+  "item-type-selection": "",
+  "item-type-text": "",
   "remove-custom-char-confirm-cancel": "",
   "remove-custom-char-confirm-text": "",
   "remove-custom-char-confirm-title": "",
@@ -26,5 +34,6 @@
   "topbar-show-info": "",
   "yuzu-kizuna-text": "前往{}的羈絆劇情。",
   "yuzu-kizuna-title": "羈絆活動",
-  "yuzu-reply-title": "回覆"
+  "yuzu-reply-title": "回覆",
+  "yuzu-sensei": ""
 }
