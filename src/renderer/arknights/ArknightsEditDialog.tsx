@@ -51,6 +51,7 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
               label={t("item-type")}
             >
               <MenuItem value={ArknightsChatItemType.Text}>{t("item-type-text")}</MenuItem>
+              <MenuItem value={ArknightsChatItemType.Thoughts}>{t("item-type-thoughts")}</MenuItem>
               <MenuItem value={ArknightsChatItemType.SectionTitle}>{t("item-type-section-title")}</MenuItem>
               <MenuItem value={ArknightsChatItemType.Choices}>{t("item-type-choices")}</MenuItem>
               <MenuItem value={ArknightsChatItemType.Selection}>{t("item-type-selection")}</MenuItem>

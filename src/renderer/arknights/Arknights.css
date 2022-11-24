@@ -1,7 +1,7 @@
 .akn-item {
-  margin-left: 72px;
+  margin-left: 12px;
   padding-bottom: 12px;
-  padding-right: 40px;
+  padding-right: 12px;
   display: flex;
   align-items: flex-start;
   column-gap: 12px;
@@ -21,12 +21,18 @@
 }
 
 .akn-content {
-  color: white;
+  color: #ddd;
   background-color: #0e0e0e;
   padding: 8px;
   border: #484848 1px solid;
   flex-grow: 1;
   width: 100%;
+}
+
+.akn-content.akn-content-thoughts {
+  color: #999;
+  background-color: #3c3c3c;
+  border: none;
 }
 
 .akn-content img {
@@ -109,4 +115,54 @@
   margin: 20px 80px;
   height: 2px;
   border-top: #a2a2a2 dashed 1px;
+}
+
+.akn-choices {
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.akn-choice {
+  color: #eee;
+  background-color: #666;
+  text-align: right;
+  min-width: 300px;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.akn-choice .icon {
+  padding-top: 2px;
+}
+
+.akn-selection {
+  margin: 0 12px;
+  margin-top: 24px;
+  height: 72px
+}
+
+.akn-selection .akn-selection-content {
+  display: flex;
+  justify-content: space-between;
+  color: #eee;
+  background-color: #565051;
+  padding: 8px;
+  border: #888 solid 1px;
+}
+
+.akn-selection .icon {
+  padding-top: 2px;
+}
+
+.akn-narration {
+  margin-left: 92px;
+  margin-right: 24px;
+  min-height: 60px;
+  color: #eee;
+  margin-bottom: 12px;
 }

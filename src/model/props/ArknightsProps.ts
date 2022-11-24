@@ -5,6 +5,7 @@ export enum ArknightsChatItemType {
   Choices = "CHOICES",
   Selection = "SELECTION",
   Narration = "NARRATION",
+  Thoughts = "THOUGHTS",
 }
 
 export class ArknightsChatItemProps {
