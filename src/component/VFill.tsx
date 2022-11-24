@@ -21,6 +21,7 @@ export default function VFill(props: VFillProps) {
   return (
     <div style={{
       flexGrow: 1,
+      minHeight: 0,  // prevents overflow, https://stackoverflow.com/a/66689926
     }} ref={ref}>
       {props.renderer(height)}
     </div>
