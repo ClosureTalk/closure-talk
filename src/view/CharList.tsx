@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, IconButton, ListItem, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FixedSizeList, ListChildComponentProps } from "react-window";
 import VFill from "../component/VFill";
@@ -118,7 +118,7 @@ export default function CharList() {
                       updateEditing(copy => copy.enabled = !copy.enabled);
                     }}
                   />
-                } label={t("Enabled")} />
+                } label={t("source-enabled")} />
               </FormGroup>
               {editing.filters.map((gp, gp_idx) => (
                 <Stack direction="column" key={gp.group_key}>
@@ -144,7 +144,7 @@ export default function CharList() {
               ))}
             </Stack>
         }
-        <TextField variant="outlined" label="Search" onChange={ev => setSearch(ev.target.value)}></TextField>
+        <TextField variant="outlined" label={t("search-label")} onChange={ev => setSearch(ev.target.value)}></TextField>
       </Stack>
       <VFill renderer={(height) => {
         return (

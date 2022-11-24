@@ -48,13 +48,13 @@ export default function CustomCharDialog(props: CustomCharDialogProps) {
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle>{t("Make custom char")}</DialogTitle>
+      <DialogTitle>{t("custom-char-title")}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
           id="custom-char-name"
-          label={t("Name")}
+          label={t("custom-char-name")}
           fullWidth
           variant="standard"
           defaultValue=""
@@ -62,7 +62,7 @@ export default function CustomCharDialog(props: CustomCharDialogProps) {
         />
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={createChar}>{t("Create")}</Button>
+        <Button color="primary" onClick={createChar}>{t("custom-char-create")}</Button>
       </DialogActions>
     </Dialog>
   );

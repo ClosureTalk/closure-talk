@@ -1,5 +1,4 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import StarsIcon from '@mui/icons-material/Stars';
 import { Box, IconButton, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useState } from "react";
 import { useAppContext } from "../model/AppContext";
@@ -7,7 +6,6 @@ import { prompt_file, read_file_as_url } from "../utils/FileUtils";
 
 class ChatSpecialPopoverProps {
   addImage = (url: string) => { };
-  addSpecial = () => { };
   closePopover = () => { };
 }
 
@@ -44,9 +42,6 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
         paddingTop: "4px",
         columnGap: "4px",
       }}>
-        <IconButton onClick={() => props.addSpecial()}>
-          <StarsIcon />
-        </IconButton>
         <IconButton onClick={async () => {
           const file = await prompt_file("image/*");
           if (file === null) {
@@ -73,6 +68,7 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
             {stampLists.map((list, idx) => (
               <ToggleButton
                 value={idx}
+                key={list[0].ds.key}
                 sx={{ paddingTop: "0", paddingBottom: "0" }}>
                 {list[0].ds.key}
               </ToggleButton>

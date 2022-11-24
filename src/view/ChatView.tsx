@@ -1,11 +1,10 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Switch, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
-import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
-import { render_chat } from "../renderer/RendererFactory";
+import { editChatDialog, renderChat } from "../renderer/RendererFactory";
 import { deserialize_chat, load_local_storage_chat, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
@@ -166,76 +165,34 @@ export default function ChatView() {
           flexGrow: 1,
           overflowY: "scroll",
         }}>
-        {render_chat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
+        {renderChat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
       </Box>
       <ChatInputView chat={chat} setChat={setChat} insertIdx={insertIdx} setInsertIdx={setInsertIdx} />
       <Dialog
         open={confirmingClearChat}
         onClose={() => setConfirmingClearChat(false)}
       >
-        <DialogTitle>{t("Clear chat confirm title")}</DialogTitle>
+        <DialogTitle>{t("clear-chat-confirm-title")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{t("Clear chat confirm text")}</DialogContentText>
+          <DialogContentText>{t("clear-chat-confirm-text")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmingClearChat(false)}>{t("Cancel")}</Button>
+          <Button onClick={() => setConfirmingClearChat(false)}>{t("clear-chat-confirm-cancel")}</Button>
           <Button color="warning" onClick={() => {
             setChat([]);
             setInsertIdx(-1);
             setConfirmingClearChat(false);
-          }}>{t("Yes")}</Button>
+          }}>{t("clear-chat-confirm-yes")}</Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={editing !== null}
-        onClose={() => {
-          const item = editing!;
-          const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
-          item.avatar = getElement("edit-avatar").checked ? ChatItemAvatarType.Show : ChatItemAvatarType.Auto;
-          if (item.is_editable()) {
-            item.content = getElement("edit-content").value;
-          }
-          item.nameOverride = getElement("name-override").value.trim();
-          setChat([...chat]);
-          setEditing(null);
-        }}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="edit-content"
-            label={t("Content")}
-            fullWidth
-            multiline
-            variant="standard"
-            defaultValue={editing?.is_editable() ? editing?.content : ""}
-            onFocus={ev => ev.target.select()}
-            disabled={!(editing?.is_editable())}
-          />
-          <TextField
-            margin="dense"
-            id="name-override"
-            label={t("Name override")}
-            fullWidth
-            variant="standard"
-            defaultValue={editing?.nameOverride}
-            onFocus={ev => ev.target.select()}
-          />
-          <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked={editing?.avatar === ChatItemAvatarType.Show} id="edit-avatar" />} label={t("Always show avatar")} />
-          </FormGroup>
-        </DialogContent>
-        <DialogActions>
-          <Button color="error" onClick={() => {
-            setChat(chat.filter(ch => ch !== editing));
-            setEditing(null);
-            setInsertIdx(-1);
-          }}>{t("Delete")}</Button>
-        </DialogActions>
-      </Dialog>
+      {editChatDialog(
+        ctx.renderer,
+        editing,
+        () => setEditing(null),
+        chat,
+        setChat,
+        setInsertIdx,
+      )}
     </Box>
   );
 }

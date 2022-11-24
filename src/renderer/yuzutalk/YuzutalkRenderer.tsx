@@ -1,10 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { useAppContext } from "../model/AppContext";
-import ChatItem from "../model/ChatItem";
-import { ChatItemAvatarType } from "../model/ChatItemAvatarType";
-import { ChatItemType } from "../model/ChatItemType";
-import RendererProps from "./RendererProps";
+import { useAppContext } from "../../model/AppContext";
+import ChatItem from "../../model/ChatItem";
+import { YuzutalkChatItemAvatarState, YuzutalkChatItemType } from "../../model/props/YuzutalkProps";
+import RendererProps from "../RendererProps";
 import "./Yuzutalk.css";
+
+function is_stamp(item: ChatItem): boolean {
+  return item.yuzutalk.type === YuzutalkChatItemType.Image && !item.content.startsWith("data:image");
+}
+
 
 export default function YuzutalkRenderer(props: RendererProps) {
   const ctx = useAppContext();
@@ -12,9 +16,9 @@ export default function YuzutalkRenderer(props: RendererProps) {
   const chat = props.chat;
 
   const getName = (item: ChatItem) => {
-    return item.nameOverride.length > 0 ?
-      item.nameOverride :
-      item.char?.character.get_short_name(ctx.lang);
+    return item.yuzutalk.nameOverride.length > 0 ?
+      item.yuzutalk.nameOverride :
+      item.char?.character.get_short_name(ctx.lang) || t("yuzu-sensei") as string;
   };
 
   const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
@@ -59,7 +63,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
   };
 
   const renderKizunaItem = (item: ChatItem) => {
-    const name = getName(item)!;
+    const name = getName(item);
     return renderSpecialItem(item, (
       <div className="yuzu-kizuna-item">
         <div className="yuzu-kizuna-header">
@@ -94,23 +98,39 @@ export default function YuzutalkRenderer(props: RendererProps) {
     ));
   };
 
+  const renderNarrationItem = (item: ChatItem) => {
+    return renderSpecialItem(item, (
+      <div className="yuzu-narration-item">
+        <span className="text">{item.content}</span>
+      </div>
+    ))
+  }
+
   const renderItem = (idx: number) => {
     const item = chat[idx];
     const boxClasses = [];
+    const itemProps = item.yuzutalk;
+    const type = itemProps.type;
 
-    if (item.type === ChatItemType.Special) {
-      return item.char !== null ? renderKizunaItem(item) : renderReplyItem(item);
+    if (type === YuzutalkChatItemType.RelationshipStory) {
+      return renderKizunaItem(item);
+    }
+    if (type === YuzutalkChatItemType.Choices) {
+      return renderReplyItem(item);
+    }
+    if (type === YuzutalkChatItemType.Narration) {
+      return renderNarrationItem(item);
     }
 
     let content: string | JSX.Element = "Not implemented";
-    if (item.type === ChatItemType.Text) {
+    if (type === YuzutalkChatItemType.Text) {
       content = item.content;
       boxClasses.push("yuzu-message-box");
     }
-    else if (item.type === ChatItemType.Image) {
-      content = <img alt={item.is_stamp() ? "Stamp" : "Uploaded image"} src={item.content} />;
+    else if (type === YuzutalkChatItemType.Image) {
+      content = <img alt={is_stamp(item) ? "Stamp" : "Uploaded image"} src={item.content} />;
       boxClasses.push("yuzu-image-box");
-      if (item.is_stamp()) {
+      if (is_stamp(item)) {
         boxClasses.push("yuzu-stamp");
       }
     }
@@ -125,11 +145,16 @@ export default function YuzutalkRenderer(props: RendererProps) {
     );
 
     if (item.char !== null) {
-      const showAvatar = idx === 0 ||
-        item.avatar === ChatItemAvatarType.Show ||
-        chat[idx - 1].type === ChatItemType.Special ||
-        chat[idx - 1].char?.get_id() !== item.char!.get_id();
-      if (item.type === ChatItemType.Text && showAvatar) {
+      let showAvatar = idx === 0 || itemProps.avatarState === YuzutalkChatItemAvatarState.Show;
+      if (idx > 0) {
+        const prev = chat[idx - 1];
+        const prevType = prev.yuzutalk.type;
+        showAvatar ||=
+          prevType !== YuzutalkChatItemType.Text && prevType !== YuzutalkChatItemType.Image ||
+          prev.char?.get_id() !== item.char!.get_id();
+      }
+
+      if (type === YuzutalkChatItemType.Text && showAvatar) {
         boxClasses.push("yuzu-avatar-message-box");
       }
 

@@ -237,3 +237,16 @@
   line-height: 24px;
   font-weight: bold;
 }
+
+.yuzu-narration-item {
+  grid-column: 1 / span 2;
+  padding: 12px;
+  text-align: center;
+}
+
+.yuzu-narration-item .text {
+  color: rgb(76, 91, 112);
+  font-size: 18px;
+  font-weight: bold;
+  white-space: pre-wrap;
+}

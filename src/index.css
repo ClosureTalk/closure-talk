@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.MuiDialogContent-root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

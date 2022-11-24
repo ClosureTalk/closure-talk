@@ -19,12 +19,12 @@ export default function RemoveCustomCharDialog(props: RemoveCustomCharDialogProp
     open={props.char !== null}
     onClose={props.setClose}
   >
-    <DialogTitle>{t("Remove custom char confirm title")}</DialogTitle>
+    <DialogTitle>{t("remove-custom-char-confirm-title")}</DialogTitle>
     <DialogContent>
-      <DialogContentText>{t("Remove custom char confirm text")}</DialogContentText>
+      <DialogContentText>{t("remove-custom-char-confirm-text")}</DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button onClick={props.setClose}>{t("Cancel")}</Button>
+      <Button onClick={props.setClose}>{t("remove-custom-char-confirm-cancel")}</Button>
       <Button color="warning" onClick={() => {
         const char = props.char!;
         const ds = DataSources[DataSources.length - 1] as CustomDataSource;
@@ -35,7 +35,7 @@ export default function RemoveCustomCharDialog(props: RemoveCustomCharDialogProp
         ctx.setCharacters(chars);
 
         props.setClose();
-      }}>{t("Yes")}</Button>
+      }}>{t("remove-custom-char-confirm-yes")}</Button>
     </DialogActions>
   </Dialog>
   )
