@@ -98,6 +98,14 @@ export default function YuzutalkRenderer(props: RendererProps) {
     ));
   };
 
+  const renderNarrationItem = (item: ChatItem) => {
+    return renderSpecialItem(item, (
+      <div className="yuzu-narration-item">
+        <span className="text">{item.content}</span>
+      </div>
+    ))
+  }
+
   const renderItem = (idx: number) => {
     const item = chat[idx];
     const boxClasses = [];
@@ -109,6 +117,9 @@ export default function YuzutalkRenderer(props: RendererProps) {
     }
     if (type === YuzutalkChatItemType.Choices) {
       return renderReplyItem(item);
+    }
+    if (type === YuzutalkChatItemType.Narration) {
+      return renderNarrationItem(item);
     }
 
     let content: string | JSX.Element = "Not implemented";
