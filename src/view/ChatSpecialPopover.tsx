@@ -68,6 +68,7 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
             {stampLists.map((list, idx) => (
               <ToggleButton
                 value={idx}
+                key={list[0].ds.key}
                 sx={{ paddingTop: "0", paddingBottom: "0" }}>
                 {list[0].ds.key}
               </ToggleButton>
