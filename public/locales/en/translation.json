@@ -20,6 +20,7 @@
   "item-type-section-title": "Section title",
   "item-type-selection": "Selection",
   "item-type-text": "Text",
+  "item-type-thoughts": "Thoughts",
   "remove-custom-char-confirm-cancel": "Cancel",
   "remove-custom-char-confirm-text": "Remove the custom character as well?",
   "remove-custom-char-confirm-title": "If removed, dialogs of the character will appear as text from player after refreshing.",
