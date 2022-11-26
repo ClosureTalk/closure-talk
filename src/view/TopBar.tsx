@@ -35,6 +35,24 @@ export default function TopBar() {
           <Typography variant="body1" sx={{
             fontStyle: "italic"
           }}>beta</Typography>
+          <StyledIconButton
+            title="GitHub"
+            onClick={() => window.open("https://github.com/ClosureTalk/closure-talk", "_blank")}
+          >
+            <GitHubIcon />
+          </StyledIconButton>
+          <StyledIconButton
+            title={t("topbar-show-info")}
+            onClick={() => setShowInfo(true)}
+          >
+            <InfoIcon />
+          </StyledIconButton>
+          <StyledIconButton
+            title={t("topbar-show-help")}
+            onClick={() => setShowHelp(true)}
+          >
+            <HelpOutlineIcon />
+          </StyledIconButton>
         </Stack>
         <Box sx={{
           display: "flex",
@@ -82,24 +100,6 @@ export default function TopBar() {
               ))}
             </StyledSelect>
           </FormControl>
-          <StyledIconButton
-            title="GitHub"
-            onClick={() => window.open("https://github.com/ClosureTalk/closure-talk", "_blank")}
-          >
-            <GitHubIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-show-info")}
-            onClick={() => setShowInfo(true)}
-          >
-            <InfoIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-show-help")}
-            onClick={() => setShowHelp(true)}
-          >
-            <HelpOutlineIcon />
-          </StyledIconButton>
           <StyledIconButton
             title={t("topbar-save-image")}
             onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
