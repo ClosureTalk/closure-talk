@@ -8,6 +8,7 @@ import ChatChar from "./model/ChatChar";
 import { Renderers } from "./model/Constants";
 import DataSourceState from "./model/DataSourceState";
 import StampInfo from "./model/StampInfo";
+import { RendererConfig } from "./renderer/RendererConfig";
 import { RendererType } from "./renderer/RendererType";
 import { load_local_storage_chat } from "./utils/ChatUtils";
 import CharList from "./view/CharList";
@@ -23,6 +24,18 @@ function App() {
   const [characters, setCharacters] = useState(new Map<string, Character>());
   const [stamps, setStamps] = useState<StampInfo[][]>([]);
   const [sources, setSources] = useState<DataSourceState[]>([]);
+  const [rendererConfigs, setRendererConfigs] = useState(new Map<RendererType, RendererConfig>());
+
+  const setRendererConfig = (name: RendererType, value: RendererConfig) => {
+    const map = new Map<RendererType, RendererConfig>(rendererConfigs);
+    map.set(name, value);
+    localStorage.setItem("rendererConfigs", JSON.stringify(
+      Array.from(map).reduce((obj: any, [key, value]) => {
+        obj[key] = value;
+        return obj;
+      }, {})));
+    setRendererConfigs(map);
+  };
 
   useEffect(() => {
     if (loaded) {
@@ -36,6 +49,11 @@ function App() {
       setLoaded(true);
       setActiveChars(load_local_storage_chat(data.characters)[1]);
       setSources(data.sources);
+
+      const cfg = JSON.parse(localStorage.getItem("rendererConfigs") || "{}");
+      setRendererConfigs(new Map<RendererType, RendererConfig>(
+        Object.keys(cfg).filter(k => Object.values<string>(RendererType).includes(k)).map(k => [k as RendererType, cfg[k]])
+        ));
     })();
   }, [loaded]);
 
@@ -45,6 +63,7 @@ function App() {
     );
   }
 
+  const cfg = rendererConfigs.get(renderer) || new RendererConfig();
   return (
     <AppContext.Provider value={{
       lang: lang,
@@ -58,6 +77,8 @@ function App() {
       stamps: stamps,
       sources: sources,
       setSources: setSources,
+      rendererConfigs: rendererConfigs,
+      setRendererConfig: setRendererConfig,
     }}>
       <Box>
         <TopBar />
@@ -78,7 +99,7 @@ function App() {
           </Box>
           <Box sx={{
             flexShrink: "0",
-            flexBasis: "500px",
+            flexBasis: `${cfg.width}px`,
             height: "100%",
           }}>
             <ChatView />

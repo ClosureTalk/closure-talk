@@ -2,9 +2,12 @@ import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
 import { ArknightsChatItemType } from "../model/props/ArknightsProps";
 import { YuzutalkChatItemType } from "../model/props/YuzutalkProps";
+import ArknightsConfigDialog from "./arknights/ArknightsConfigDialog";
 import ArknightsEditDialog from "./arknights/ArknightsEditDialog";
 import ArknightsRenderer from "./arknights/ArknightsRenderer";
+import { RendererConfig } from "./RendererConfig";
 import { RendererType } from "./RendererType";
+import YuzutalkConfigDialog from "./yuzutalk/YuzutalkConfigDialog";
 import YuzutalkEditDialog from "./yuzutalk/YuzutalkEditDialog";
 import YuzutalkRenderer from "./yuzutalk/YuzutalkRenderer";
 
@@ -30,6 +33,19 @@ export function editChatDialog(type: RendererType, editing: ChatItem | null, set
     case RendererType.Yuzutalk:
       return (
         <YuzutalkEditDialog editing={editing} setEditingNull={setEditingNull} chat={chat} setChat={setChat} setInsertIdx={setInsertIdx} />
+      );
+  }
+}
+
+export function rendererConfigDialog(type: RendererType, open: boolean, setClose: () => void, setConfig: (name: RendererType, value: RendererConfig) => void) {
+  switch (type) {
+    case RendererType.Arknights:
+      return (
+        <ArknightsConfigDialog open={open} setClose={setClose} setConfig={setConfig} />
+      );
+    case RendererType.Yuzutalk:
+      return (
+        <YuzutalkConfigDialog open={open} setClose={setClose} setConfig={setConfig} />
       );
   }
 }

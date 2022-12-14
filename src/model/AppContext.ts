@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { RendererConfig } from "../renderer/RendererConfig";
 import { RendererType } from "../renderer/RendererType";
 import Character from "./Character";
 import ChatChar from "./ChatChar";
@@ -18,6 +19,8 @@ export interface IAppContext {
   stamps: StampInfo[][];
   sources: DataSourceState[];
   setSources: Function;
+  rendererConfigs: Map<RendererType, RendererConfig>;
+  setRendererConfig: (name: RendererType, value: RendererConfig) => void;
 }
 
 const AppContext = createContext<IAppContext>({
@@ -32,6 +35,8 @@ const AppContext = createContext<IAppContext>({
   stamps: [],
   sources: [],
   setSources: () => { },
+  rendererConfigs: new Map<RendererType, RendererConfig>(),
+  setRendererConfig: () => { },
 });
 
 const useAppContext = () => useContext(AppContext);

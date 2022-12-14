@@ -1,8 +1,12 @@
 import { MouseEventHandler } from "react";
+import { useAppContext } from "../../model/AppContext";
 import ChatItem from "../../model/ChatItem";
 import { ArknightsChatItemType } from "../../model/props/ArknightsProps";
+import { getConfig } from "../../utils/CtxUtils";
 import RendererProps from "../RendererProps";
+import { RendererType } from "../RendererType";
 import "./Arknights.css";
+import ArknightsConfig from "./ArknightsConfig";
 
 
 function make_akn_header(content: string, click: () => void, contextMenu: MouseEventHandler) {
@@ -81,7 +85,11 @@ function is_stamp(item: ChatItem): boolean {
 }
 
 export default function ArknightsRenderer(props: RendererProps) {
+  const ctx = useAppContext();
   const chat = props.chat;
+
+  const config = getConfig(ArknightsConfig, ctx, RendererType.Arknights);
+
   let headerCounter = 0;
 
   const renderItem = (idx: number) => {
@@ -137,7 +145,7 @@ export default function ArknightsRenderer(props: RendererProps) {
     );
   };
 
-  const chatBgColor = "#231b14";
+  const chatBgColor = config.bgColor;
 
   return (
     <div style={{

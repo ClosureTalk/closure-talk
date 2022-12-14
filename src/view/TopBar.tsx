@@ -5,6 +5,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InfoIcon from '@mui/icons-material/Info';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { AppBar, Box, Dialog, DialogContent, DialogContentText, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,6 +14,7 @@ import { StyledInputLabel, StyledSelect } from "../component/StyledSelect";
 import { useAppContext } from "../model/AppContext";
 import { Languages, Renderers } from "../model/Constants";
 import { ClearChatEvent, LoadCodeEvent, SaveCodeEvent } from "../model/Events";
+import { rendererConfigDialog } from "../renderer/RendererFactory";
 import { capture_and_save } from "../utils/CaptureUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import InfoView from "./InfoView";
@@ -22,6 +24,7 @@ export default function TopBar() {
   const { t, i18n } = useTranslation();
   const [showHelp, setShowHelp] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showRendererConfig, setShowRendererConfig] = useState(false);
 
   return (
     <AppBar position="fixed" className="top-bar" elevation={0}>
@@ -101,6 +104,12 @@ export default function TopBar() {
             </StyledSelect>
           </FormControl>
           <StyledIconButton
+            title={t("topbar-config")}
+            onClick={() => setShowRendererConfig(true)}
+          >
+            <SettingsIcon />
+          </StyledIconButton>
+          <StyledIconButton
             title={t("topbar-save-image")}
             onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
             <PhotoCameraIcon />
@@ -124,6 +133,7 @@ export default function TopBar() {
             <DeleteForeverIcon />
           </StyledIconButton>
         </Box>
+        {rendererConfigDialog(ctx.renderer, showRendererConfig, () => {setShowRendererConfig(false)}, ctx.setRendererConfig)}
       </Toolbar>
       <Dialog
         open={showHelp}
