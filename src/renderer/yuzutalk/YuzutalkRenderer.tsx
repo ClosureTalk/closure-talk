@@ -2,8 +2,11 @@ import { useTranslation } from "react-i18next";
 import { useAppContext } from "../../model/AppContext";
 import ChatItem from "../../model/ChatItem";
 import { YuzutalkChatItemAvatarState, YuzutalkChatItemType } from "../../model/props/YuzutalkProps";
+import { getConfig } from "../../utils/CtxUtils";
 import RendererProps from "../RendererProps";
+import { RendererType } from "../RendererType";
 import "./Yuzutalk.css";
+import YuzutalkConfig, { YuzutalkTheme } from "./YuzutalkConfig";
 
 function is_stamp(item: ChatItem): boolean {
   return item.yuzutalk.type === YuzutalkChatItemType.Image && !item.content.startsWith("data:image");
@@ -14,6 +17,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
   const ctx = useAppContext();
   const { t } = useTranslation();
   const chat = props.chat;
+  const config = getConfig(YuzutalkConfig, ctx, RendererType.Yuzutalk);
 
   const getName = (item: ChatItem) => {
     return item.yuzutalk.nameOverride.length > 0 ?
@@ -166,7 +170,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
     }
   };
 
-  const chatBgColor = "rgb(255, 247, 225)";
+  const chatBgColor = config.theme === YuzutalkTheme.Yuzutalk ? "rgb(255, 247, 225)" : "white";
 
   return (
     <div style={{

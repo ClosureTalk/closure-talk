@@ -1,14 +1,16 @@
 import { Dialog, DialogContent } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useAppContext } from "../../model/AppContext";
 import { getConfig } from "../../utils/CtxUtils";
-import { ChatWidthSelect, setChatWidth } from "../ConfigDialogCommons";
+import { ChatWidthSelect, MakeSelect, setChatWidth } from "../ConfigDialogCommons";
 import ConfigDialogProps from "../ConfigDialogProps";
 import { RendererType } from "../RendererType";
-import YuzutalkConfig from "./YuzutalkConfig";
+import YuzutalkConfig, { YuzutalkTheme } from "./YuzutalkConfig";
 
 export default function YuzutalkConfigDialog(props: ConfigDialogProps) {
   const ctx = useAppContext();
   const config = getConfig(YuzutalkConfig, ctx, RendererType.Yuzutalk);
+  const { t } = useTranslation();
 
   return !props.open ? null : (
     <Dialog
@@ -16,6 +18,7 @@ export default function YuzutalkConfigDialog(props: ConfigDialogProps) {
       onClose={() => {
         const cfg = new YuzutalkConfig();
         setChatWidth(cfg);
+        cfg.theme = (document.getElementById("yuzu-theme-select") as HTMLInputElement).value as YuzutalkTheme;
         props.setClose();
         props.setConfig(RendererType.Yuzutalk, cfg);
       }}
@@ -24,6 +27,12 @@ export default function YuzutalkConfigDialog(props: ConfigDialogProps) {
     >
       <DialogContent>
         <ChatWidthSelect width={config.width} />
+        {MakeSelect(
+          "yuzu-theme",
+          [YuzutalkTheme.Yuzutalk, YuzutalkTheme.Momotalk],
+          config.theme,
+          t("yuzu-theme"),
+        )}
       </DialogContent>
     </Dialog>
   );

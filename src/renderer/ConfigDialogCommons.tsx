@@ -12,21 +12,33 @@ export function setChatWidth(cfg: RendererConfig) {
 
 export function ChatWidthSelect(props: ChatWidthSelectProps) {
   const { t } = useTranslation();
+  return MakeSelect(
+    "chat-width",
+    [500, 800, 1000],
+    props.width,
+    t("common-cfg-width"),
+  );
+}
+
+export function MakeSelect(key: string, values: string[] | number[], defaultValue: string | number, label: string, valueLabels: null | string[] = null) {
+  const actualValueLabels = valueLabels ?? values.map(v => `${v}`);
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="chat-width-label">{t("common-cfg-width")}</InputLabel>
+      <InputLabel id={`${key}-label`}>{label}</InputLabel>
       <Select
-        labelId="chat-width-label"
+        labelId={`${key}-label`}
         inputProps={{
-          id: "chat-width-select"
+          id: `${key}-select`
         }}
-        defaultValue={props.width}
-        label={t("common-cfg-width")}
+        defaultValue={defaultValue}
+        label={label}
       >
-        <MenuItem value={500}>500</MenuItem>
-        <MenuItem value={800}>800</MenuItem>
-        <MenuItem value={1000}>1000</MenuItem>
+        {
+          values.map((v, i) => [v, actualValueLabels[i]]).map((tuple, i) => (
+            <MenuItem key={i} value={tuple[0]}>{`${tuple[1]}`}</MenuItem>
+          ))
+        }
       </Select>
     </FormControl>
   );
