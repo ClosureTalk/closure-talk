@@ -2,7 +2,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { Box, IconButton, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useState } from "react";
 import { useAppContext } from "../model/AppContext";
-import { prompt_file, read_file_as_url } from "../utils/FileUtils";
+import { prompt_file, read_image_resized } from "../utils/FileUtils";
 
 class ChatSpecialPopoverProps {
   addImage = (url: string) => { };
@@ -49,7 +49,7 @@ export default function ChatSpecialPopover(props: ChatSpecialPopoverProps) {
           }
 
           try {
-            const url = await read_file_as_url(file);
+            const url = await read_image_resized(file, 400);
             props.addImage(url);
             props.closePopover();
           }

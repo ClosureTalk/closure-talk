@@ -5,7 +5,7 @@ import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
 import { DataSources } from "../model/Constants";
 import CustomCharacter from "../model/CustomCharacter";
-import { prompt_file, read_file_as_url } from "../utils/FileUtils";
+import { prompt_file, read_image_resized } from "../utils/FileUtils";
 
 class CustomCharDialogProps {
   open = false;
@@ -26,7 +26,7 @@ export default function CustomCharDialog(props: CustomCharDialogProps) {
     if (file === null) {
       return;
     }
-    const image = await read_file_as_url(file);
+    const image = await read_image_resized(file, 100);
 
     // save data
     const ds = DataSources[DataSources.length - 1] as CustomDataSource;
