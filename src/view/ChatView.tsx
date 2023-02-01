@@ -134,7 +134,11 @@ export default function ChatView() {
   }, [chat, insertIdx]);
 
   // left click handler
-  const clickCallback = (item: ChatItem) => {
+  const clickCallback = (ev: MouseEvent, item: ChatItem) => {
+    if (ev.button !== 0) {
+      return;
+    }
+
     const idx = chat.indexOf(item);
     if (idx === 0) {
       setInsertIdx(insertIdx === 1 ? 0 : (insertIdx === 0 ? -1 : 1));
@@ -147,6 +151,9 @@ export default function ChatView() {
     }
     if (ctx.isWideScreen) {
       document.getElementById("chat-input")!.focus();
+    }
+    else if (insertIdx === -1 || idx === chat.length - 1) {
+      setEditing(item);
     }
   };
 

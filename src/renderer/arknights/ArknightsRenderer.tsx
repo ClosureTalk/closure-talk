@@ -9,7 +9,7 @@ import "./Arknights.css";
 import ArknightsConfig from "./ArknightsConfig";
 
 
-function make_akn_header(content: string, click: () => void, contextMenu: MouseEventHandler) {
+function make_akn_header(content: string, click: MouseEventHandler, contextMenu: MouseEventHandler) {
   return (
     <div className="akn-header">
       <div className="akn-header-left">DIALOGUE</div>
@@ -25,7 +25,7 @@ function make_akn_header(content: string, click: () => void, contextMenu: MouseE
   );
 }
 
-function renderChoices(item: ChatItem, click: () => void, contextMenu: MouseEventHandler) {
+function renderChoices(item: ChatItem, click: MouseEventHandler, contextMenu: MouseEventHandler) {
   const choices = item.content.split("\n");
   return (
     <div className="akn-choices" onClick={click} onContextMenu={contextMenu}>
@@ -45,7 +45,7 @@ function renderChoices(item: ChatItem, click: () => void, contextMenu: MouseEven
   );
 }
 
-function renderSelection(item: ChatItem, click: () => void, contextMenu: MouseEventHandler) {
+function renderSelection(item: ChatItem, click: MouseEventHandler, contextMenu: MouseEventHandler) {
   return (
     <div className="akn-selection" onClick={click} onContextMenu={contextMenu}>
       <div className="akn-selection-content">
@@ -72,7 +72,7 @@ function renderSelection(item: ChatItem, click: () => void, contextMenu: MouseEv
   );
 }
 
-function renderNarration(item: ChatItem, click: () => void, contextMenu: MouseEventHandler) {
+function renderNarration(item: ChatItem, click: MouseEventHandler, contextMenu: MouseEventHandler) {
   return (
     <div className="akn-narration" onClick={click} onContextMenu={contextMenu}>
       {item.content}
@@ -101,16 +101,16 @@ export default function ArknightsRenderer(props: RendererProps) {
       // make part counter increasing sequentially
       headerCounter++;
       const title = item.content.trim().length === 0 ? `Part.${headerCounter.toString().padStart(2, "0")}` : item.content;
-      return make_akn_header(title, () => props.click(item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
+      return make_akn_header(title, (ev) => props.click(ev.nativeEvent, item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
     }
     if (type === ArknightsChatItemType.Choices) {
-      return renderChoices(item, () => props.click(item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
+      return renderChoices(item, (ev) => props.click(ev.nativeEvent, item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
     }
     if (type === ArknightsChatItemType.Selection) {
-      return renderSelection(item, () => props.click(item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
+      return renderSelection(item, (ev) => props.click(ev.nativeEvent, item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
     }
     if (type === ArknightsChatItemType.Narration) {
-      return renderNarration(item, () => props.click(item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
+      return renderNarration(item, (ev) => props.click(ev.nativeEvent, item), (ev) => props.contextMenuCallback(ev.nativeEvent, item));
     }
 
     const avatarUrl = item.char?.character.get_url(item.char!.img) || "resources/renderer/ak/doctor.webp";
@@ -138,7 +138,7 @@ export default function ArknightsRenderer(props: RendererProps) {
         <div className="akn-avatar">
           <img alt={`Avatar of ${item.char?.character.get_short_name("en") || "player"}`} src={avatarUrl}></img>
         </div>
-        <div className={contentClasses.join(" ")} onClick={() => props.click(item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
+        <div className={contentClasses.join(" ")} onClick={(ev) => props.click(ev.nativeEvent, item)} onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
           {content}
         </div>
       </div>

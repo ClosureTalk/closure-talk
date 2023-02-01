@@ -30,3 +30,7 @@
   width: 60px;
   height: 60px;
 }
+
+#chat-area {
+  user-select: none;
+}

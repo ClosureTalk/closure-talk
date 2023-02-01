@@ -11,7 +11,7 @@ import YuzutalkConfigDialog from "./yuzutalk/YuzutalkConfigDialog";
 import YuzutalkEditDialog from "./yuzutalk/YuzutalkEditDialog";
 import YuzutalkRenderer from "./yuzutalk/YuzutalkRenderer";
 
-export function renderChat(type: RendererType, chat: ChatItem[], clickCallback: (item: ChatItem) => void, contextMenuCallback: (ev: MouseEvent, item: ChatItem) => void, insertIdx: number) {
+export function renderChat(type: RendererType, chat: ChatItem[], clickCallback: (ev: MouseEvent, item: ChatItem) => void, contextMenuCallback: (ev: MouseEvent, item: ChatItem) => void, insertIdx: number) {
   switch (type) {
     case RendererType.Arknights:
       return (

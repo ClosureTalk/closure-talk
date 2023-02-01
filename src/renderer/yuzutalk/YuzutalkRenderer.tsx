@@ -59,7 +59,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
     return (
       <div
         className="yuzu-item yuzu-special-item"
-        onClick={() => props.click(item)}
+        onClick={(ev) => props.click(ev.nativeEvent, item)}
         onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
         {content}
       </div>
@@ -142,7 +142,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
     content = (
       <div
         className="yuzu-message"
-        onClick={() => props.click(item)}
+        onClick={(ev) => props.click(ev.nativeEvent, item)}
         onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
         {content}
       </div>
