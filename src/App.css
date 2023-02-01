@@ -16,6 +16,16 @@
   border-color: inherit !important;
 }
 
+@media (max-width: 800px) {
+  .top-bar h5 {
+    font-size: 24px;
+  }
+
+  div.MuiBox-root {
+    top: 56px;
+  }
+}
+
 .stamp-btn {
   width: 60px;
   height: 60px;

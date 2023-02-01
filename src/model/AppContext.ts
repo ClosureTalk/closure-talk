@@ -21,6 +21,9 @@ export interface IAppContext {
   setSources: Function;
   rendererConfigs: Map<RendererType, RendererConfig>;
   setRendererConfig: (name: RendererType, value: RendererConfig) => void;
+  isWideScreen: boolean;
+  showCharListOverlay: boolean,
+  setShowCharListOverlay: Function,
 }
 
 const AppContext = createContext<IAppContext>({
@@ -37,6 +40,9 @@ const AppContext = createContext<IAppContext>({
   setSources: () => { },
   rendererConfigs: new Map<RendererType, RendererConfig>(),
   setRendererConfig: () => { },
+  isWideScreen: true,
+  showCharListOverlay: false,
+  setShowCharListOverlay: () => { },
 });
 
 const useAppContext = () => useContext(AppContext);

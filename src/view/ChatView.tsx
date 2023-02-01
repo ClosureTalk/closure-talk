@@ -10,6 +10,7 @@ import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
 import { prompt_file, read_file_as_text } from "../utils/FileUtils";
 import { get_key_string } from "../utils/KeyboardUtils";
+import CharList from "./CharList";
 import ChatInputView from "./ChatInputView";
 
 export default function ChatView() {
@@ -165,7 +166,9 @@ export default function ChatView() {
           flexGrow: 1,
           overflowY: "scroll",
         }}>
-        {renderChat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
+        { (!ctx.isWideScreen && ctx.showCharListOverlay) ?
+        <CharList /> :
+        renderChat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
       </Box>
       <ChatInputView chat={chat} setChat={setChat} insertIdx={insertIdx} setInsertIdx={setInsertIdx} />
       <Dialog

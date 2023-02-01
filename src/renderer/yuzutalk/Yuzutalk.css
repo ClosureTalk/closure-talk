@@ -250,3 +250,18 @@
   font-weight: bold;
   white-space: pre-wrap;
 }
+
+@media (max-width: 800px) {
+  .yuzu-item {
+    grid-template-columns: 48px minmax(0px, 1fr);
+  }
+
+  .yuzu-avatar-box {
+    width: 48px;
+    height: 48px;
+  }
+
+  .yuzu-name {
+    font-size: 16px;
+  }
+}

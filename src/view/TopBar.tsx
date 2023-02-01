@@ -3,7 +3,10 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import InfoIcon from '@mui/icons-material/Info';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { AppBar, Box, Dialog, DialogContent, DialogContentText, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
@@ -19,12 +22,128 @@ import { capture_and_save } from "../utils/CaptureUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import InfoView from "./InfoView";
 
+type BoolFunc = (v: boolean) => void;
+
+function InfoButtons(setShowInfo: BoolFunc, setShowHelp: BoolFunc) {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <StyledIconButton
+        title="GitHub"
+        onClick={() => window.open("https://github.com/ClosureTalk/closure-talk", "_blank")}
+      >
+        <GitHubIcon />
+      </StyledIconButton>
+      <StyledIconButton
+        title={t("topbar-show-info")}
+        onClick={() => setShowInfo(true)}
+      >
+        <InfoIcon />
+      </StyledIconButton>
+      <StyledIconButton
+        title={t("topbar-show-help")}
+        onClick={() => setShowHelp(true)}
+      >
+        <HelpOutlineIcon />
+      </StyledIconButton>
+    </>
+  );
+}
+
+function ChatButtons(setShowRendererConfig: BoolFunc) {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <StyledIconButton
+        title={t("topbar-config")}
+        onClick={() => setShowRendererConfig(true)}
+      >
+        <SettingsIcon />
+      </StyledIconButton>
+      <StyledIconButton
+        title={t("topbar-save-image")}
+        onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
+        <PhotoCameraIcon />
+      </StyledIconButton>
+      <StyledIconButton
+        title={t("topbar-save-code")}
+        onClick={() => { window.dispatchEvent(SaveCodeEvent); }}
+      >
+        <CodeIcon />
+      </StyledIconButton>
+      <StyledIconButton
+        title={t("topbar-load-code")}
+        onClick={() => { window.dispatchEvent(LoadCodeEvent); }}
+      >
+        <FileUploadIcon />
+      </StyledIconButton>
+      <StyledIconButton
+        title={t("topbar-clear-chat")}
+        onClick={() => { window.dispatchEvent(ClearChatEvent); }}
+      >
+        <DeleteForeverIcon />
+      </StyledIconButton>
+    </>
+  );
+}
+
+function AppDropdowns() {
+  const ctx = useAppContext();
+  const { i18n } = useTranslation();
+
+  return (
+    <>
+      <FormControl sx={{ width: "100px" }} size="small">
+        <StyledInputLabel id="select-lang-label">Lang</StyledInputLabel>
+        <StyledSelect
+          labelId="select-lang-label"
+          id="select-lang"
+          value={ctx.lang}
+          label="Lang"
+          onChange={(ev) => {
+            const newLang = ev.target.value as string;
+            localStorage.setItem("lang", newLang);
+            ctx.setLang(newLang);
+            i18n.changeLanguage(newLang);
+          }}
+        >
+          {Languages.map(l => (
+            <MenuItem key={l} value={l}>{l}</MenuItem>
+          ))}
+        </StyledSelect>
+      </FormControl>
+      <FormControl sx={{ width: "120px" }} size="small">
+        <StyledInputLabel id="select-renderer-label">Render</StyledInputLabel>
+        <StyledSelect
+          labelId="select-renderer-label"
+          id="select-renderer"
+          value={ctx.renderer}
+          label="Render"
+          onChange={(ev) => {
+            const newRenderer = ev.target.value as string;
+            localStorage.setItem("renderer", newRenderer);
+            ctx.setRenderer(newRenderer);
+          }}
+        >
+          {Renderers.map(l => (
+            <MenuItem key={l} value={l}>{l}</MenuItem>
+          ))}
+        </StyledSelect>
+      </FormControl>
+    </>
+  );
+}
+
 export default function TopBar() {
   const ctx = useAppContext();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [showHelp, setShowHelp] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showRendererConfig, setShowRendererConfig] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
   return (
     <AppBar position="fixed" className="top-bar" elevation={0}>
@@ -38,24 +157,9 @@ export default function TopBar() {
           <Typography variant="body1" sx={{
             fontStyle: "italic"
           }}>beta</Typography>
-          <StyledIconButton
-            title="GitHub"
-            onClick={() => window.open("https://github.com/ClosureTalk/closure-talk", "_blank")}
-          >
-            <GitHubIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-show-info")}
-            onClick={() => setShowInfo(true)}
-          >
-            <InfoIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-show-help")}
-            onClick={() => setShowHelp(true)}
-          >
-            <HelpOutlineIcon />
-          </StyledIconButton>
+          {!ctx.isWideScreen ? null :
+            InfoButtons(setShowInfo, setShowHelp)
+          }
         </Stack>
         <Box sx={{
           display: "flex",
@@ -66,75 +170,53 @@ export default function TopBar() {
           alignItems: "center",
           marginRight: "8px",
         }}>
-          <FormControl sx={{ width: "100px" }} size="small">
-            <StyledInputLabel id="select-lang-label">Lang</StyledInputLabel>
-            <StyledSelect
-              labelId="select-lang-label"
-              id="select-lang"
-              value={ctx.lang}
-              label="Lang"
-              onChange={(ev) => {
-                const newLang = ev.target.value as string;
-                localStorage.setItem("lang", newLang);
-                ctx.setLang(newLang);
-                i18n.changeLanguage(newLang);
-              }}
-            >
-              {Languages.map(l => (
-                <MenuItem key={l} value={l}>{l}</MenuItem>
-              ))}
-            </StyledSelect>
-          </FormControl>
-          <FormControl sx={{ width: "120px" }} size="small">
-            <StyledInputLabel id="select-renderer-label">Render</StyledInputLabel>
-            <StyledSelect
-              labelId="select-renderer-label"
-              id="select-renderer"
-              value={ctx.renderer}
-              label="Render"
-              onChange={(ev) => {
-                const newRenderer = ev.target.value as string;
-                localStorage.setItem("renderer", newRenderer);
-                ctx.setRenderer(newRenderer);
-              }}
-            >
-              {Renderers.map(l => (
-                <MenuItem key={l} value={l}>{l}</MenuItem>
-              ))}
-            </StyledSelect>
-          </FormControl>
-          <StyledIconButton
-            title={t("topbar-config")}
-            onClick={() => setShowRendererConfig(true)}
-          >
-            <SettingsIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-save-image")}
-            onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
-            <PhotoCameraIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-save-code")}
-            onClick={() => { window.dispatchEvent(SaveCodeEvent); }}
-          >
-            <CodeIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-load-code")}
-            onClick={() => { window.dispatchEvent(LoadCodeEvent); }}
-          >
-            <FileUploadIcon />
-          </StyledIconButton>
-          <StyledIconButton
-            title={t("topbar-clear-chat")}
-            onClick={() => { window.dispatchEvent(ClearChatEvent); }}
-          >
-            <DeleteForeverIcon />
-          </StyledIconButton>
+          {ctx.isWideScreen ?
+            <>
+              {AppDropdowns()}
+              {ChatButtons(setShowRendererConfig)}
+            </> :
+            <>
+              <StyledIconButton
+                title={t("topbar-show-menu")}
+                onClick={(ev) => {
+                  setMenuAnchor(ev.currentTarget);
+                  setShowMenu(true);
+                }}
+              >
+                <MenuIcon />
+              </StyledIconButton>
+              <StyledIconButton
+                title={t("topbar-show-charlist")}
+                onClick={() => ctx.setShowCharListOverlay(!ctx.showCharListOverlay)}
+              >
+                {ctx.showCharListOverlay ?
+                  <HowToRegIcon /> :
+                  <PersonAddIcon />
+                }
+              </StyledIconButton>
+            </>
+          }
         </Box>
-        {rendererConfigDialog(ctx.renderer, showRendererConfig, () => {setShowRendererConfig(false)}, ctx.setRendererConfig)}
+        {rendererConfigDialog(ctx.renderer, showRendererConfig, () => { setShowRendererConfig(false); }, ctx.setRendererConfig)}
       </Toolbar>
+      {ctx.isWideScreen ? null :
+        <Dialog
+          open={showMenu}
+          onClose={() => setShowMenu(false)}
+        >
+          <DialogContent>
+            <Stack direction="row" spacing={1}>
+              {InfoButtons(setShowInfo, setShowHelp)}
+            </Stack>
+            <Stack direction="row" spacing={1}>
+            {AppDropdowns()}
+            </Stack>
+            <Stack direction="row" spacing={1}>
+            {ChatButtons(setShowRendererConfig)}
+            </Stack>
+          </DialogContent>
+        </Dialog>
+      }
       <Dialog
         open={showHelp}
         onClose={() => { setShowHelp(false); }}

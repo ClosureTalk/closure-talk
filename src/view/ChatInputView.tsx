@@ -52,7 +52,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const [selectImageAnchor, setSelectImageAnchor] = useState<HTMLElement | null>(null);
   const [customCharOpen, setCustomCharOpen] = useState(false);
   const [removingCustomChar, setRemovingCustomChar] = useState<CustomCharacter | null>(null);
-  const boxHeight = 240;
+  const boxHeight = ctx.isWideScreen ? 240 : 200;
 
   // set new active char if new char is added
   useEffect(() => {

@@ -57,11 +57,21 @@ export default function CharList() {
     return (
       <ListItem style={rp.style} key={ch.id} className="char-list-item">
         <ListItemText
-          primary={<Stack direction="row" spacing={1}>
-            {ch.images.map(img => makeAvatar(ch, img))}
-          </Stack>}
+          primary={
+            <Stack direction="row" spacing={1} sx={{
+              overflowX: "auto",
+              overflowY: "hidden",
+              scrollBehavior: "#dddddd",
+            }}>
+              {ch.images.map(img => makeAvatar(ch, img))}
+            </Stack>
+          }
         />
-        <Typography variant="h6">{ch.get_name(ctx.lang)}</Typography>
+        <Typography variant="h6" sx={{
+          textAlign: "right",
+          flexShrink: 0,
+          paddingLeft: "4px",
+        }}>{ch.get_name(ctx.lang)}</Typography>
       </ListItem>
     );
   };
@@ -80,6 +90,7 @@ export default function CharList() {
       display: "flex",
       flexDirection: "column",
       height: "100%",
+      backgroundColor: "#dddddd",
     }}>
       <Stack spacing={2} sx={{
         padding: "8px",

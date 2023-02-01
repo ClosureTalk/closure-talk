@@ -1,3 +1,4 @@
+import { useMediaQuery } from "react-responsive";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -26,6 +27,9 @@ function App() {
   const [sources, setSources] = useState<DataSourceState[]>([]);
   const [rendererConfigs, setRendererConfigs] = useState(new Map<RendererType, RendererConfig>());
 
+  const isWideScreen = useMediaQuery({ query: "(min-width: 800px)" });
+  const [showCharListOverlay, setShowCharListOverlay] = useState(false);
+
   const setRendererConfig = (name: RendererType, value: RendererConfig) => {
     const map = new Map<RendererType, RendererConfig>(rendererConfigs);
     map.set(name, value);
@@ -53,7 +57,7 @@ function App() {
       const cfg = JSON.parse(localStorage.getItem("rendererConfigs") || "{}");
       setRendererConfigs(new Map<RendererType, RendererConfig>(
         Object.keys(cfg).filter(k => Object.values<string>(RendererType).includes(k)).map(k => [k as RendererType, cfg[k]])
-        ));
+      ));
     })();
   }, [loaded]);
 
@@ -79,6 +83,9 @@ function App() {
       setSources: setSources,
       rendererConfigs: rendererConfigs,
       setRendererConfig: setRendererConfig,
+      isWideScreen: isWideScreen,
+      showCharListOverlay: showCharListOverlay,
+      setShowCharListOverlay: setShowCharListOverlay,
     }}>
       <Box>
         <TopBar />
@@ -90,16 +97,21 @@ function App() {
           width: "100vw",
           display: "flex",
         }}>
+          {
+            !isWideScreen ? null :
+              <Box sx={{
+                flexGrow: 1,
+                height: "100%",
+              }}>
+                <CharList />
+              </Box>
+          }
+
           <Box sx={{
-            flexGrow: 1,
-            height: "100%",
-            backgroundColor: "#dddddd",
-          }}>
-            <CharList />
-          </Box>
-          <Box sx={{
-            flexShrink: "0",
-            flexBasis: `${cfg.width}px`,
+            flexShrink: 0,
+            flexBasis: isWideScreen ? `${cfg.width}px` : "auto",
+            flexGrow: isWideScreen ? 0 : 1,
+            maxWidth: "100%",
             height: "100%",
           }}>
             <ChatView />
