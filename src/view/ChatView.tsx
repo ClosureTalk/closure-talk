@@ -145,7 +145,9 @@ export default function ChatView() {
     else {
       setInsertIdx(insertIdx === idx + 1 ? -1 : idx + 1);
     }
-    document.getElementById("chat-input")!.focus();
+    if (ctx.isWideScreen) {
+      document.getElementById("chat-input")!.focus();
+    }
   };
 
   // right click handler

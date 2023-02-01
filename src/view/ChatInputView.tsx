@@ -40,9 +40,6 @@ class ChatInputViewProps {
   setInsertIdx = (idx: number) => { };
 }
 
-function focusOnInput() {
-  document.getElementById("chat-input")!.focus();
-}
 
 export default function ChatInputView(props: ChatInputViewProps) {
   const ctx = useAppContext();
@@ -53,6 +50,13 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const [customCharOpen, setCustomCharOpen] = useState(false);
   const [removingCustomChar, setRemovingCustomChar] = useState<CustomCharacter | null>(null);
   const boxHeight = ctx.isWideScreen ? 240 : 200;
+
+  function focusOnInput() {
+    if (!ctx.isWideScreen) {
+      return;
+    }
+    document.getElementById("chat-input")!.focus();
+  }
 
   // set new active char if new char is added
   useEffect(() => {
