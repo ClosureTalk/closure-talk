@@ -1,24 +1,15 @@
 import { Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import ReleaseNotes from "../model/ReleaseNotes";
+
+const release_notes = require("../release_notes.json") as ReleaseNotes[];
 
 export default function InfoView() {
-  const [codeVersion, setCodeVersion] = useState("");
   const [dataVersions, setDataVersions] = useState<string[]>([]);
 
   const link = (title: string, url: string) => (
     <a href={url} target="_blank" rel="noreferrer">{title}</a>
   );
-
-  useEffect(() => {
-    if (codeVersion.length > 0) {
-      return;
-    }
-
-    (async () => {
-      const data = await (await fetch("https://api.github.com/repos/ClosureTalk/closure-talk/branches/master")).json();
-      setCodeVersion(`${data.commit.sha.substring(0, 7)} (${data.commit.commit.committer.date})`);
-    })();
-  }, [codeVersion]);
 
   useEffect(() => {
     if (dataVersions.length > 0) {
@@ -34,10 +25,24 @@ export default function InfoView() {
   }, [dataVersions]);
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1}>
       <Typography variant="h5">Closure Talk</Typography>
-      <pre>Code: {codeVersion}</pre>
-      <pre>{dataVersions.join("\n")}</pre>
+      <div>
+        <pre>v{release_notes[0].version} ({release_notes[0].date})</pre>
+        <pre>{release_notes[0].note}</pre>
+        <pre>{dataVersions.join("\n")}</pre>
+      </div>
+      {release_notes.map((item, idx) => {
+        if (idx === 0) {
+          return (<div key={idx}>Old Versions</div>);
+        }
+        return (
+          <div key={idx}>
+            <pre>v{item.version} ({item.date}){"\n"}{item.note}</pre>
+          </div>
+        )
+      })}
+
       <Typography variant="body1">More information can be found on {link("Project Homepage", "https://github.com/ClosureTalk/closure-talk")}.</Typography>
       <Typography variant="h6">Credits &amp; Copyrights</Typography>
       <Typography variant="body1">

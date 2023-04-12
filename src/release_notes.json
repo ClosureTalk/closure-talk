@@ -1,0 +1,12 @@
+[
+  {
+    "version": "0.2.0",
+    "date": "2023-04-12",
+    "note": "显示更新内容\n可以设置截图时在一些对白后分割图片了\nAdd release notes\nAdd option to break screenshot at chat items"
+  },
+  {
+    "version": "0.1.0",
+    "date": "2022-05-10",
+    "note": "首次发布Beta版本\nFirst beta release"
+  }
+]

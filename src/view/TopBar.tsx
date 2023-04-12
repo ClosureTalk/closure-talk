@@ -18,6 +18,7 @@ import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
 import { Languages, Renderers } from "../model/Constants";
 import { ClearChatEvent, LoadCodeEvent, SaveCodeEvent } from "../model/Events";
+import ReleaseNotes from "../model/ReleaseNotes";
 import { rendererConfigDialog } from "../renderer/RendererFactory";
 import { capture_and_save } from "../utils/CaptureUtils";
 import { get_now_filename } from "../utils/DateUtils";
@@ -25,6 +26,7 @@ import { wait } from "../utils/PromiseUtils";
 import InfoView from "./InfoView";
 
 type BoolFunc = (v: boolean) => void;
+const release_notes = require("../release_notes.json") as ReleaseNotes[];
 
 function InfoButtons(setShowInfo: BoolFunc, setShowHelp: BoolFunc) {
   const { t } = useTranslation();
@@ -178,7 +180,7 @@ export default function TopBar() {
   const ctx = useAppContext();
   const { t } = useTranslation();
   const [showHelp, setShowHelp] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
+  const [showInfo, setShowInfo] = useState(localStorage.getItem("last-viewed-version") !== release_notes[0].version);
   const [showRendererConfig, setShowRendererConfig] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
@@ -247,10 +249,10 @@ export default function TopBar() {
               {InfoButtons(setShowInfo, setShowHelp)}
             </Stack>
             <Stack direction="row" spacing={1}>
-            {AppDropdowns()}
+              {AppDropdowns()}
             </Stack>
             <Stack direction="row" spacing={1}>
-            {ChatButtons(setShowRendererConfig)}
+              {ChatButtons(setShowRendererConfig)}
             </Stack>
           </DialogContent>
         </Dialog>
@@ -267,7 +269,10 @@ export default function TopBar() {
       </Dialog>
       <Dialog
         open={showInfo}
-        onClose={() => { setShowInfo(false); }}
+        onClose={() => {
+          setShowInfo(false);
+          localStorage.setItem("last-viewed-version", release_notes[0].version);
+        }}
       >
         <DialogContent>
           <InfoView />
