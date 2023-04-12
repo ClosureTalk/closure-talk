@@ -5,6 +5,7 @@ import { YuzutalkChatItemProps } from "./props/YuzutalkProps";
 export default class ChatItem {
   char: ChatChar | null = null;
   content = "";
+  is_breaking = false;
   yuzutalk = new YuzutalkChatItemProps();
   arknights = new ArknightsChatItemProps();
 

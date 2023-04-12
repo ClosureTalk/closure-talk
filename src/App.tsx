@@ -28,6 +28,7 @@ function App() {
   const [sources, setSources] = useState<DataSourceState[]>([]);
   const [rendererConfigs, setRendererConfigs] = useState(new Map<RendererType, RendererConfig>());
   const [chat, setChat] = useState<ChatItem[]>([]);
+  const [isCapturing, setIsCapturing] = useState(false);
 
   const isWideScreen = useMediaQuery({ query: "(min-width: 800px)" });
   const [showCharListOverlay, setShowCharListOverlay] = useState(false);
@@ -92,6 +93,8 @@ function App() {
       setShowCharListOverlay: setShowCharListOverlay,
       chat: chat,
       setChat: setChat,
+      isCapturing: isCapturing,
+      setIsCapturing: setIsCapturing,
     }}>
       <Box>
         <TopBar />

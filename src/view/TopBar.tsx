@@ -15,11 +15,13 @@ import { useTranslation } from "react-i18next";
 import { StyledIconButton } from "../component/StyledIconButton";
 import { StyledInputLabel, StyledSelect } from "../component/StyledSelect";
 import { useAppContext } from "../model/AppContext";
+import ChatItem from "../model/ChatItem";
 import { Languages, Renderers } from "../model/Constants";
 import { ClearChatEvent, LoadCodeEvent, SaveCodeEvent } from "../model/Events";
 import { rendererConfigDialog } from "../renderer/RendererFactory";
 import { capture_and_save } from "../utils/CaptureUtils";
 import { get_now_filename } from "../utils/DateUtils";
+import { wait } from "../utils/PromiseUtils";
 import InfoView from "./InfoView";
 
 type BoolFunc = (v: boolean) => void;
@@ -52,6 +54,7 @@ function InfoButtons(setShowInfo: BoolFunc, setShowHelp: BoolFunc) {
 }
 
 function ChatButtons(setShowRendererConfig: BoolFunc) {
+  const ctx = useAppContext();
   const { t } = useTranslation();
 
   return (
@@ -64,7 +67,42 @@ function ChatButtons(setShowRendererConfig: BoolFunc) {
       </StyledIconButton>
       <StyledIconButton
         title={t("topbar-save-image")}
-        onClick={() => { capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`); }}>
+        disabled={ctx.isCapturing}
+        onClick={() => {
+          const chat_groups = ctx.chat.reduceRight((result: ChatItem[][], item) => {
+            result[0] = result[0] || [];
+
+            if (item.is_breaking) {
+              result.unshift([item]);
+            }
+            else {
+              result[0].unshift(item);
+            }
+
+            return result;
+          }, []);
+
+          if (chat_groups.length === 1) {
+            capture_and_save("chat-area", `closure-talk-${get_now_filename()}.png`);
+            return;
+          }
+
+          (async () => {
+            const name = `closure-talk-${get_now_filename()}`;
+            ctx.setIsCapturing(true);
+
+            const saved_chat = ctx.chat;
+            for (let i = 0; i < chat_groups.length; ++i) {
+              ctx.setChat(chat_groups[i]);
+              await wait(1000);
+              capture_and_save("chat-area", `${name}-${i.toString().padStart(2, "0")}.png`);
+            }
+
+            await wait(1000);
+            ctx.setChat(saved_chat);
+            ctx.setIsCapturing(false);
+          })();
+        }}>
         <PhotoCameraIcon />
       </StyledIconButton>
       <StyledIconButton

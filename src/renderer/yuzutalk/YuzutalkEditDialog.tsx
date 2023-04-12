@@ -24,6 +24,7 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
 
         item.yuzutalk.avatarState = getElement("edit-avatar").checked ? YuzutalkChatItemAvatarState.Show : YuzutalkChatItemAvatarState.Auto;
         item.yuzutalk.nameOverride = getElement("name-override").value.trim();
+        item.is_breaking = getElement("edit-is-breaking").checked;
 
         props.setChat([...chat]);
         props.setEditingNull();
@@ -86,6 +87,10 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
                 <MenuItem value={YuzutalkChatItemType.Image}>{t("item-type-image")}</MenuItem>
               </Select>
             }
+
+            <FormGroup>
+              <FormControlLabel control={<Switch defaultChecked={editing.is_breaking} id="edit-is-breaking" />} label={t("chat-edit-is-breaking")} />
+            </FormGroup>
           </FormControl>
         }
       </DialogContent>

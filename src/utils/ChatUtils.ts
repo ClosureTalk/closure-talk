@@ -9,6 +9,7 @@ export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[]): strin
     chat: chat.map(ch => ({
       char_id: ch.char?.character.id,
       img: ch.char?.img,
+      is_breaking: ch.is_breaking,
       content: ch.content,
       yuzutalk: ch.yuzutalk,
       arknights: ch.arknights,
@@ -31,6 +32,7 @@ export function deserialize_chat(text: string, characters: Map<string, Character
 
     return new ChatItem({
       char: valid ? new ChatChar(char, ch.img) : null,
+      is_breaking: ch.is_breaking,
       content: ch.content,
       yuzutalk: new YuzutalkChatItemProps(ch.yuzutalk),
       arknights: new ArknightsChatItemProps(ch.arknights),

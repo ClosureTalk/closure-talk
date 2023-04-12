@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ArknightsChatItemType } from "../../model/props/ArknightsProps";
 import EditDialogProps from "../EditDialogProps";
@@ -16,6 +16,8 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
         const item = editing!;
 
         const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
+        item.is_breaking = getElement("edit-is-breaking").checked;
+
         if (editable) {
           item.content = getElement("edit-content").value;
           item.arknights.type = getElement("item-type-select").value as ArknightsChatItemType;
@@ -69,6 +71,9 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
               <MenuItem value={ArknightsChatItemType.Image}>{t("item-type-image")}</MenuItem>
             </Select>
           }
+          <FormGroup>
+            <FormControlLabel control={<Switch defaultChecked={editing.is_breaking} id="edit-is-breaking" />} label={t("chat-edit-is-breaking")} />
+          </FormGroup>
         </FormControl>
       </DialogContent>
       <DialogActions>
