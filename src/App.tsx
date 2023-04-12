@@ -1,11 +1,12 @@
-import { useMediaQuery } from "react-responsive";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import "./App.css";
 import { AppContext } from "./model/AppContext";
 import AppData from "./model/AppData";
 import Character from "./model/Character";
 import ChatChar from "./model/ChatChar";
+import ChatItem from "./model/ChatItem";
 import { Renderers } from "./model/Constants";
 import DataSourceState from "./model/DataSourceState";
 import StampInfo from "./model/StampInfo";
@@ -26,6 +27,7 @@ function App() {
   const [stamps, setStamps] = useState<StampInfo[][]>([]);
   const [sources, setSources] = useState<DataSourceState[]>([]);
   const [rendererConfigs, setRendererConfigs] = useState(new Map<RendererType, RendererConfig>());
+  const [chat, setChat] = useState<ChatItem[]>([]);
 
   const isWideScreen = useMediaQuery({ query: "(min-width: 800px)" });
   const [showCharListOverlay, setShowCharListOverlay] = useState(false);
@@ -51,7 +53,9 @@ function App() {
       setCharacters(data.characters);
       setStamps(data.stamps);
       setLoaded(true);
-      setActiveChars(load_local_storage_chat(data.characters)[1]);
+      const [lastChat, lastChars] = load_local_storage_chat(data.characters);
+      setChat(lastChat);
+      setActiveChars(lastChars);
       setSources(data.sources);
 
       const cfg = JSON.parse(localStorage.getItem("rendererConfigs") || "{}");
@@ -86,6 +90,8 @@ function App() {
       isWideScreen: isWideScreen,
       showCharListOverlay: showCharListOverlay,
       setShowCharListOverlay: setShowCharListOverlay,
+      chat: chat,
+      setChat: setChat,
     }}>
       <Box>
         <TopBar />

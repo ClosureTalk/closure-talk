@@ -3,6 +3,7 @@ import { RendererConfig } from "../renderer/RendererConfig";
 import { RendererType } from "../renderer/RendererType";
 import Character from "./Character";
 import ChatChar from "./ChatChar";
+import ChatItem from "./ChatItem";
 import { Renderers } from "./Constants";
 import DataSourceState from "./DataSourceState";
 import StampInfo from "./StampInfo";
@@ -24,6 +25,8 @@ export interface IAppContext {
   isWideScreen: boolean;
   showCharListOverlay: boolean,
   setShowCharListOverlay: Function,
+  chat: ChatItem[],
+  setChat: Function,
 }
 
 const AppContext = createContext<IAppContext>({
@@ -43,6 +46,8 @@ const AppContext = createContext<IAppContext>({
   isWideScreen: true,
   showCharListOverlay: false,
   setShowCharListOverlay: () => { },
+  chat: [],
+  setChat: () => { },
 });
 
 const useAppContext = () => useContext(AppContext);

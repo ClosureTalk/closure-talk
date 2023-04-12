@@ -5,7 +5,7 @@ import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { editChatDialog, renderChat } from "../renderer/RendererFactory";
-import { deserialize_chat, load_local_storage_chat, serialize_chat } from "../utils/ChatUtils";
+import { deserialize_chat, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
 import { prompt_file, read_file_as_text } from "../utils/FileUtils";
@@ -16,18 +16,17 @@ import ChatInputView from "./ChatInputView";
 export default function ChatView() {
   const ctx = useAppContext();
   const { t } = useTranslation();
-  const lastChat = load_local_storage_chat(ctx.characters)[0];
+  const chat = ctx.chat;
 
-  const [chat, setChatRaw] = useState<ChatItem[]>(lastChat);
   const [confirmingClearChat, setConfirmingClearChat] = useState(false);
   const [editing, setEditing] = useState<ChatItem | null>(null);
   const [insertIdx, setInsertIdx] = useState(-1);
-  const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat(lastChat, ctx.activeChars)]);
+  const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat(chat, ctx.activeChars)]);
   const [chatHistoryIdx, setChatHistoryIdx] = useState(1);
 
   const setChatSaved = (list: ChatItem[], serailized: string) => {
     localStorage.setItem("last-chat", serailized);
-    setChatRaw(list);
+    ctx.setChat(list);
   };
 
   const setChat = (list: ChatItem[]) => {
