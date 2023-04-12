@@ -2,6 +2,7 @@
   "chat-edit-always-show-avatar": "",
   "chat-edit-content": "",
   "chat-edit-delete": "",
+  "chat-edit-is-breaking": "",
   "chat-edit-name-override": "",
   "chat-input-placeholder": "",
   "clear-chat-confirm-cancel": "",
@@ -33,10 +34,13 @@
   "topbar-load-code": "",
   "topbar-save-code": "",
   "topbar-save-image": "",
+  "topbar-show-charlist": "",
   "topbar-show-help": "",
   "topbar-show-info": "",
+  "topbar-show-menu": "",
   "yuzu-kizuna-text": "前往{}的羈絆劇情。",
   "yuzu-kizuna-title": "羈絆活動",
   "yuzu-reply-title": "回覆",
-  "yuzu-sensei": ""
+  "yuzu-sensei": "",
+  "yuzu-theme": ""
 }

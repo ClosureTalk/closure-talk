@@ -2,6 +2,7 @@
   "chat-edit-always-show-avatar": "显示头像",
   "chat-edit-content": "内容",
   "chat-edit-delete": "删除",
+  "chat-edit-is-breaking": "截图时在这里分割图片",
   "chat-edit-name-override": "临时改名",
   "chat-input-placeholder": "聊天内容",
   "clear-chat-confirm-cancel": "取消",
@@ -33,10 +34,13 @@
   "topbar-load-code": "导入代码",
   "topbar-save-code": "保存代码",
   "topbar-save-image": "保存图片",
+  "topbar-show-charlist": "角色",
   "topbar-show-help": "帮助",
   "topbar-show-info": "关于",
+  "topbar-show-menu": "菜单",
   "yuzu-kizuna-text": "前往{}的羁绊剧情",
   "yuzu-kizuna-title": "羁绊事件",
   "yuzu-reply-title": "回复",
-  "yuzu-sensei": "老师"
+  "yuzu-sensei": "老师",
+  "yuzu-theme": ""
 }

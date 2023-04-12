@@ -2,6 +2,7 @@
   "chat-edit-always-show-avatar": "Always show avatar",
   "chat-edit-content": "Content",
   "chat-edit-delete": "Delete",
+  "chat-edit-is-breaking": "Break screenshot after this item",
   "chat-edit-name-override": "Override name",
   "chat-input-placeholder": "Chat",
   "clear-chat-confirm-cancel": "Cancel",
@@ -33,10 +34,13 @@
   "topbar-load-code": "Load code",
   "topbar-save-code": "Save code",
   "topbar-save-image": "Save image",
+  "topbar-show-charlist": "Characters",
   "topbar-show-help": "Help",
   "topbar-show-info": "About",
+  "topbar-show-menu": "Menu",
   "yuzu-kizuna-text": "To {}'s Relationship Story",
   "yuzu-kizuna-title": "Relationship Event",
   "yuzu-reply-title": "Reply",
-  "yuzu-sensei": "Sensei"
+  "yuzu-sensei": "Sensei",
+  "yuzu-theme": "Theme"
 }
