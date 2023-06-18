@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.2.1",
+    "date": "2023-06-18",
+    "note": "修复分割图片时的分辨率问题\nFix screenshots with breaks"
+  },
+  {
     "version": "0.2.0",
     "date": "2023-04-12",
     "note": "显示更新内容\n可以设置截图时在一些对白后分割图片了\nAdd release notes\nAdd option to break screenshot at chat items"

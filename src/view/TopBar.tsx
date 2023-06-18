@@ -98,9 +98,9 @@ function ChatButtons(setShowRendererConfig: BoolFunc) {
               ctx.setChat(chat_groups[i]);
               await wait(1000);
               capture_and_save("chat-area", `${name}-${i.toString().padStart(2, "0")}.png`);
+              await wait(1000);
             }
 
-            await wait(1000);
             ctx.setChat(saved_chat);
             ctx.setIsCapturing(false);
           })();
