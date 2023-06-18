@@ -17,8 +17,9 @@ export const Renderers = [
 ];
 
 export const Languages = [
-  "zh-cn",
-  "ja",
   "en",
+  "ja",
+  "ko",
+  "zh-cn",
   "zh-tw",
 ];
