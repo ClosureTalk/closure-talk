@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.2.2",
+    "date": "2023-06-21",
+    "note": "Prevent loading outdated data\nOptimize version display"
+  },
+  {
     "version": "0.2.1",
     "date": "2023-06-18",
     "note": "修复分割图片时的分辨率问题\n添加韩语支持\nFix screenshots with breaks\nSupports Korean"
