@@ -9,3 +9,7 @@ export function get_now_string() {
 export function get_now_filename() {
   return get_now_string().substring(0, 19).replace(/[T:]/g, "-");
 }
+
+export function get_nocache_param() {
+  return "t=" + get_now_string().substring(0, 13);
+}
