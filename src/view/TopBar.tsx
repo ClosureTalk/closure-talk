@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { AppBar, Box, Dialog, DialogContent, DialogContentText, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Dialog, DialogContent, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledIconButton } from "../component/StyledIconButton";
@@ -28,7 +28,7 @@ import InfoView from "./InfoView";
 type BoolFunc = (v: boolean) => void;
 const release_notes = require("../release_notes.json") as ReleaseNotes[];
 
-function InfoButtons(setShowInfo: BoolFunc, setShowHelp: BoolFunc) {
+function InfoButtons(setShowInfo: BoolFunc) {
   const { t } = useTranslation();
 
   return (
@@ -47,7 +47,7 @@ function InfoButtons(setShowInfo: BoolFunc, setShowHelp: BoolFunc) {
       </StyledIconButton>
       <StyledIconButton
         title={t("topbar-show-help")}
-        onClick={() => setShowHelp(true)}
+        onClick={() => window.open("https://github.com/ClosureTalk/closure-talk/tree/master/docs/user-guide", "_blank")}
       >
         <HelpOutlineIcon />
       </StyledIconButton>
@@ -179,7 +179,6 @@ function AppDropdowns() {
 export default function TopBar() {
   const ctx = useAppContext();
   const { t } = useTranslation();
-  const [showHelp, setShowHelp] = useState(false);
   const [showInfo, setShowInfo] = useState(localStorage.getItem("last-viewed-version") !== release_notes[0].version);
   const [showRendererConfig, setShowRendererConfig] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -198,7 +197,7 @@ export default function TopBar() {
             fontStyle: "italic"
           }}>beta</Typography>
           {!ctx.isWideScreen ? null :
-            InfoButtons(setShowInfo, setShowHelp)
+            InfoButtons(setShowInfo)
           }
         </Stack>
         <Box sx={{
@@ -246,7 +245,7 @@ export default function TopBar() {
         >
           <DialogContent>
             <Stack direction="row" spacing={1}>
-              {InfoButtons(setShowInfo, setShowHelp)}
+              {InfoButtons(setShowInfo)}
             </Stack>
             <Stack direction="row" spacing={1}>
               {AppDropdowns()}
@@ -257,16 +256,6 @@ export default function TopBar() {
           </DialogContent>
         </Dialog>
       }
-      <Dialog
-        open={showHelp}
-        onClose={() => { setShowHelp(false); }}
-      >
-        <DialogContent>
-          <DialogContentText sx={{
-            whiteSpace: "pre-line"
-          }}>{t("help-text-content")}</DialogContentText>
-        </DialogContent>
-      </Dialog>
       <Dialog
         open={showInfo}
         onClose={() => {

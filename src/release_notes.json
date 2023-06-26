@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.2.3",
+    "date": "2023-06-25",
+    "note": "用GitHub上的用户指南代替帮助文本\nRemove help text, navigate to GitHub user guide instead."
+  },
+  {
     "version": "0.2.2",
     "date": "2023-06-21",
     "note": "Prevent loading outdated data\nOptimize version display"

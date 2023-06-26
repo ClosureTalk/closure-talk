@@ -14,7 +14,6 @@
   "custom-char-name": "Name",
   "custom-char-title": "Create custom character",
   "data-version": "Data Version",
-  "help-text-content": "Search for characters on the left.\nClick on an avatar to add it to the bottom-right character area.\nClick on a character area avatar to talk with that character.\nPress Ctrl+Number to quickly switch talking character.\nClick on avatar to the left of input box for images, specials, etc.\nEnter to send, Shift+Enter to break line.\nClick on chat bubble to insert after it.\nRight-click on bubble to edit or delete.",
   "item-type": "Item Type",
   "item-type-choices": "Choices",
   "item-type-image": "Image",
