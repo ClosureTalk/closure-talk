@@ -101,7 +101,6 @@ export default function ChatInputView(props: ChatInputViewProps) {
   };
 
   const deleteActiveChar = (ch: ChatChar) => {
-    console.log(ch);
     if (ch.character.is_custom()) {
       setRemovingCustomChar(ch.character as CustomCharacter);
     }

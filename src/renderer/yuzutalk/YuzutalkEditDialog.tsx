@@ -86,7 +86,6 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
           const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
           if (editable) {
             item.content = getElement("edit-content").value;
-            console.log(getElement("item-type-select").value);
             item.yuzutalk.type = getElement("item-type-select").value as YuzutalkChatItemType;
           }
 

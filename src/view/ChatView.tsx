@@ -175,7 +175,7 @@ export default function ChatView() {
           flexGrow: 1,
           overflowY: "scroll",
         }}>
-        { (!ctx.isWideScreen && ctx.showCharListOverlay) ?
+        {(!ctx.isWideScreen && ctx.showCharListOverlay) ?
           <CharList /> :
           renderChat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
       </Box>
