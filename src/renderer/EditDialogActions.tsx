@@ -25,7 +25,6 @@ export default function EditDialogActions(props: EditDialogActionsProps) {
           <Button color="error" onClick={() => {
             dialogProps.setChat(dialogProps.chat.filter(ch => ch !== dialogProps.editing));
             dialogProps.setEditingNull();
-            dialogProps.setInsertIdx(-1);
           }}>{t("chat-edit-delete")}</Button>
         </Stack>
         <Stack

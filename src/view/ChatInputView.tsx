@@ -76,7 +76,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
     const idx = props.insertIdx;
     if (idx >= 0) {
       newChat.splice(idx, 0, item);
-      props.setInsertIdx(idx + 1);
+      props.setInsertIdx(Math.min(idx + 1, newChat.length));
     }
     else {
       newChat.push(item);

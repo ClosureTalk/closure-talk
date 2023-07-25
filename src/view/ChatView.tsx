@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
@@ -23,6 +23,7 @@ export default function ChatView() {
   const [insertIdx, setInsertIdx] = useState(-1);
   const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat(chat, ctx.activeChars)]);
   const [chatHistoryIdx, setChatHistoryIdx] = useState(1);
+  const previousChat = useRef<ChatItem[]>([]);
 
   const setChatSaved = (list: ChatItem[], serailized: string) => {
     localStorage.setItem("last-chat", serailized);
@@ -122,14 +123,14 @@ export default function ChatView() {
 
   // scroll to inserted chat
   useEffect(() => {
-    const container = document.getElementById("chat-container")!;
-    if (insertIdx < 0) {
-      container.scrollTo(0, container.scrollHeight);
+    const previous = previousChat.current;
+    previousChat.current = chat;
+    if (chat.length <= previous.length || chat.length === 0) {
+      return;
     }
-    else {
-      const targetIdx = Math.max(0, insertIdx - 3);
-      document.querySelectorAll(".chat-item")[targetIdx].scrollIntoView({ behavior: "smooth" });
-    }
+
+    const idx = insertIdx < 0 ? chat.length - 1 : Math.min(Math.max(insertIdx - 1, 0), chat.length - 1);
+    document.querySelectorAll(".chat-item")[idx].scrollIntoView({ behavior: "smooth", block: "center" });
   }, [chat, insertIdx]);
 
   // left click handler
@@ -175,8 +176,8 @@ export default function ChatView() {
           overflowY: "scroll",
         }}>
         { (!ctx.isWideScreen && ctx.showCharListOverlay) ?
-        <CharList /> :
-        renderChat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
+          <CharList /> :
+          renderChat(ctx.renderer, chat, clickCallback, contextMenuCallback, insertIdx)}
       </Box>
       <ChatInputView chat={chat} setChat={setChat} insertIdx={insertIdx} setInsertIdx={setInsertIdx} />
       <Dialog
