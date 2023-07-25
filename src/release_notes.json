@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.2.4",
+    "date": "2023-07-24",
+    "note": "修复聊天滚动和跳转问题\n改进编辑对话框按钮\nFix chat view scrolling issues\nImprove edit dialog buttons"
+  },
+  {
     "version": "0.2.3",
     "date": "2023-06-25",
     "note": "用GitHub上的用户指南代替帮助文本\nRemove help text, navigate to GitHub user guide instead."
