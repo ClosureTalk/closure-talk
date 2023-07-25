@@ -1,7 +1,9 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { Dialog, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ArknightsChatItemType } from "../../model/props/ArknightsProps";
+import EditDialogActions from "../EditDialogActions";
 import EditDialogProps from "../EditDialogProps";
+
 
 export default function ArknightsEditDialog(props: EditDialogProps) {
   const editing = props.editing;
@@ -12,19 +14,6 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
   return editing === null ? <></> : (
     <Dialog
       open={true}
-      onClose={() => {
-        const item = editing!;
-
-        const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
-        item.is_breaking = getElement("edit-is-breaking").checked;
-
-        if (editable) {
-          item.content = getElement("edit-content").value;
-          item.arknights.type = getElement("item-type-select").value as ArknightsChatItemType;
-          props.setChat([...chat]);
-        }
-        props.setEditingNull();
-      }}
       maxWidth="sm"
       fullWidth
     >
@@ -76,13 +65,22 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
           </FormGroup>
         </FormControl>
       </DialogContent>
-      <DialogActions>
-        <Button color="error" onClick={() => {
-          props.setChat(chat.filter(ch => ch !== editing));
-          props.setEditingNull();
-          props.setInsertIdx(-1);
-        }}>{t("chat-edit-delete")}</Button>
-      </DialogActions>
+      <EditDialogActions
+        editDialogProps={props}
+        onApply={() => {
+          const item = editing!;
+
+          const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
+          item.is_breaking = getElement("edit-is-breaking").checked;
+
+          if (editable) {
+            item.content = getElement("edit-content").value;
+            item.arknights.type = getElement("item-type-select").value as ArknightsChatItemType;
+            props.setChat([...chat]);
+          }
+        }}
+        onCancel={() => { }}
+      />
     </Dialog>
   );
 }

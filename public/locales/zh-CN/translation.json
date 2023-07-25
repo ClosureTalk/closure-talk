@@ -1,5 +1,7 @@
 {
   "chat-edit-always-show-avatar": "显示头像",
+  "chat-edit-apply": "确认",
+  "chat-edit-cancel": "取消",
   "chat-edit-content": "内容",
   "chat-edit-delete": "删除",
   "chat-edit-is-breaking": "截图时在这里分割图片",

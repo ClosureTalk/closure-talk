@@ -1,6 +1,7 @@
-import { Button, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { Dialog, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { YuzutalkChatItemAvatarState, YuzutalkChatItemType } from "../../model/props/YuzutalkProps";
+import EditDialogActions from "../EditDialogActions";
 import EditDialogProps from "../EditDialogProps";
 
 export default function YuzutalkEditDialog(props: EditDialogProps) {
@@ -12,23 +13,6 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
   return editing === null ? <></> : (
     <Dialog
       open={true}
-      onClose={() => {
-        const item = editing!;
-
-        const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
-        if (editable) {
-          item.content = getElement("edit-content").value;
-          console.log(getElement("item-type-select").value);
-          item.yuzutalk.type = getElement("item-type-select").value as YuzutalkChatItemType;
-        }
-
-        item.yuzutalk.avatarState = getElement("edit-avatar").checked ? YuzutalkChatItemAvatarState.Show : YuzutalkChatItemAvatarState.Auto;
-        item.yuzutalk.nameOverride = getElement("name-override").value.trim();
-        item.is_breaking = getElement("edit-is-breaking").checked;
-
-        props.setChat([...chat]);
-        props.setEditingNull();
-      }}
       maxWidth="sm"
       fullWidth
     >
@@ -94,13 +78,26 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
           </FormControl>
         }
       </DialogContent>
-      <DialogActions>
-        <Button color="error" onClick={() => {
-          props.setChat(chat.filter(ch => ch !== editing));
-          props.setEditingNull();
-          props.setInsertIdx(-1);
-        }}>{t("chat-edit-delete")}</Button>
-      </DialogActions>
+      <EditDialogActions
+        editDialogProps={props}
+        onApply={() => {
+          const item = editing!;
+
+          const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
+          if (editable) {
+            item.content = getElement("edit-content").value;
+            console.log(getElement("item-type-select").value);
+            item.yuzutalk.type = getElement("item-type-select").value as YuzutalkChatItemType;
+          }
+
+          item.yuzutalk.avatarState = getElement("edit-avatar").checked ? YuzutalkChatItemAvatarState.Show : YuzutalkChatItemAvatarState.Auto;
+          item.yuzutalk.nameOverride = getElement("name-override").value.trim();
+          item.is_breaking = getElement("edit-is-breaking").checked;
+
+          props.setChat([...chat]);
+        }}
+        onCancel={() => { }}
+      />
     </Dialog>
   );
 }

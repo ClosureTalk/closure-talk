@@ -1,5 +1,7 @@
 {
   "chat-edit-always-show-avatar": "Always show avatar",
+  "chat-edit-apply": "Apply",
+  "chat-edit-cancel": "Cancel",
   "chat-edit-content": "Content",
   "chat-edit-delete": "Delete",
   "chat-edit-is-breaking": "Break screenshot after this item",
