@@ -1,8 +1,8 @@
 import { Box, Button, Checkbox, FormControlLabel, FormGroup, IconButton, ListItem, ListItemText, Stack, TextField, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FixedSizeList, ListChildComponentProps } from "react-window";
+import { VariableSizeList, ListChildComponentProps } from "react-window";
 import VFill from "../component/VFill";
 import { useAppContext } from "../model/AppContext";
 import Character from "../model/Character";
@@ -26,6 +26,8 @@ export default function CharList() {
   const [search, setSearch] = useState("");
   const [displayedChars, setDisplayedChars] = useState<Character[]>([]);
   const [editingSourceKey, setEditingSourceKey] = useState("");
+  const listRef = useRef<VariableSizeList>(null);
+  const listHeaderHeight = useRef(0);
 
   useEffect(() => {
     const characters = Array.from(ctx.characters.values());
@@ -52,50 +54,30 @@ export default function CharList() {
     );
   };
 
-  const renderRow = (rp: ListChildComponentProps<Character>) => {
-    const ch = displayedChars[rp.index];
+  const renderHeader = (rp: ListChildComponentProps<any>) => {
     return (
-      <ListItem style={rp.style} key={ch.id} className="char-list-item">
-        <ListItemText
-          primary={
-            <Stack direction="row" spacing={1} sx={{
-              overflowX: "auto",
-              overflowY: "hidden",
-              scrollBehavior: "#dddddd",
-            }}>
-              {ch.images.map(img => makeAvatar(ch, img))}
-            </Stack>
-          }
-        />
-        <Typography variant="h6" sx={{
-          textAlign: "right",
-          flexShrink: 0,
-          paddingLeft: "4px",
-        }}>{ch.get_name(ctx.lang)}</Typography>
-      </ListItem>
-    );
-  };
-
-  const editing = ctx.sources.find(s => s.source.key === editingSourceKey);
-  const updateEditing = (action: (copy: DataSourceState) => void) => {
-    const copy = new DataSourceState(editing!.source, editing!.filters);
-    Object.assign(copy, editing);
-    action(copy);
-    ctx.setSources(ctx.sources.map(v => v.source.key === copy.source.key ? copy : v));
-    copy.save_state();
-  };
-
-  return (
-    <Box sx={{
-      display: "flex",
-      flexDirection: "column",
-      height: "100%",
-      backgroundColor: "#dddddd",
-    }}>
       <Stack spacing={2} sx={{
-        padding: "8px",
-      }}>
-        <Stack direction="row" spacing={1}>
+        ...rp.style,
+        height: undefined,
+        zIndex: 9
+      }}
+      ref={(elem: HTMLDivElement) => {
+        if (!elem) {
+          return;
+        }
+
+        const observer = new ResizeObserver(() => {
+          if (elem.clientHeight === 0 || elem.clientHeight === listHeaderHeight.current) {
+            return;
+          }
+          listHeaderHeight.current = elem.clientHeight;
+          listRef.current?.resetAfterIndex(0);
+        });
+
+        observer.observe(elem);
+      }}
+      >
+        <Stack direction="row" spacing={1} sx={{ margin: "8px" }}>
           {ctx.sources.map(ds => (
             <Button
               key={ds.source.key}
@@ -119,6 +101,7 @@ export default function CharList() {
               borderColor: "gray",
               borderRadius: "4px",
               borderWidth: "1px",
+              margin: "8px",
               padding: "8px",
             }}>
               <FormGroup>
@@ -155,18 +138,72 @@ export default function CharList() {
               ))}
             </Stack>
         }
-        <TextField variant="outlined" label={t("search-label")} onChange={ev => setSearch(ev.target.value)}></TextField>
+        <Stack direction="column" style={{ padding: "0 8px" }}>
+          <TextField variant="outlined" label={t("search-label")} onChange={ev => setSearch(ev.target.value)}></TextField>
+        </Stack>
       </Stack>
+    );
+  };
+
+  const renderRow = (rp: ListChildComponentProps<any>) => {
+    if (rp.index === 0) {
+      return renderHeader(rp);
+    }
+
+    const ch = displayedChars[rp.index - 1];
+    return (
+      <ListItem style={rp.style} key={ch.id} className="char-list-item">
+        <ListItemText
+          primary={
+            <Stack direction="row" spacing={1} sx={{
+              overflowX: "auto",
+              overflowY: "hidden",
+              scrollBehavior: "#dddddd",
+            }}>
+              {ch.images.map(img => makeAvatar(ch, img))}
+            </Stack>
+          }
+        />
+        <Typography variant="h6" sx={{
+          textAlign: "right",
+          flexShrink: 0,
+          paddingLeft: "4px",
+        }}>{ch.get_name(ctx.lang)}</Typography>
+      </ListItem>
+    );
+  };
+
+  const getRowHeight = (idx: number) => {
+    return idx > 0 ? 80 : listHeaderHeight.current;
+  };
+
+  const editing = ctx.sources.find(s => s.source.key === editingSourceKey);
+  const updateEditing = (action: (copy: DataSourceState) => void) => {
+    const copy = new DataSourceState(editing!.source, editing!.filters);
+    Object.assign(copy, editing);
+    action(copy);
+    ctx.setSources(ctx.sources.map(v => v.source.key === copy.source.key ? copy : v));
+    copy.save_state();
+  };
+
+  return (
+    <Box sx={{
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      backgroundColor: "#dddddd",
+    }}>
       <VFill renderer={(height) => {
         return (
-          <FixedSizeList
+          <VariableSizeList
             height={height}
             width={"100%"}
-            itemSize={80}
-            itemCount={displayedChars.length}
+            itemSize={getRowHeight}
+            itemCount={displayedChars.length + 1}
+            ref={listRef}
           >
             {renderRow}
-          </FixedSizeList>
+          </VariableSizeList>
         );
       }} />
     </Box>

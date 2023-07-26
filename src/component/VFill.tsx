@@ -9,12 +9,10 @@ export default function VFill(props: VFillProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const update = () => setHeight(ref.current!.clientHeight);
-    update();
-
-    window.addEventListener("resize", update);
+    const observer = new ResizeObserver(() => setHeight(ref.current!.clientHeight));
+    observer.observe(ref.current!);
     return () => {
-      window.removeEventListener("resize", update);
+      observer.disconnect();
     };
   }, []);
 
