@@ -9,10 +9,29 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
   const chat = props.chat;
   const { t } = useTranslation();
   const editable = editing !== null && editing.yuzutalk.type !== YuzutalkChatItemType.Image;
+  const apply = () => {
+    const item = editing!;
+
+    const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
+    if (editable) {
+      item.content = getElement("edit-content").value;
+      item.yuzutalk.type = getElement("item-type-select").value as YuzutalkChatItemType;
+    }
+
+    item.yuzutalk.avatarState = getElement("edit-avatar").checked ? YuzutalkChatItemAvatarState.Show : YuzutalkChatItemAvatarState.Auto;
+    item.yuzutalk.nameOverride = getElement("name-override").value.trim();
+    item.is_breaking = getElement("edit-is-breaking").checked;
+
+    props.setChat([...chat]);
+  };
 
   return editing === null ? <></> : (
     <Dialog
       open={true}
+      onClose={() => {
+        apply();
+        props.setEditingNull();
+      }}
       maxWidth="sm"
       fullWidth
     >
@@ -80,21 +99,7 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
       </DialogContent>
       <EditDialogActions
         editDialogProps={props}
-        onApply={() => {
-          const item = editing!;
-
-          const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
-          if (editable) {
-            item.content = getElement("edit-content").value;
-            item.yuzutalk.type = getElement("item-type-select").value as YuzutalkChatItemType;
-          }
-
-          item.yuzutalk.avatarState = getElement("edit-avatar").checked ? YuzutalkChatItemAvatarState.Show : YuzutalkChatItemAvatarState.Auto;
-          item.yuzutalk.nameOverride = getElement("name-override").value.trim();
-          item.is_breaking = getElement("edit-is-breaking").checked;
-
-          props.setChat([...chat]);
-        }}
+        onApply={apply}
         onCancel={() => { }}
       />
     </Dialog>

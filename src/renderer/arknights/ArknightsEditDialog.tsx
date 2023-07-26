@@ -10,10 +10,26 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
   const chat = props.chat;
   const { t } = useTranslation();
   const editable = editing !== null && editing.arknights.type !== ArknightsChatItemType.Image;
+  const apply = () => {
+    const item = editing!;
+
+    const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
+    item.is_breaking = getElement("edit-is-breaking").checked;
+
+    if (editable) {
+      item.content = getElement("edit-content").value;
+      item.arknights.type = getElement("item-type-select").value as ArknightsChatItemType;
+      props.setChat([...chat]);
+    }
+  };
 
   return editing === null ? <></> : (
     <Dialog
       open={true}
+      onClose={() => {
+        apply();
+        props.setEditingNull();
+      }}
       maxWidth="sm"
       fullWidth
     >
@@ -67,18 +83,7 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
       </DialogContent>
       <EditDialogActions
         editDialogProps={props}
-        onApply={() => {
-          const item = editing!;
-
-          const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
-          item.is_breaking = getElement("edit-is-breaking").checked;
-
-          if (editable) {
-            item.content = getElement("edit-content").value;
-            item.arknights.type = getElement("item-type-select").value as ArknightsChatItemType;
-            props.setChat([...chat]);
-          }
-        }}
+        onApply={apply}
         onCancel={() => { }}
       />
     </Dialog>
