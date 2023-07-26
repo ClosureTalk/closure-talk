@@ -16,7 +16,7 @@
   border-color: inherit !important;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
   .top-bar h5 {
     font-size: 24px;
   }
