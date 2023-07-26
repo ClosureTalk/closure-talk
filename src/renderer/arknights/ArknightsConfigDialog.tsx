@@ -1,7 +1,7 @@
 import { Dialog, DialogContent } from "@mui/material";
 import { useAppContext } from "../../model/AppContext";
 import { getConfig } from "../../utils/CtxUtils";
-import { ChatWidthSelect, setChatWidth } from "../ConfigDialogCommons";
+import { AppConfigUI, ChatWidthSelect, setChatWidth, updateAppConfig } from "../ConfigDialogCommons";
 import ConfigDialogProps from "../ConfigDialogProps";
 import { RendererType } from "../RendererType";
 import ArknightsConfig from "./ArknightsConfig";
@@ -14,6 +14,8 @@ export default function ArknightsConfigDialog(props: ConfigDialogProps) {
     <Dialog
       open={true}
       onClose={() => {
+        updateAppConfig(ctx);
+
         const cfg = new ArknightsConfig();
         setChatWidth(cfg);
         props.setClose();
@@ -23,6 +25,7 @@ export default function ArknightsConfigDialog(props: ConfigDialogProps) {
       fullWidth
     >
       <DialogContent>
+        <AppConfigUI />
         <ChatWidthSelect width={config.width} />
       </DialogContent>
     </Dialog>

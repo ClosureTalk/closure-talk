@@ -1,4 +1,7 @@
 {
+  "app-cfg-width": "App Width",
+  "app-cfg-width-100vw": "Full width",
+  "app-cfg-width-80vw": "80% width",
   "chat-edit-always-show-avatar": "Always show avatar",
   "chat-edit-apply": "Apply",
   "chat-edit-cancel": "Cancel",

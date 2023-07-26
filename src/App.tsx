@@ -2,6 +2,7 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import "./App.css";
+import AppConfig, { loadAppConfig, saveAppConfig } from "./model/AppConfig";
 import { AppContext } from "./model/AppContext";
 import AppData from "./model/AppData";
 import Character from "./model/Character";
@@ -27,6 +28,7 @@ function App() {
   const [stamps, setStamps] = useState<StampInfo[][]>([]);
   const [sources, setSources] = useState<DataSourceState[]>([]);
   const [rendererConfigs, setRendererConfigs] = useState(new Map<RendererType, RendererConfig>());
+  const [appConfig, setAppConfig] = useState(loadAppConfig());
   const [chat, setChat] = useState<ChatItem[]>([]);
   const [isCapturing, setIsCapturing] = useState(false);
 
@@ -42,6 +44,11 @@ function App() {
         return obj;
       }, {})));
     setRendererConfigs(map);
+  };
+
+  const setAndSaveAppConfig = (config: AppConfig) => {
+    saveAppConfig(config);
+    setAppConfig(config);
   };
 
   useEffect(() => {
@@ -95,6 +102,8 @@ function App() {
       setChat: setChat,
       isCapturing: isCapturing,
       setIsCapturing: setIsCapturing,
+      appConfig: appConfig,
+      setAppConfig: setAndSaveAppConfig,
     }}>
       <Box>
         <TopBar />
@@ -104,6 +113,7 @@ function App() {
           top: "64px",
           bottom: "0",
           width: "100vw",
+          maxWidth: isWideScreen ? appConfig.maxWidth : undefined,
           display: "flex",
         }}>
           {
@@ -122,6 +132,7 @@ function App() {
             flexGrow: isWideScreen ? 0 : 1,
             maxWidth: "100%",
             height: "100%",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)"
           }}>
             <ChatView />
           </Box>

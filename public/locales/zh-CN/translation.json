@@ -1,4 +1,7 @@
 {
+  "app-cfg-width": "网页宽度",
+  "app-cfg-width-100vw": "100% 窗口",
+  "app-cfg-width-80vw": "80% 窗口",
   "chat-edit-always-show-avatar": "显示头像",
   "chat-edit-apply": "确认",
   "chat-edit-cancel": "取消",

@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 import { RendererConfig } from "../renderer/RendererConfig";
 import { RendererType } from "../renderer/RendererType";
+import AppConfig from "./AppConfig";
 import Character from "./Character";
 import ChatChar from "./ChatChar";
 import ChatItem from "./ChatItem";
@@ -23,12 +24,14 @@ export interface IAppContext {
   rendererConfigs: Map<RendererType, RendererConfig>;
   setRendererConfig: (name: RendererType, value: RendererConfig) => void;
   isWideScreen: boolean;
-  showCharListOverlay: boolean,
-  setShowCharListOverlay: Function,
-  chat: ChatItem[],
-  setChat: Function,
-  isCapturing: boolean,
-  setIsCapturing: Function,
+  showCharListOverlay: boolean;
+  setShowCharListOverlay: Function;
+  chat: ChatItem[];
+  setChat: Function;
+  isCapturing: boolean;
+  setIsCapturing: Function;
+  appConfig: AppConfig;
+  setAppConfig: Function;
 }
 
 const AppContext = createContext<IAppContext>({
@@ -52,6 +55,8 @@ const AppContext = createContext<IAppContext>({
   setChat: () => { },
   isCapturing: false,
   setIsCapturing: () => { },
+  appConfig: new AppConfig(),
+  setAppConfig: () => { },
 });
 
 const useAppContext = () => useContext(AppContext);
