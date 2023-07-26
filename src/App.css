@@ -34,3 +34,7 @@
 #chat-area {
   user-select: none;
 }
+
+pre {
+  white-space: pre-wrap;
+}

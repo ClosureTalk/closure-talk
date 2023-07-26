@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.2.5",
+    "date": "2023-07-25",
+    "note": "增加网页宽度限制选项\n编辑对话框重新支持点击空白处确认及关闭\n修复角色列表滚动\nAdd option to limit page width\nChat edit dialog: clicking outside applies changes and dismisses the dialog\nFix character select scrolling"
+  },
+  {
     "version": "0.2.4",
     "date": "2023-07-24",
     "note": "修复聊天滚动和跳转问题\n改进编辑对话框按钮\nFix chat view scrolling issues\nImprove edit dialog buttons"
