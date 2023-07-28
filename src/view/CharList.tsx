@@ -61,21 +61,21 @@ export default function CharList() {
         height: undefined,
         zIndex: 9
       }}
-      ref={(elem: HTMLDivElement) => {
-        if (!elem) {
-          return;
-        }
-
-        const observer = new ResizeObserver(() => {
-          if (elem.clientHeight === 0 || elem.clientHeight === listHeaderHeight.current) {
+        ref={(elem: HTMLDivElement) => {
+          if (!elem) {
             return;
           }
-          listHeaderHeight.current = elem.clientHeight;
-          listRef.current?.resetAfterIndex(0);
-        });
 
-        observer.observe(elem);
-      }}
+          const observer = new ResizeObserver(() => {
+            if (elem.clientHeight === 0 || elem.clientHeight === listHeaderHeight.current) {
+              return;
+            }
+            listHeaderHeight.current = elem.clientHeight;
+            listRef.current?.resetAfterIndex(0);
+          });
+
+          observer.observe(elem);
+        }}
       >
         <Stack direction="row" spacing={1} sx={{ margin: "8px" }}>
           {ctx.sources.map(ds => (
@@ -138,9 +138,6 @@ export default function CharList() {
               ))}
             </Stack>
         }
-        <Stack direction="column" style={{ padding: "0 8px" }}>
-          <TextField variant="outlined" label={t("search-label")} onChange={ev => setSearch(ev.target.value)}></TextField>
-        </Stack>
       </Stack>
     );
   };
@@ -193,6 +190,10 @@ export default function CharList() {
       height: "100%",
       backgroundColor: "#dddddd",
     }}>
+      <Stack direction="column" style={{ padding: "16px 8px" }}>
+        <TextField variant="outlined" label={t("search-label")}
+          onChange={ev => setSearch(ev.target.value)}></TextField>
+      </Stack>
       <VFill renderer={(height) => {
         return (
           <VariableSizeList

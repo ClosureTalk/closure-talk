@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.2.6",
+    "date": "2023-07-27",
+    "note": "修复搜索框功能\nFix search box"
+  },
+  {
     "version": "0.2.5",
     "date": "2023-07-25",
     "note": "增加网页宽度限制选项\n编辑对话框重新支持点击空白处确认及关闭\n修复角色列表滚动\nAdd option to limit page width\nChat edit dialog: clicking outside applies changes and dismisses the dialog\nFix character select scrolling"
