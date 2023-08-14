@@ -78,6 +78,11 @@ export function deserialize_chat(text: string, characters: Map<string, Character
 export async function deserialize_custom_chars(text: string, ds: CustomDataSource): Promise<CustomCharacter[]> {
   const obj = JSON.parse(text);
   const chars = await ds.get_characters();
+  // ensure that json without "custom_chars" field can also be imported
+  if (obj.custom_chars == undefined) {
+    return [];
+  }
+
   const customChars = (obj.custom_chars as any[]).map(ch => {
       const char = new CustomCharacter(ds, ch.name, ch.img)
       char.id = ch.char_id;
