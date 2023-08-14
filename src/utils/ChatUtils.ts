@@ -75,12 +75,18 @@ export function deserialize_chat(text: string, characters: Map<string, Character
   return [chat, chars];
 }
 
-export function deserialize_custom_chars(text: string, ds: CustomDataSource): CustomCharacter[] {
+export async function deserialize_custom_chars(text: string, ds: CustomDataSource): Promise<CustomCharacter[]> {
   const obj = JSON.parse(text);
+  const chars = await ds.get_characters();
   const customChars = (obj.custom_chars as any[]).map(ch => {
-      let char = new CustomCharacter(ds, ch.name, ch.img)
-      char.id = ch.char_id
-      ds.add_character(char)
+      const char = new CustomCharacter(ds, ch.name, ch.img)
+      char.id = ch.char_id;
+      chars.map((c) => {
+        if (c.id == ch.char_id) {
+          ds.remove_character(c as CustomCharacter);
+        }
+      })
+      ds.add_character(char);
       return char;
     }
   )

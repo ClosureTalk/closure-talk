@@ -102,10 +102,17 @@ export default function ChatView() {
         const text = await read_file_as_text(file);
 
         const ds = DataSources[DataSources.length - 1] as CustomDataSource;
-        const customChars = deserialize_custom_chars(text, ds)
-        customChars.map((char)=>{
-          ctx.characters.set(char.id, char);
+        const customChars = await deserialize_custom_chars(text, ds)
+        const chars = new Map(ctx.characters)
+        customChars.map((char) => {
+          const ch = chars.get(char.id);
+          if (ch != null) {
+            chars.delete(char.id)
+          }
+          chars.set(char.id, char);
         })
+        ctx.characters = chars;
+        ctx.setCharacters(chars);
 
         const [newChat, newChars] = deserialize_chat(text, ctx.characters);
 
