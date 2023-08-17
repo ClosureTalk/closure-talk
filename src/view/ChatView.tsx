@@ -5,7 +5,7 @@ import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { editChatDialog, renderChat } from "../renderer/RendererFactory";
-import { deserialize_chat, deserialize_custom_chars, serialize_chat, serialize_chat_with_custom_chars } from "../utils/ChatUtils";
+import { deserialize_chat, deserialize_custom_chars, serialize_chat } from "../utils/ChatUtils";
 import { get_now_filename } from "../utils/DateUtils";
 import { download_text } from "../utils/DownloadUtils";
 import { prompt_file, read_file_as_text } from "../utils/FileUtils";
@@ -80,7 +80,7 @@ export default function ChatView() {
     const handler = async () => {
       const ds = DataSources[DataSources.length - 1] as CustomDataSource;
       const customChars = await ds.get_characters();
-      const serializedStr = await serialize_chat_with_custom_chars(chat, ctx.activeChars, customChars);
+      const serializedStr = serialize_chat(chat, ctx.activeChars, customChars);
       download_text(serializedStr, `closure-talk-${get_now_filename()}.json`);
     };
 
@@ -102,19 +102,16 @@ export default function ChatView() {
         const text = await read_file_as_text(file);
 
         const ds = DataSources[DataSources.length - 1] as CustomDataSource;
-        const customChars = await deserialize_custom_chars(text, ds)
-        const chars = new Map(ctx.characters)
-        customChars.map((char) => {
-          const ch = chars.get(char.id);
-          if (ch != null) {
-            chars.delete(char.id)
-          }
-          chars.set(char.id, char);
-        })
-        ctx.characters = chars;
-        ctx.setCharacters(chars);
+        const customChars = await deserialize_custom_chars(text, ds);
+        const chars = new Map(ctx.characters);
+        if (customChars.length != 0) {
+          customChars.forEach((char) => {
+            chars.set(char.id, char);
+          });
+          ctx.setCharacters(chars);
+        }
 
-        const [newChat, newChars] = deserialize_chat(text, ctx.characters);
+        const [newChat, newChars] = deserialize_chat(text, chars);
 
         setChat(newChat);
         ctx.setActiveChars(newChars);

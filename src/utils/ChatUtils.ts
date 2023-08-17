@@ -6,24 +6,7 @@ import ChatItem from "../model/ChatItem";
 import { ArknightsChatItemProps } from "../model/props/ArknightsProps";
 import { YuzutalkChatItemProps } from "../model/props/YuzutalkProps";
 
-export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[]): string {
-  return JSON.stringify({
-    chat: chat.map(ch => ({
-      char_id: ch.char?.character.id,
-      img: ch.char?.img,
-      is_breaking: ch.is_breaking,
-      content: ch.content,
-      yuzutalk: ch.yuzutalk,
-      arknights: ch.arknights,
-    })),
-    chars: activeChars.map(ch => ({
-      char_id: ch.character.id,
-      img: ch.img,
-    })),
-  }, undefined, 2);
-}
-
-export async function serialize_chat_with_custom_chars(chat: ChatItem[], activeChars: ChatChar[], customChars: Character[]): Promise<string> {
+export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[], customChars: Character[] = []): string {
   return JSON.stringify({
     chat: chat.map(ch => ({
       char_id: ch.char?.character.id,
@@ -38,12 +21,12 @@ export async function serialize_chat_with_custom_chars(chat: ChatItem[], activeC
       img: ch.img,
     })),
     custom_chars: customChars.map((ch) => {
-      let c = ch as CustomCharacter
+      let c = ch as CustomCharacter;
       return {
         char_id: c.id,
         img: c.image,
         name: c.names.get("zh-cn"),
-      }
+      };
     }),
   }, undefined, 2);
 }
@@ -84,17 +67,17 @@ export async function deserialize_custom_chars(text: string, ds: CustomDataSourc
   }
 
   const customChars = (obj.custom_chars as any[]).map(ch => {
-      const char = new CustomCharacter(ds, ch.name, ch.img)
+      const char = new CustomCharacter(ds, ch.name, ch.img);
       char.id = ch.char_id;
-      chars.map((c) => {
+      chars.forEach((c) => {
         if (c.id == ch.char_id) {
           ds.remove_character(c as CustomCharacter);
         }
-      })
+      });
       ds.add_character(char);
       return char;
     }
-  )
+  );
   return customChars;
 }
 
