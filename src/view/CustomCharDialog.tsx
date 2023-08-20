@@ -1,9 +1,8 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import CustomDataSource from "../data/CustomDataSource";
 import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
-import { DataSources } from "../model/Constants";
+import { getCustomDataSource } from "../model/Constants";
 import CustomCharacter from "../model/CustomCharacter";
 import { prompt_file, read_image_resized } from "../utils/FileUtils";
 
@@ -29,7 +28,7 @@ export default function CustomCharDialog(props: CustomCharDialogProps) {
     const image = await read_image_resized(file, 100);
 
     // save data
-    const ds = DataSources[DataSources.length - 1] as CustomDataSource;
+    const ds = getCustomDataSource();
     const char = new CustomCharacter(ds, name, image);
     ds.add_character(char);
 
