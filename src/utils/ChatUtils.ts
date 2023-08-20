@@ -6,9 +6,9 @@ import ChatItem from "../model/ChatItem";
 import { ArknightsChatItemProps } from "../model/props/ArknightsProps";
 import { YuzutalkChatItemProps } from "../model/props/YuzutalkProps";
 
-export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[], customChars: Character[] = []): string {
+export function serialize_chat(chat: ChatItem[] | null, activeChars: ChatChar[] | null, customChars: Character[] | null=null): string {
   return JSON.stringify({
-    chat: chat.map(ch => ({
+    chat: chat?.map(ch => ({
       char_id: ch.char?.character.id,
       img: ch.char?.img,
       is_breaking: ch.is_breaking,
@@ -16,11 +16,11 @@ export function serialize_chat(chat: ChatItem[], activeChars: ChatChar[], custom
       yuzutalk: ch.yuzutalk,
       arknights: ch.arknights,
     })),
-    chars: activeChars.map(ch => ({
+    chars: activeChars?.map(ch => ({
       char_id: ch.character.id,
       img: ch.img,
     })),
-    custom_chars: customChars.map((ch) => {
+    custom_chars: customChars?.map((ch) => {
       let c = ch as CustomCharacter;
       return {
         char_id: c.id,
@@ -62,21 +62,21 @@ export async function deserialize_custom_chars(text: string, ds: CustomDataSourc
   const obj = JSON.parse(text);
   const chars = await ds.get_characters();
   // ensure that json without "custom_chars" field can also be imported
-  if (obj.custom_chars == undefined) {
+  if (!obj.custom_chars) {
     return [];
   }
 
   const customChars = (obj.custom_chars as any[]).map(ch => {
-      const char = new CustomCharacter(ds, ch.name, ch.img);
-      char.id = ch.char_id;
-      chars.forEach((c) => {
-        if (c.id == ch.char_id) {
-          ds.remove_character(c as CustomCharacter);
-        }
-      });
-      ds.add_character(char);
-      return char;
-    }
+    const char = new CustomCharacter(ds, ch.name, ch.img);
+    char.id = ch.char_id;
+    chars.forEach((c) => {
+      if (c.id == ch.char_id) {
+        ds.remove_character(c as CustomCharacter);
+      }
+    });
+    ds.add_character(char);
+    return char;
+  }
   );
   return customChars;
 }

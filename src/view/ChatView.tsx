@@ -3,17 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "../model/AppContext";
 import ChatItem from "../model/ChatItem";
+import { getCustomDataSource } from "../model/Constants";
 import { ClearChatEventName, LoadCodeEventName, SaveCodeEventName } from "../model/Events";
 import { editChatDialog, renderChat } from "../renderer/RendererFactory";
 import { deserialize_chat, deserialize_custom_chars, serialize_chat } from "../utils/ChatUtils";
-import { get_now_filename } from "../utils/DateUtils";
-import { download_text } from "../utils/DownloadUtils";
 import { prompt_file, read_file_as_text } from "../utils/FileUtils";
 import { get_key_string } from "../utils/KeyboardUtils";
 import CharList from "./CharList";
 import ChatInputView from "./ChatInputView";
-import { DataSources } from "../model/Constants";
-import CustomDataSource from "../data/CustomDataSource";
+import SaveCodeDialog from "./SaveCodeDialog";
 
 export default function ChatView() {
   const ctx = useAppContext();
@@ -25,6 +23,7 @@ export default function ChatView() {
   const [insertIdx, setInsertIdx] = useState(-1);
   const [chatHistory, setChatHistory] = useState<string[]>([serialize_chat(chat, ctx.activeChars)]);
   const [chatHistoryIdx, setChatHistoryIdx] = useState(1);
+  const [saveCodeDialogOpen, setSaveCodeDialogOpen] = useState(false);
   const previousChat = useRef<ChatItem[]>([]);
 
   const setChatSaved = (list: ChatItem[], serailized: string) => {
@@ -77,11 +76,8 @@ export default function ChatView() {
 
   // save JSON
   useEffect(() => {
-    const handler = async () => {
-      const ds = DataSources[DataSources.length - 1] as CustomDataSource;
-      const customChars = await ds.get_characters();
-      const serializedStr = serialize_chat(chat, ctx.activeChars, customChars);
-      download_text(serializedStr, `closure-talk-${get_now_filename()}.json`);
+    const handler = () => {
+      setSaveCodeDialogOpen(true);
     };
 
     window.addEventListener(SaveCodeEventName, handler);
@@ -101,7 +97,7 @@ export default function ChatView() {
       try {
         const text = await read_file_as_text(file);
 
-        const ds = DataSources[DataSources.length - 1] as CustomDataSource;
+        const ds = getCustomDataSource();
         const customChars = await deserialize_custom_chars(text, ds);
         const chars = new Map(ctx.characters);
         if (customChars.length != 0) {
@@ -111,10 +107,24 @@ export default function ChatView() {
           ctx.setCharacters(chars);
         }
 
-        const [newChat, newChars] = deserialize_chat(text, chars);
+        // Handle saved data without chat or char
+        const obj: any = JSON.parse(text);
+        const hasChat = !!obj.chat;
+        if (!hasChat) {
+          obj.chat = [];
+        }
+        const hasActiveChars = !!obj.chars;
+        if (!hasActiveChars) {
+          obj.chars = [];
+        }
 
-        setChat(newChat);
-        ctx.setActiveChars(newChars);
+        const [newChat, newActiveChars] = deserialize_chat(JSON.stringify(obj), chars);
+        if (hasChat) {
+          setChat(newChat);
+        }
+        if (hasActiveChars) {
+          ctx.setActiveChars(newActiveChars);
+        }
       }
       catch (ex) {
         console.error(ex);
@@ -221,6 +231,11 @@ export default function ChatView() {
         setChat,
         setInsertIdx,
       )}
+      {!saveCodeDialogOpen ? null :
+        <SaveCodeDialog
+          closeDialog={() => setSaveCodeDialogOpen(false)}
+        />
+      }
     </Box>
   );
 }

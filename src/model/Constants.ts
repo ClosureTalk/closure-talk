@@ -23,3 +23,7 @@ export const Languages = [
   "zh-cn",
   "zh-tw",
 ];
+
+export function getCustomDataSource() {
+  return DataSources.at(-1) as CustomDataSource;
+}
