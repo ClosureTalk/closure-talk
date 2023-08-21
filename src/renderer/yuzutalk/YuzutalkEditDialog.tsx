@@ -3,11 +3,14 @@ import { useTranslation } from "react-i18next";
 import { YuzutalkChatItemAvatarState, YuzutalkChatItemType } from "../../model/props/YuzutalkProps";
 import EditDialogActions from "../EditDialogActions";
 import EditDialogProps from "../EditDialogProps";
+import { EditDialogCommonParts, applyCharEdit } from "../EditDialogCommons";
+import { useAppContext } from "../../model/AppContext";
 
 export default function YuzutalkEditDialog(props: EditDialogProps) {
   const editing = props.editing;
   const chat = props.chat;
   const { t } = useTranslation();
+  const ctx = useAppContext();
   const editable = editing !== null && editing.yuzutalk.type !== YuzutalkChatItemType.Image;
   const apply = () => {
     const item = editing!;
@@ -18,6 +21,7 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
       item.yuzutalk.type = getElement("item-type-select").value as YuzutalkChatItemType;
     }
 
+    applyCharEdit(item, ctx.activeChars);
     item.yuzutalk.avatarState = getElement("edit-avatar").checked ? YuzutalkChatItemAvatarState.Show : YuzutalkChatItemAvatarState.Auto;
     item.yuzutalk.nameOverride = getElement("name-override").value.trim();
     item.is_breaking = getElement("edit-is-breaking").checked;
@@ -36,17 +40,9 @@ export default function YuzutalkEditDialog(props: EditDialogProps) {
       fullWidth
     >
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="edit-content"
-          label={t("chat-edit-content")}
-          fullWidth
-          multiline
-          variant="standard"
-          defaultValue={editable ? editing.content : ""}
-          onFocus={ev => ev.target.select()}
-          disabled={!editable}
+        <EditDialogCommonParts
+          isContentEditable={editable}
+          chat={editing}
         />
         <TextField
           margin="dense"

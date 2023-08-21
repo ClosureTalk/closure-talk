@@ -1,9 +1,10 @@
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
-import { Avatar, Chip, IconButton, Input, Popover, Stack } from "@mui/material";
-import { Box, styled } from "@mui/system";
+import { Avatar, IconButton, Input, Popover, Stack } from "@mui/material";
+import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { LargeChip, PlayerChip } from "../component/AvatarChips";
 import { useAppContext } from "../model/AppContext";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
@@ -13,25 +14,6 @@ import { get_key_string } from "../utils/KeyboardUtils";
 import ChatSpecialPopover from "./ChatSpecialPopover";
 import CustomCharDialog from "./CustomCharDialog";
 import RemoveCustomCharDialog from "./RemoveCustomCharDialog";
-
-const LargeChip = styled(Chip)(() => ({
-  width: "92px",
-  height: "60px",
-  "& .MuiChip-avatar": {
-    width: "48px",
-    height: "48px",
-  }
-}));
-
-const PlayerChip = styled(LargeChip)(() => ({
-  width: "60px",
-  "& .MuiChip-avatar": {
-    margin: "0",
-  },
-  "& .MuiChip-label": {
-    padding: "0",
-  }
-}));
 
 class ChatInputViewProps {
   chat: ChatItem[] = [];

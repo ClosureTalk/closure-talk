@@ -1,20 +1,24 @@
-import { Dialog, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { Dialog, DialogContent, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Switch } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ArknightsChatItemType } from "../../model/props/ArknightsProps";
 import EditDialogActions from "../EditDialogActions";
+import { EditDialogCommonParts, applyCharEdit } from "../EditDialogCommons";
 import EditDialogProps from "../EditDialogProps";
+import { useAppContext } from "../../model/AppContext";
 
 
 export default function ArknightsEditDialog(props: EditDialogProps) {
   const editing = props.editing;
   const chat = props.chat;
   const { t } = useTranslation();
+  const ctx = useAppContext();
   const editable = editing !== null && editing.arknights.type !== ArknightsChatItemType.Image;
   const apply = () => {
     const item = editing!;
 
     const getElement = (id: string) => document.getElementById(id) as HTMLInputElement;
     item.is_breaking = getElement("edit-is-breaking").checked;
+    applyCharEdit(item, ctx.activeChars);
 
     if (editable) {
       item.content = getElement("edit-content").value;
@@ -34,17 +38,9 @@ export default function ArknightsEditDialog(props: EditDialogProps) {
       fullWidth
     >
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="edit-content"
-          label={t("chat-edit-content")}
-          fullWidth
-          multiline
-          variant="standard"
-          defaultValue={editable ? editing.content : ""}
-          onFocus={ev => ev.target.select()}
-          disabled={!editable}
+        <EditDialogCommonParts
+          isContentEditable={editable}
+          chat={editing}
         />
         <FormControl fullWidth size="small">
           <InputLabel id="item-type-label">{t("item-type")}</InputLabel>
