@@ -48,6 +48,7 @@
   "source-enabled": "包含这些角色",
   "topbar-clear-chat": "清空聊天",
   "topbar-config": "渲染设置",
+  "topbar-feedback": "反馈",
   "topbar-load-code": "导入代码",
   "topbar-save-code": "保存代码",
   "topbar-save-image": "保存图片",

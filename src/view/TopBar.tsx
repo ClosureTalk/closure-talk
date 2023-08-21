@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { AppBar, Box, Dialog, DialogContent, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Dialog, DialogContent, FormControl, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledIconButton } from "../component/StyledIconButton";
@@ -29,7 +29,11 @@ type BoolFunc = (v: boolean) => void;
 const release_notes = require("../release_notes.json") as ReleaseNotes[];
 
 function InfoButtons(setShowInfo: BoolFunc) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const feedbackUrl = i18n.language.startsWith("zh-") ?
+    "https://wj.qq.com/s2/12952865/a1aa/" :
+    "https://github.com/ClosureTalk/closure-talk/issues";
 
   return (
     <>
@@ -51,6 +55,13 @@ function InfoButtons(setShowInfo: BoolFunc) {
       >
         <HelpOutlineIcon />
       </StyledIconButton>
+      <Button
+        variant="text"
+        sx={{
+          color: "white",
+        }}
+        onClick={() => window.open(feedbackUrl, "_blank")}
+      >{t("topbar-feedback")}</Button>
     </>
   );
 }
