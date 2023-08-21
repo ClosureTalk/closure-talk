@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.3.0",
+    "date": "2023-08-20",
+    "note": "支持保存和加载自定义角色\n支持更换聊天发送人\n增加反馈按钮\nSupports saving and loading custom characters\nSupports changing chat senders\nAdd feedback button"
+  },
+  {
     "version": "0.2.6",
     "date": "2023-07-27",
     "note": "修复搜索框功能\nFix search box"
