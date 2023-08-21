@@ -29,6 +29,11 @@ export function applyCharEdit(chat: ChatItem, activeChars: ChatChar[]) {
   }
 }
 
+function setSenderValue(value: string) {
+  const hidden = document.getElementById("chat-edit-sender") as HTMLInputElement;
+  hidden.value = value;
+}
+
 export function EditDialogCommonParts(props: EditDialogCommonPartsProps) {
   const { t } = useTranslation();
   const ctx = useAppContext();
@@ -39,7 +44,7 @@ export function EditDialogCommonParts(props: EditDialogCommonPartsProps) {
 
   return (
     <>
-      <input style={{display: "none"}} id="chat-edit-sender" defaultValue={char === null ? "null" : char.get_id()} />
+      <input style={{ display: "none" }} id="chat-edit-sender" defaultValue={char === null ? "null" : char.get_id()} />
       <Stack direction="row" alignItems="baseline" gap={2}>
         <Typography variant="body1" component="span">{t("chat-edit-sender")}</Typography>
         <PlayerChip
@@ -84,7 +89,11 @@ export function EditDialogCommonParts(props: EditDialogCommonPartsProps) {
           <PlayerChip
             variant="outlined"
             avatar={GetPlayerAvatar()}
-            onClick={ev => setSelectSenderAnchor(ev.target as HTMLElement)}
+            onClick={() => {
+              setSenderValue("null");
+              setSelectedChar(null);
+              setSelectSenderAnchor(null);
+            }}
           />
 
           {ctx.activeChars.map(ch => (
@@ -93,10 +102,7 @@ export function EditDialogCommonParts(props: EditDialogCommonPartsProps) {
               variant="outlined"
               avatar={GetCharAvatar(ch)}
               onClick={() => {
-                const hidden = document.getElementById("chat-edit-sender") as HTMLInputElement;
-                hidden.value = ch.get_id();
-                console.log(`update value to ${hidden.value}`);
-
+                setSenderValue(ch.get_id());
                 setSelectedChar(ch);
                 setSelectSenderAnchor(null);
               }}
