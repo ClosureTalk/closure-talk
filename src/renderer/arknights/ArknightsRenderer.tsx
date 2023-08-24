@@ -118,7 +118,7 @@ export default function ArknightsRenderer(props: RendererProps) {
     let content: string | JSX.Element = "Not implemented";
     if (type === ArknightsChatItemType.Text || type === ArknightsChatItemType.Thoughts) {
       content = (
-        <div className="akn-content-text">{item.content}</div>
+        <div className="akn-content-text">{item.content || " "}</div>
       );
     }
     else if (type === ArknightsChatItemType.Image) {

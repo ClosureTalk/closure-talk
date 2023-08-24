@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.3.1",
+    "date": "2023-08-23",
+    "note": "修复空白对话框显示\n（之后可能增加自动删除空白对话的选项）\nFix display of empty chat items"
+  },
+  {
     "version": "0.3.0",
     "date": "2023-08-20",
     "note": "支持保存和加载自定义角色\n支持更换聊天发送人\n增加反馈按钮\nSupports saving and loading custom characters\nSupports changing chat senders\nAdd feedback button"

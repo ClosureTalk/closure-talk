@@ -144,7 +144,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
         className="yuzu-message"
         onClick={(ev) => props.click(ev.nativeEvent, item)}
         onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
-        {content}
+        {content || " "}
       </div>
     );
 
