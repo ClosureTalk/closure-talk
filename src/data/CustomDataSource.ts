@@ -3,6 +3,7 @@ import CustomCharacter from "../model/CustomCharacter";
 import FilterGroup from "../model/FilterGroup";
 import StampInfo from "../model/StampInfo";
 import BasicDataSource from "./BasicDataSource";
+import localforage from "localforage";
 
 export default class CustomDataSource extends BasicDataSource {
   characters: CustomCharacter[] = [];
@@ -11,8 +12,20 @@ export default class CustomDataSource extends BasicDataSource {
     super(name, key, "zh-cn");
   }
 
+  get_custom_characters_store(): LocalForage {
+    return localforage.createInstance({
+      name: "custom_characters",
+      driver: localforage.INDEXEDDB,
+    });;
+  }
+
   async get_characters(): Promise<Character[]> {
-    const list = JSON.parse(localStorage.getItem("custom-characters") || "[]") as any[];
+    let list_json = await this.get_custom_characters_store().getItem<string>('custom-characters');
+    if (!list_json) {
+      list_json = "[]";
+    }
+
+    const list = JSON.parse(list_json) as any[];
     this.characters = list.map(ch => CustomCharacter.load_custom_object(ch, this));
     return this.characters;
   }
@@ -35,7 +48,7 @@ export default class CustomDataSource extends BasicDataSource {
     this.update_storage();
   }
 
-  update_storage() {
+  update_storage(): Promise<string> {
     const chars = this.characters.map(ch => {
       return {
         names: Object.fromEntries(ch.names),
@@ -43,7 +56,8 @@ export default class CustomDataSource extends BasicDataSource {
         id: ch.id
       };
     });
-    localStorage.setItem("custom-characters", JSON.stringify(chars));
+
+    return this.get_custom_characters_store().setItem('custom-characters', JSON.stringify(chars))
   }
 
   async get_filters(): Promise<FilterGroup[]> {
