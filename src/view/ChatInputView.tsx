@@ -119,7 +119,9 @@ export default function ChatInputView(props: ChatInputViewProps) {
         <Input id="chat-input" fullWidth placeholder={t("chat-input-placeholder")} multiline onKeyDown={(ev) => {
           if (get_key_string(ev.nativeEvent) === "Enter") {
             ev.preventDefault();
-            addNormalChat();
+            if (!ctx.showCharListOverlay) {
+              addNormalChat();
+            }
             return;
           }
           if (ev.ctrlKey) {
@@ -132,7 +134,7 @@ export default function ChatInputView(props: ChatInputViewProps) {
             }
           }
         }} />
-        <IconButton onClick={() => addNormalChat()}>
+        <IconButton onClick={() => addNormalChat()} disabled={ctx.showCharListOverlay}>
           <SendIcon />
         </IconButton>
       </Stack>
