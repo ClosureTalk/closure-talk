@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.4.0",
+    "date": "2024-04-28",
+    "note": "更新中文反馈链接\n添加日语和韩语翻译\n优化移动端编辑交互\n优化韩语字体\n默认模式改为Yuzu(Momo)talk\nAdd Japanese and Korean translations\nOptimize editing on mobile\nOptimize Korean font\nSet default to Yuzu(Momo)talk"
+  },
+  {
     "version": "0.3.2",
     "date": "2023-10-01",
     "note": "修复图片显示不填满对话框\nFix image not filling chat item"
