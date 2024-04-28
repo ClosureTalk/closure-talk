@@ -32,7 +32,7 @@ function InfoButtons(setShowInfo: BoolFunc) {
   const { t, i18n } = useTranslation();
 
   const feedbackUrl = i18n.language.startsWith("zh-") ?
-    "https://wj.qq.com/s2/12952865/a1aa/" :
+    "https://wj.qq.com/s2/14292312/3ade/" :
     "https://github.com/ClosureTalk/closure-talk/issues";
 
   return (
