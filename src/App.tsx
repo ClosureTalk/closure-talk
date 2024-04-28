@@ -21,7 +21,7 @@ import TopBar from "./view/TopBar";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
-  const [renderer, setRenderer] = useState((localStorage.getItem("renderer") || Renderers[0]) as RendererType);
+  const [renderer, setRenderer] = useState((localStorage.getItem("renderer") || Renderers[1]) as RendererType);
   const [lang, setLang] = useState(localStorage.getItem("lang") || "zh-cn");
   const [activeChars, setActiveChars] = useState<ChatChar[]>([]);
   const [characters, setCharacters] = useState(new Map<string, Character>());
