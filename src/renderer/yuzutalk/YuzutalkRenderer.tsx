@@ -18,6 +18,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
   const { t } = useTranslation();
   const chat = props.chat;
   const config = getConfig(YuzutalkConfig, ctx, RendererType.Yuzutalk);
+  const itemClass = `yuzu-item yuzu-item-${ctx.lang}`;
 
   const getName = (item: ChatItem) => {
     return item.yuzutalk.nameOverride.length > 0 ?
@@ -27,7 +28,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
 
   const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
     return (
-      <div className="yuzu-item">
+      <div className={itemClass}>
         <div className="yuzu-left">
           {!showAvatar ? null :
             <div className="yuzu-avatar-box">
@@ -48,7 +49,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
   };
 
   const renderPlayerItem = (content: JSX.Element, boxClasses: string[]) => (
-    <div className="yuzu-item yuzu-player-item">
+    <div className={itemClass + " yuzu-player-item"}>
       <div className={boxClasses.join(" ")}>
         {content}
       </div>
@@ -58,7 +59,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
   const renderSpecialItem = (item: ChatItem, content: JSX.Element) => {
     return (
       <div
-        className="yuzu-item yuzu-special-item"
+        className={itemClass + " yuzu-special-item"}
         onClick={(ev) => props.click(ev.nativeEvent, item)}
         onContextMenu={(ev) => props.contextMenuCallback(ev.nativeEvent, item)}>
         {content}

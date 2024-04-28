@@ -1,9 +1,47 @@
+@font-face {
+  font-family: 'GyeonggiTitle';
+  font-weight: 300;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.eot');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.eot?#iefix') format('embedded-opentype'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.woff2') format('woff2'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.woff') format('woff'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.ttf') format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GyeonggiTitle';
+  font-weight: 500;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.eot');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.eot?#iefix') format('embedded-opentype'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.woff2') format('woff2'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.woff') format('woff'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.ttf') format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GyeonggiTitle';
+  font-weight: 700;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.eot');
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.eot?#iefix') format('embedded-opentype'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.woff2') format('woff2'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.woff') format('woff'),
+      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.ttf') format("truetype");
+  font-display: swap;
+}
+
 .yuzu-item {
   display: grid;
   grid-template-columns: 64px minmax(0px, 1fr);
   grid-template-rows: 1fr;
   column-gap: 16px;
   padding: 8px 24px 0px 16px;
+}
+
+.yuzu-item.yuzu-item-ko {
+  font-family: GyeonggiTitle, sans-serif;
 }
 
 .yuzu-left {
