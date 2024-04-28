@@ -165,20 +165,21 @@ export default function ChatView() {
       return;
     }
 
-    const idx = chat.indexOf(item);
-    if (idx === 0) {
-      setInsertIdx(insertIdx === 1 ? 0 : (insertIdx === 0 ? -1 : 1));
-    }
-    else if (idx === chat.length - 1) {
-      setInsertIdx(-1);
-    }
-    else {
-      setInsertIdx(insertIdx === idx + 1 ? -1 : idx + 1);
-    }
     if (ctx.isWideScreen) {
+      const idx = chat.indexOf(item);
+      if (idx === 0) {
+        setInsertIdx(insertIdx === 1 ? 0 : (insertIdx === 0 ? -1 : 1));
+      }
+      else if (idx === chat.length - 1) {
+        setInsertIdx(-1);
+      }
+      else {
+        setInsertIdx(insertIdx === idx + 1 ? -1 : idx + 1);
+      }
+
       document.getElementById("chat-input")!.focus();
     }
-    else if (insertIdx === -1 || idx === chat.length - 1) {
+    else {
       setEditing(item);
     }
   };

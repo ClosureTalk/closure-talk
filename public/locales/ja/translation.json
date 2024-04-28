@@ -7,6 +7,8 @@
   "chat-edit-cancel": "キャンセル",
   "chat-edit-content": "内容",
   "chat-edit-delete": "削除",
+  "chat-edit-insert-after": "ここから続く",
+  "chat-edit-insert-before": "前のメッセージから続く",
   "chat-edit-is-breaking": "スクリーンショットをここでカット",
   "chat-edit-name-override": "名前(上書き)",
   "chat-edit-sender": "送信者",

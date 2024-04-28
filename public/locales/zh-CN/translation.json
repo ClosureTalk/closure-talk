@@ -7,6 +7,8 @@
   "chat-edit-cancel": "取消",
   "chat-edit-content": "内容",
   "chat-edit-delete": "删除",
+  "chat-edit-insert-after": "在此消息之后插入",
+  "chat-edit-insert-before": "在此消息之前插入",
   "chat-edit-is-breaking": "截图时在这里分割图片",
   "chat-edit-name-override": "临时改名",
   "chat-edit-sender": "发送自",

@@ -7,6 +7,8 @@
   "chat-edit-cancel": "Cancel",
   "chat-edit-content": "Content",
   "chat-edit-delete": "Delete",
+  "chat-edit-insert-after": "Insert after",
+  "chat-edit-insert-before": "Insert before",
   "chat-edit-is-breaking": "Break screenshot after this item",
   "chat-edit-name-override": "Override name",
   "chat-edit-sender": "Sender",
