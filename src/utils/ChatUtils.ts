@@ -1,12 +1,13 @@
 import CustomDataSource from "../data/CustomDataSource";
 import Character from "../model/Character";
-import CustomCharacter from "../model/CustomCharacter";
 import ChatChar from "../model/ChatChar";
 import ChatItem from "../model/ChatItem";
+import CustomCharacter from "../model/CustomCharacter";
 import { ArknightsChatItemProps } from "../model/props/ArknightsProps";
 import { YuzutalkChatItemProps } from "../model/props/YuzutalkProps";
+import { convertBACollectionImage } from "./migration/MigrateBACollectionRemoval";
 
-export function serialize_chat(chat: ChatItem[] | null, activeChars: ChatChar[] | null, customChars: Character[] | null=null): string {
+export function serialize_chat(chat: ChatItem[] | null, activeChars: ChatChar[] | null, customChars: Character[] | null = null): string {
   return JSON.stringify({
     chat: chat?.map(ch => ({
       char_id: ch.char?.character.id,
@@ -34,26 +35,48 @@ export function serialize_chat(chat: ChatItem[] | null, activeChars: ChatChar[] 
 export function deserialize_chat(text: string, characters: Map<string, Character>): [ChatItem[], ChatChar[]] {
   const obj = JSON.parse(text);
 
-  const chat = (obj.chat as any[]).map(ch => {
-    const char = characters.get(ch.char_id) || null;
-    const valid = char !== null && char.images.includes(ch.img);
+  const getChatChar = (id: string | null, img: string | null) => {
+    if (id === null || img === null) {
+      return null;
+    }
 
-    ch.yuzutalk = ch.yuzutalk ?? new YuzutalkChatItemProps();
+    const char = characters.get(id);
+    if (!char) {
+      return null;
+    }
 
-    return new ChatItem({
-      char: valid ? new ChatChar(char, ch.img) : null,
-      is_breaking: ch.is_breaking,
-      content: ch.content,
-      yuzutalk: new YuzutalkChatItemProps(ch.yuzutalk),
-      arknights: new ArknightsChatItemProps(ch.arknights),
-    });
-  });
+    let updatedImg = img;
+    if (char.id.startsWith("ba-") && img.endsWith("_Collection")) {
+      updatedImg = convertBACollectionImage(img);
+    }
 
-  const chars = (obj.chars as any[]).map(ch => {
-    const char = characters.get(ch.char_id) || null;
-    const valid = char !== null && char.images.includes(ch.img);
-    return valid ? new ChatChar(char, ch.img) : null;
-  }).filter(ch => ch !== null) as ChatChar[];
+    if (!char.images.includes(updatedImg)) {
+      return null;
+    }
+
+    return new ChatChar(char, updatedImg);
+  };
+
+  const chat = (obj.chat as any[]).map(ch => new ChatItem({
+    char: getChatChar(ch.char_id, ch.img),
+    is_breaking: ch.is_breaking,
+    content: ch.content,
+    yuzutalk: new YuzutalkChatItemProps(ch.yuzutalk),
+    arknights: new ArknightsChatItemProps(ch.arknights),
+  }));
+  const existingIds = new Set<string>();
+  const chars = (obj.chars as any[]).map(ch => getChatChar(ch.char_id, ch.img)).filter(ch => {
+    if (ch === null) {
+      return false;
+    }
+
+    if (existingIds.has(ch.get_id())) {
+      return false;
+    }
+
+    existingIds.add(ch.get_id());
+    return true;
+  }) as ChatChar[];
 
   return [chat, chars];
 }
