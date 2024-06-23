@@ -6,7 +6,8 @@ import { getConfig } from "../../utils/CtxUtils";
 import RendererProps from "../RendererProps";
 import { RendererType } from "../RendererType";
 import "./Yuzutalk.css";
-import YuzutalkConfig, { YuzutalkTheme } from "./YuzutalkConfig";
+import YuzutalkConfig, { YuzutalkAvatarBackground, YuzutalkTheme } from "./YuzutalkConfig";
+import { getAvatarBg } from "./YuzutalkAvatarBg";
 
 function is_stamp(item: ChatItem): boolean {
   return item.yuzutalk.type === YuzutalkChatItemType.Image && !item.content.startsWith("data:image");
@@ -26,12 +27,29 @@ export default function YuzutalkRenderer(props: RendererProps) {
       item.char?.character.get_short_name(ctx.lang) || t("yuzu-sensei") as string;
   };
 
+  const getAvatarBackground = (item: ChatItem) => {
+    if (config.avatarBackground === YuzutalkAvatarBackground.Disabled) {
+      return undefined;
+    }
+    const char = item.char?.character;
+    if (!char) {
+      return undefined;
+    }
+
+    const name = getAvatarBg(char, item.char!.img);
+    return `url(resources/ba/avatar-bg/${name}.webp)`;
+  };
+
   const renderCharacterItem = (item: ChatItem, showAvatar: boolean, boxClasses: string[], content: JSX.Element) => {
     return (
       <div className={itemClass}>
         <div className="yuzu-left">
           {!showAvatar ? null :
-            <div className="yuzu-avatar-box">
+            <div className="yuzu-avatar-box"
+              style={{
+                backgroundImage: getAvatarBackground(item)
+              }}
+            >
               <img alt={`Avatar of ${item.char!.character.get_short_name("en")}`} src={item.char!.character.get_url(item.char!.img)}></img>
             </div>
           }
@@ -108,8 +126,8 @@ export default function YuzutalkRenderer(props: RendererProps) {
       <div className="yuzu-narration-item">
         <span className="text">{item.content}</span>
       </div>
-    ))
-  }
+    ));
+  };
 
   const renderItem = (idx: number) => {
     const item = chat[idx];

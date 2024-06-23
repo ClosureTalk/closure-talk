@@ -100,6 +100,11 @@
 .yuzu-avatar-box {
   width: 64px;
   height: 64px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-clip: border-box;
+  border-radius: 50%;
 }
 
 .yuzu-avatar-box img {
