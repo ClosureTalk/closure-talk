@@ -173,7 +173,7 @@ export default function YuzutalkRenderer(props: RendererProps) {
         const prev = chat[idx - 1];
         const prevType = prev.yuzutalk.type;
         showAvatar ||=
-          prevType !== YuzutalkChatItemType.Text && prevType !== YuzutalkChatItemType.Image ||
+          (prevType !== YuzutalkChatItemType.Text && prevType !== YuzutalkChatItemType.Image) ||
           prev.char?.get_id() !== item.char!.get_id();
       }
 

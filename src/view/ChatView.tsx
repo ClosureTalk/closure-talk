@@ -100,7 +100,7 @@ export default function ChatView() {
         const ds = getCustomDataSource();
         const customChars = await deserialize_custom_chars(text, ds);
         const chars = new Map(ctx.characters);
-        if (customChars.length != 0) {
+        if (customChars.length !== 0) {
           customChars.forEach((char) => {
             chars.set(char.id, char);
           });

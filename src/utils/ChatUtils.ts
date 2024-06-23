@@ -93,7 +93,7 @@ export async function deserialize_custom_chars(text: string, ds: CustomDataSourc
     const char = new CustomCharacter(ds, ch.name, ch.img);
     char.id = ch.char_id;
     chars.forEach((c) => {
-      if (c.id == ch.char_id) {
+      if (c.id === ch.char_id) {
         ds.remove_character(c as CustomCharacter);
       }
     });

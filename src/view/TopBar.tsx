@@ -193,7 +193,6 @@ export default function TopBar() {
   const [showInfo, setShowInfo] = useState(localStorage.getItem("last-viewed-version") !== release_notes[0].version);
   const [showRendererConfig, setShowRendererConfig] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
   return (
     <AppBar position="fixed" className="top-bar" elevation={0}>
@@ -228,8 +227,7 @@ export default function TopBar() {
             <>
               <StyledIconButton
                 title={t("topbar-show-menu")}
-                onClick={(ev) => {
-                  setMenuAnchor(ev.currentTarget);
+                onClick={() => {
                   setShowMenu(true);
                 }}
               >

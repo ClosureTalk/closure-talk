@@ -5,10 +5,6 @@ import { get_nocache_param } from "../utils/DateUtils";
 import BasicDataSource from "./BasicDataSource";
 
 export default class RemoteDataSource extends BasicDataSource {
-  constructor(name: string, key: string, lang_fallback: string) {
-    super(name, key, lang_fallback);
-  }
-
   id_prefix(): string {
     return this.key + "-";
   }

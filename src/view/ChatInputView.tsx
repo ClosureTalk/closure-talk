@@ -22,6 +22,10 @@ class ChatInputViewProps {
   setInsertIdx = (idx: number) => { };
 }
 
+function focusOnInput() {
+  document.getElementById("chat-input")!.focus();
+}
+
 
 export default function ChatInputView(props: ChatInputViewProps) {
   const ctx = useAppContext();
@@ -33,13 +37,6 @@ export default function ChatInputView(props: ChatInputViewProps) {
   const [removingCustomChar, setRemovingCustomChar] = useState<CustomCharacter | null>(null);
   const boxHeight = ctx.isWideScreen ? 240 : 200;
 
-  function focusOnInput() {
-    if (!ctx.isWideScreen) {
-      return;
-    }
-    document.getElementById("chat-input")!.focus();
-  }
-
   // set new active char if new char is added
   useEffect(() => {
     if (ctx.activeChars.length === previousActiveCharLength) {
@@ -48,10 +45,12 @@ export default function ChatInputView(props: ChatInputViewProps) {
 
     if (ctx.activeChars.length > previousActiveCharLength) {
       setCurrentChar(ctx.activeChars[ctx.activeChars.length - 1]);
-      focusOnInput();
+      if (ctx.isWideScreen) {
+        focusOnInput();
+      }
     }
     setPreviousActiveCharLength(ctx.activeChars.length);
-  }, [ctx.activeChars, previousActiveCharLength]);
+  }, [ctx.activeChars, previousActiveCharLength, ctx.isWideScreen]);
 
   const addChat = (item: ChatItem) => {
     const newChat = [...props.chat];
@@ -162,7 +161,9 @@ export default function ChatInputView(props: ChatInputViewProps) {
             }
             onClick={() => {
               setCurrentChar(ch);
-              focusOnInput();
+              if (ctx.isWideScreen) {
+                focusOnInput();
+              }
             }}
             onDelete={() => { deleteActiveChar(ch); }}
           />

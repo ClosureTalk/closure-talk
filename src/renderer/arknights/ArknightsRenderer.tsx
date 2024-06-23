@@ -123,7 +123,7 @@ export default function ArknightsRenderer(props: RendererProps) {
     }
     else if (type === ArknightsChatItemType.Image) {
       content = <img
-        alt={"Image"}
+        alt="Custom upload"
         src={item.content}
         className={is_stamp(item) ? "akn-stamp" : ""}
       />;
