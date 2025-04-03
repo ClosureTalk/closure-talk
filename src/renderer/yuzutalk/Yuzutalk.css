@@ -2,33 +2,21 @@
   font-family: 'GyeonggiTitle';
   font-weight: 300;
   font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.eot?#iefix') format('embedded-opentype'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.woff2') format('woff2'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.woff') format('woff'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleLight.ttf') format("truetype");
+  src: url('../../fonts/gyeonggi-title-light-subset.woff2') format("opentype");
   font-display: swap;
 }
 @font-face {
   font-family: 'GyeonggiTitle';
   font-weight: 500;
   font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.eot?#iefix') format('embedded-opentype'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.woff2') format('woff2'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.woff') format('woff'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleMedium.ttf') format("truetype");
+  src: url('../../fonts/gyeonggi-title-medium-subset.woff2') format("opentype");
   font-display: swap;
 }
 @font-face {
   font-family: 'GyeonggiTitle';
   font-weight: 700;
   font-style: normal;
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.eot?#iefix') format('embedded-opentype'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.woff2') format('woff2'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.woff') format('woff'),
-      url('https://cdn.jsdelivr.net/gh/webfontworld/gyeonggi/GyeonggiTitleBold.ttf') format("truetype");
+  src: url('../../fonts/gyeonggi-title-bold-subset.woff2') format("opentype");
   font-display: swap;
 }
 

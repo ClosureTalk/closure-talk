@@ -1,5 +1,10 @@
 [
   {
+    "version": "0.5.2",
+    "date": "2025-04-03",
+    "note": "修复韩语字体\nFix Korean font"
+  },
+  {
     "version": "0.5.1",
     "date": "2024-09-28",
     "note": "修复截图速度过慢问题\nFix screenshot too slow"
